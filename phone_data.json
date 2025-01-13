@@ -1,0 +1,485 @@
+[
+  {
+    "product_id": 1,
+    "product_name": "Xiaomi Redmi Note 14",
+    "product_quantity": 50,
+    "product_description": "Redmi Note 14 5G sở hữu camera AI 108MP kết hợp với zoom trong cảm biến 3x.",
+    "product_image": [
+      "Xiaomi_Redmi_Note_14_1",
+      "Xiaomi_Redmi_Note_14_2",
+      "Xiaomi_Redmi_Note_14_3"
+    ],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.79,
+        "product_sku": "XRN14-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 10.79,
+        "product_sku": "XRN14-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 2,
+    "product_name": "Xiaomi 14T",
+    "product_quantity": 52,
+    "product_description": "Xiaomi 14T trang bị pin lớn 5.000mAh, kết hợp với công nghệ sạc nhanh 67W - Sạc đầy nhanh chóng.",
+    "product_image": ["Xiaomi_14T_1", "Xiaomi_14T_2", "Xiaomi_14T_3"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 10.79,
+        "product_sku": "X14T-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 15.79,
+        "product_sku": "X14T-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 3,
+    "product_name": "Xiaomi Redmi Note 13",
+    "product_quantity": 53,
+    "product_description": "Công nghệ âm thanh Dolby Atmos - Redmi Note 13 Pro đem lại trải nghiệm âm thanh sống động, chi tiết và mạnh mẽ.",
+    "product_image": ["Xiaomi_Redmi_Note_13_1", "Xiaomi_Redmi_Note_13_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 6.49,
+        "product_sku": "XRN13-256GB"
+      },
+      {
+        "storage": "518GB",
+        "price": 9.29,
+        "product_sku": "XRN13-518GB"
+      }
+    ]
+  },
+  {
+    "product_id": 4,
+    "product_name": "Xiaomi POCO M6",
+    "product_quantity": 54,
+    "product_description": "Với thiết kế trẻ trung, năng động, POCO M6 phù hợp với những người dùng yêu thích sự cá tính và nổi bật.",
+    "product_image": ["Xiaomi_POCO_M6_1"],
+    "brand_id": 3,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.49,
+        "product_sku": "XPM6-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 5,
+    "product_name": "Xiaomi Redmi 14C",
+    "product_quantity": 55,
+    "product_description": "Redmi 14C được trang bị bộ vi xử lý 8 nhân MediaTek Helio G81- Ultra, mang lại hiệu năng mượt mà và hiệu quả.",
+    "product_image": ["Xiaomi_Redmi_14C_1", "Xiaomi_Redmi_14C_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "XR14C-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 6,
+    "product_name": "Xiaomi POCO X6 Pro",
+    "product_quantity": 56,
+    "product_description": "Bộ 3 camera chất lượng, quay chụp sắc nét - Đem đến cho bạn những bức hình chân dung chất lượng cao.",
+    "product_image": [
+      "Xiaomi_Poco_X6_1",
+      "Xiaomi_Poco_X6_2",
+      "Xiaomi_Poco_X6_3"
+    ],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 8.49,
+        "product_sku": "XPX6-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 12.49,
+        "product_sku": "XPX6-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 7,
+    "product_name": "Xiaomi Redmi A3",
+    "product_quantity": 57,
+    "product_description": "Đắm chìm cùng Redmi A3 với những thước phim mượt mà với màn ảnh rộng 6.71 inch cùng tốc độ làm mới 90Hz.",
+    "product_image": ["Xiaomi_Redmi_A3_1", "Xiaomi_Redmi_A3_2"],
+    "brand_id": 3,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.59,
+        "product_sku": "XRA3-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 8,
+    "product_name": "Xiaomi Redmi 13C",
+    "product_quantity": 58,
+    "product_description": "Chipset Helio G85 cho hiệu năng ổn định - Hoạt động mượt mà cho các tác vụ cơ bản hàng ngày.",
+    "product_image": ["Xiaomi_Redmi_13C_1", "Xiaomi_Redmi_13C_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "XR13C-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 5.39,
+        "product_sku": "XR13C-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 9,
+    "product_name": "Xiaomi Redmi 10",
+    "product_quantity": 59,
+    "product_description": "Trải nghiệm chất lượng hiển thị sắc nét, mượt mà - Màn hình 6.5' FullHD+, tần số quét 90 Hz.",
+    "product_image": ["Xiaomi_Redmi_10_1"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.19,
+        "product_sku": "XR10-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 5.49,
+        "product_sku": "XR10-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 10,
+    "product_name": "Xiaomi 12 Pro (5G)",
+    "product_quantity": 60,
+    "product_description": "Cân mọi tác vụ với CPU thế hệ mới - Vi xử lí Snapdragon 8 Gen 1 cùng RAM 12GB.",
+    "product_image": ["Xiaomi_12_1", "Xiaomi_12_2", "Xiaomi_12_3"],
+    "brand_id": 1,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 12.79,
+        "product_sku": "X12-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 17.79,
+        "product_sku": "X12-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 11,
+    "product_name": "OPPO Reno13",
+    "product_quantity": 61,
+    "product_description": "Màn hình OPPO Reno13 F AMOLED 6.67 inch với độ phân giải Full HD+ và tần số quét 120Hz mang đến cho bạn chất lượng hình ảnh sắc nét..",
+    "product_image": ["OPPO_Reno13_1", "OPPO_Reno13_2", "OPPO_Reno13_3"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "price": 8.99,
+        "product_sku": "OR13-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 12,
+    "product_name": "OPPO Find X8",
+    "product_quantity": 62,
+    "product_description": "OPPO Find X8 sở hữu chip Dimensity 9400 3nm với lõi Cortex-X925 sẽ đảm bảo xử lý mọi tác vụ một cách nhanh chóng.",
+    "product_image": ["OPPO_Find_X8_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 20.99,
+        "product_sku": "OFX8-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 22.19,
+        "product_sku": "OFX8-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 13,
+    "product_name": "OPPO A3",
+    "product_quantity": 63,
+    "product_description": "Màn hình LCD, 6.67 inch cho phép bạn xem nội dung với độ chi tiết cao và màu sắc rực rỡ.",
+    "product_image": ["OPPO_A3_1", "OPPO_A3_2"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.59,
+        "product_sku": "OA3-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 6.09,
+        "product_sku": "OA3-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 14,
+    "product_name": "OPPO Reno12",
+    "product_quantity": 44,
+    "product_description": "Thiết kế OPPO Reno 12 5G mỏng nhẹ dễ dàng mang theo bên mình, đồng thời vẫn đảm bảo độ bền bỉ và chắc chắn.",
+    "product_image": ["OPPO_Reno12_1", "OPPO_Reno12_2"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 8.79,
+        "product_sku": "OR12-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 11.99,
+        "product_sku": "OR12-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 15,
+    "product_name": "OPPO A79",
+    "product_quantity": 55,
+    "product_description": "Tận hưởng tốc độ internet siêu nhanh và ổn định với kết nối 5G, cho bạn tải xuống, xem video và chơi game online mượt mà hơn.",
+    "product_image": ["OPPO_A79_1"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 6.29,
+        "product_sku": "OA79-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 16,
+    "product_name": "OPPO Find X5",
+    "product_quantity": 66,
+    "product_description": "Màn hình AMOLED 120 Hz mang đến cho bạn trải nghiệm mượt mà, màu sắc sống động.",
+    "product_image": ["OPPO_Find_X5_1", "OPPO_Find_X5_2"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 12.79,
+        "product_sku": "OFX5-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 14.99,
+        "product_sku": "OFX5-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 17,
+    "product_name": "OPPO Find N3",
+    "product_quantity": 67,
+    "product_description": "Bậc thầy thiết kế, siêu mỏng nhẹ - Mỏng chỉ 239g, nhẹ chỉ 5.8mm với nếp gấp tàng hình.",
+    "product_image": ["OPPO_Find_N3_1", "OPPO_Find_N3_2", "OPPO_Find_N3_3"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "price": 36.99,
+        "product_sku": "OFN3-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 18,
+    "product_name": "OPPO Reno10",
+    "product_quantity": 68,
+    "product_description": "Chuyên gia chân dung thế hệ thứ 10 - Camera chân dung 32MP siêu nét, chụp xa từ 2X-5X không lo biến dạng khung hình.",
+    "product_image": ["OPPO_Reno10_1", "OPPO_Reno10_2"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 7.79,
+        "product_sku": "OR10-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 8.49,
+        "product_sku": "OR10-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 19,
+    "product_name": "OPPO A38",
+    "product_quantity": 69,
+    "product_description": "CPU MediaTek Helio P35 8 nhân,  cho khả năng xử lý đa nhiệm mượt mà, chơi game nhẹ và các tác vụ cơ bản.",
+    "product_image": ["OPPO_A38_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.99,
+        "product_sku": "OA38-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 20,
+    "product_name": "OPPO A18",
+    "product_quantity": 59,
+    "product_description": "Bộ nhớ trong 64GB cho bạn không gian lưu trữ thoải mái cho ứng dụng, hình ảnh và video.",
+    "product_image": ["OPPO_A18_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "OA18-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 21,
+    "product_name": "Vivo Y19S",
+    "product_quantity": 31,
+    "product_description": "Bộ nhớ trong 128GB - Lưu trữ thoải mái hình ảnh, video, ứng dụng và tài liệu mà không lo hết dung lượng.",
+    "product_image": ["Vivo_Y19S_1", "Vivo_Y19S_2"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.59,
+        "product_sku": "VY19S-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 22,
+    "product_name": "Vivo Y100",
+    "product_quantity": 42,
+    "product_description": "Màn hình vivo Y100 rộng 6.67 inch - Cho không gian hiển thị lớn và thoải mái cho các hoạt động trên điện thoại.",
+    "product_image": ["Vivo_Y100_1"],
+    "brand_id": 5,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 5.79,
+        "product_sku": "VY100-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 6.19,
+        "product_sku": "VY100-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 23,
+    "product_name": "Vivo Y36",
+    "product_quantity": 73,
+    "product_description": "Description of product 23.",
+    "product_image": ["Vivo_Y36_1", "Vivo_Y36_2", "Vivo_Y36_3"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.29,
+        "product_sku": "VY36-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 5.89,
+        "product_sku": "VY36-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 24,
+    "product_name": "Vivo V30E",
+    "product_quantity": 74,
+    "product_description": "Chip Snapdragon 6 Gen 1 cho khả năng xử lý đa nhiệm mượt mà và chơi game tốt.",
+    "product_image": ["Vivo_V30E_1", "Vivo_V30E_2"],
+    "brand_id": 5,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "price": 8.99,
+        "product_sku": "VV30E-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 25,
+    "product_name": "Vivo Y18S",
+    "product_quantity": 55,
+    "product_description": "Được trang bị vi xử lý Mediatek Helio G85 và RAM 6GB, Y18S đảm bảo khả năng xử lý mượt mà và hiệu suất vượt trội.",
+    "product_image": ["Vivo_Y18S_1", "Vivo_Y18S_2", "Vivo_Y18S_3"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.29,
+        "product_sku": "VY18S-128GB"
+      },
+      {
+        "storage": "256GB",
+        "price": 5.49,
+        "product_sku": "VY18S-256GB"
+      }
+    ]
+  }
+]
