@@ -10,8 +10,8 @@ const Footer = () => {
             ZPHONE – Your destination for authentic smartphones with a wide
             range of models from top brands. We are committed to delivering
             high-quality products, competitive prices, and dedicated customer
-            service. <hr />
-            ZPHONE – Connecting you to technology and unforgettable experiences.
+            service. ZPHONE – Connecting you to technology and unforgettable
+            experiences.
           </p>
         </div>
         <div>
