@@ -5,11 +5,7 @@ const Navibar = () => {
   return (
     <Navbar fluid rounded>
       <Navbar.Brand>
-        <img
-          src="../../public/logo.png"
-          className="mr-3 h-6 sm:h-9"
-          alt="ZPHONE Logo"
-        />
+        <img src="logo.png" className="mr-3 h-6 sm:h-9" alt="ZPHONE Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2">
         <Dropdown
@@ -18,7 +14,7 @@ const Navibar = () => {
           label={
             <Avatar
               alt="User settings"
-              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+              img="https://thispersondoesnotexist.com/ "
               rounded
             />
           }

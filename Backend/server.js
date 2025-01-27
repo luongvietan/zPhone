@@ -8,7 +8,7 @@ const sharp = require("sharp"); // Thêm thư viện sharp để xử lý ảnh
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static("statics"));
+app.use(express.static("static"));
 mongoose
   .connect("mongodb://localhost:27017/zPhone")
   .then(() => console.log("MongoDB connected"))
