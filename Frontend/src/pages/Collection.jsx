@@ -28,7 +28,7 @@ const Collection = () => {
   const [sortType, setSortType] = useState("default");
 
   const toggleBrand = (e) => {
-    if (category.includes(e.target.value)) {
+    if (brand.includes(e.target.value)) {
       setBrand((previous) =>
         previous.filter((item) => item !== e.target.value)
       );
@@ -50,18 +50,20 @@ const Collection = () => {
 
     if (showSearch && search) {
       productCopy = productCopy.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
+        item.product_name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    if (brand.length > 0) {
+      productCopy = productCopy.filter((item) =>
+        brand.includes(item.brand_id.toString())
       );
     }
 
     if (category.length > 0) {
       productCopy = productCopy.filter((item) =>
-        category.includes(item.category)
+        category.includes(item.category_id.toString())
       );
-    }
-
-    if (brand.length > 0) {
-      productCopy = productCopy.filter((item) => brand.includes(item.brand));
     }
 
     switch (sortType) {
@@ -99,7 +101,7 @@ const Collection = () => {
             className={`h-3 sm:hidden ${showFilter ? "rotate-90" : ""}`}
           />
         </p>
-        {/* Category Filter */}
+        {/* Brand Filter */}
         <div
           className={`border border-gray-300 pl-5 py-3 mt-6 ${
             showFilter ? "" : "hidden"
@@ -111,7 +113,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={1}
+                value="1"
                 onChange={toggleBrand}
               />
               Apple
@@ -120,7 +122,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={2}
+                value="2"
                 onChange={toggleBrand}
               />
               Samsung
@@ -129,7 +131,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={3}
+                value="3"
                 onChange={toggleBrand}
               />
               Xiaomi
@@ -138,7 +140,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={4}
+                value="4"
                 onChange={toggleBrand}
               />
               OPPO
@@ -147,14 +149,14 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={5}
-                onChange={toggleCategory}
+                value="5"
+                onChange={toggleBrand}
               />
               Vivo
             </p>
           </div>
         </div>
-        {/* SubCategory Filter */}
+        {/* Category Filter */}
         <div
           className={`border border-gray-300 pl-5 py-3 my-5 ${
             showFilter ? "" : "hidden"
@@ -166,7 +168,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={1}
+                value="1"
                 onChange={toggleCategory}
               />
               Smartphones
@@ -175,7 +177,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={2}
+                value="2"
                 onChange={toggleCategory}
               />
               Gaming Phones
@@ -201,9 +203,9 @@ const Collection = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
           {filterProducts.map((item, index) => (
             <ProductItem
-              key={item.id || item._id} // Tùy thuộc vào cấu trúc API của bạn
+              key={item.id || item._id}
               product_id={item.product_id || item._id}
-              product_image={item.product_image || item.images} // Điều chỉnh theo tên trường trong API
+              product_image={item.product_image || item.images}
               product_name={item.product_name || item.product_name}
               price={parseFloat(item.variants[0].product_price)}
             />

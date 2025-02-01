@@ -1,28 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const ProductItem = ({ product_id, product_image, product_name, price }) => {
   return (
     <div className="hover:scale-110 transition ease-in-out relative m-3 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-      <a
+      <Link
         className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-        href="#"
+        to={`/product/${product_id}`}
       >
         <img
-          className="object-cover "
+          className="object-cover"
           src={`http://localhost:5000/phone_images/${product_image[0]}.png`}
           alt={product_image[0]}
         />
         {/* <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
           39% OFF
         </span> */}
-      </a>
+      </Link>
       <div className="mt-4 px-5 pb-5">
-        <a href="#">
+        <Link to={`/product/${product_id}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
             {product_name}
           </h5>
-        </a>
+        </Link>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
             <span className="text-2xl font-bold text-slate-900">
