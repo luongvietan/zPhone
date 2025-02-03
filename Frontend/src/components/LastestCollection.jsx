@@ -35,8 +35,8 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-3xl">
         <Title text1={"LASTEST"} text2={"COLLECTION"} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          Explore our latest collection of soccer gear—10 brand new products
-          designed to elevate your game with style and performance.
+          Explore our latest collection of new products designed to elevate your
+          life with style and performance.
         </p>
       </div>
       {/* Rendering products */}

@@ -3,23 +3,27 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 export const Product = () => {
-  const { productId } = useParams();
+  const { product_id } = useParams();
   const { products, currency, addToCart, updateQuantity, updateCartIcon } =
     useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
-
   const fetchProductData = useCallback(() => {
-    products.map((item) => {
-      if (item.pid === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-      }
-    });
-  }, [products, productId]);
+    if (products && products.length > 0 && product_id) {
+      const foundProduct = products.find(
+        (item) => item.product_id === parseInt(product_id)
+      );
+      if (foundProduct) {
+        setProductData(foundProduct);
+        setImage(foundProduct.product_image[0]);
 
+        // Set default size to first variant
+        setSize(foundProduct.variants[0].storage);
+      }
+    }
+  }, [products, product_id]);
   useEffect(() => {
     fetchProductData();
   }, [fetchProductData]);
@@ -50,7 +54,7 @@ export const Product = () => {
               <li className="text-left">
                 <div className="-m-1">
                   <a
-                    href="#"
+                    href="/"
                     className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                   >
                     {" "}
@@ -64,7 +68,7 @@ export const Product = () => {
                   <span className="mx-2 text-gray-400">/</span>
                   <div className="-m-1">
                     <a
-                      href="#"
+                      href="/collection"
                       className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                     >
                       {" "}
@@ -79,12 +83,12 @@ export const Product = () => {
                   <span className="mx-2 text-gray-400">/</span>
                   <div className="-m-1">
                     <a
-                      href="#"
+                      href=""
                       className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                       aria-current="page"
                     >
                       {" "}
-                      Coffee{" "}
+                      {productData?.product_name}{" "}
                     </a>
                   </div>
                 </div>
@@ -96,47 +100,35 @@ export const Product = () => {
             <div className="lg:col-span-3 lg:row-end-1">
               <div className="lg:flex lg:items-start">
                 <div className="lg:order-2 lg:ml-5">
-                  <div className="max-w-xl overflow-hidden rounded-lg">
+                  <div className="max-w-xl overflow-hidden rounded-lg transition-transform duration-300 hover:scale-110">
                     <img
-                      className="h-full w-full max-w-full object-cover"
-                      src="/images/JHxMnVrtPMdcNU1s_7g7f.png"
-                      alt=""
+                      className="h-full w-full max-w-full object-cover transition-transform duration-300"
+                      src={`http://localhost:5000/phone_images/${image}.png`}
+                      alt={productData?.product_name}
                     />
                   </div>
                 </div>
 
                 <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
                   <div className="flex flex-row items-start lg:flex-col">
-                    <button
-                      type="button"
-                      className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-900 text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="/images/JHxMnVrtPMdcNU1s_7g7f.png"
-                        alt=""
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="/images/JHxMnVrtPMdcNU1s_7g7f.png"
-                        alt=""
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="/images/JHxMnVrtPMdcNU1s_7g7f.png"
-                        alt=""
-                      />
-                    </button>
+                    {productData?.product_image.map((img, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 transition-transform duration-300 hover:scale-110 ${
+                          image === img
+                            ? "border-gray-900"
+                            : "border-transparent"
+                        } text-center`}
+                        onClick={() => setImage(img)}
+                      >
+                        <img
+                          className="h-full w-full object-cover"
+                          src={`http://localhost:5000/phone_images/${img}.png`}
+                          alt=""
+                        />
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -144,7 +136,7 @@ export const Product = () => {
 
             <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
               <h1 className="sm: text-2xl font-bold text-gray-900 sm:text-3xl">
-                Afro-Brazillian Coffee
+                {productData?.product_name}
               </h1>
 
               <div className="mt-5 flex items-center">
@@ -210,97 +202,40 @@ export const Product = () => {
                 </p>
               </div>
 
-              <h2 className="mt-8 text-base text-gray-900">Coffee Type</h2>
+              <h2 className="mt-8 text-base text-gray-900">Storage</h2>
               <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-                <label className="">
-                  <input
-                    type="radio"
-                    name="type"
-                    value="Powder"
-                    className="peer sr-only"
-                    defaultChecked
-                    onChange={handleTypeChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    Powder
-                  </p>
-                </label>
-                <label className="">
-                  <input
-                    type="radio"
-                    name="type"
-                    value="Whole Bean"
-                    className="peer sr-only"
-                    onChange={handleTypeChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    Whole Bean
-                  </p>
-                </label>
-                <label className="">
-                  <input
-                    type="radio"
-                    name="type"
-                    value="Groud"
-                    className="peer sr-only"
-                    onChange={handleTypeChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    Groud
-                  </p>
-                </label>
-              </div>
-
-              <h2 className="mt-8 text-base text-gray-900">
-                Choose subscription
-              </h2>
-              <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-                <label className="">
-                  <input
-                    type="radio"
-                    name="subscription"
-                    value="4 Months"
-                    className="peer sr-only"
-                    onChange={handleSubscriptionChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    4 Months
-                  </p>
-                  <span className="mt-1 block text-center text-xs">$80/mo</span>
-                </label>
-                <label className="">
-                  <input
-                    type="radio"
-                    name="subscription"
-                    value="8 Months"
-                    className="peer sr-only"
-                    defaultChecked
-                    onChange={handleSubscriptionChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    8 Months
-                  </p>
-                  <span className="mt-1 block text-center text-xs">$60/mo</span>
-                </label>
-                <label className="">
-                  <input
-                    type="radio"
-                    name="subscription"
-                    value="12 Months"
-                    className="peer sr-only"
-                    onChange={handleSubscriptionChange}
-                  />
-                  <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                    12 Months
-                  </p>
-                  <span className="mt-1 block text-center text-xs">$40/mo</span>
-                </label>
+                {productData?.variants.map((variant, index) => (
+                  <label key={index} className="">
+                    <input
+                      type="radio"
+                      name="storage"
+                      value={variant.storage}
+                      className="peer sr-only"
+                      defaultChecked={index === 0}
+                      onChange={() => setSize(variant.storage)}
+                    />
+                    <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
+                      {variant.storage}
+                    </p>
+                    <span className="mt-1 block text-center text-xs">
+                      {(variant.product_price * 1000000).toLocaleString()} VND
+                    </span>
+                  </label>
+                ))}
               </div>
 
               <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-t border-b py-4 sm:flex-row sm:space-y-0">
                 <div className="flex items-end">
-                  <h1 className="text-3xl font-bold">$60.50</h1>
-                  <span className="text-base">/month</span>
+                  <h1 className="text-3xl font-bold">
+                    {(
+                      productData?.variants.find((v) => v.storage === size)
+                        ?.product_price * 1000000
+                    ).toLocaleString() ||
+                      (
+                        productData?.variants[0]?.product_price * 1000000
+                      ).toLocaleString()}{" "}
+                    VND
+                  </h1>
                 </div>
 
                 <button
@@ -393,23 +328,7 @@ export const Product = () => {
               </div>
 
               <div className="mt-8 flow-root sm:mt-12">
-                <h1 className="text-3xl font-bold">Delivered To Your Door</h1>
-                <p className="mt-4">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-                  accusantium nesciunt fuga.
-                </p>
-                <h1 className="mt-8 text-3xl font-bold">
-                  From the Fine Farms of Brazil
-                </h1>
-                <p className="mt-4">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio
-                  numquam enim facere.
-                </p>
-                <p className="mt-4">
-                  Amet consectetur adipisicing elit. Optio numquam enim facere.
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Dolore rerum nostrum eius facere, ad neque.
-                </p>
+                <p className="mt-4">{productData?.product_description}</p>
               </div>
             </div>
           </div>

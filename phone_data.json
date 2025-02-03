@@ -19,7 +19,7 @@
       },
       {
         "storage": "256GB",
-        "price": 10.79,
+        "product_price": 10.79,
         "product_sku": "XRN14-256GB"
       }
     ]
@@ -40,7 +40,7 @@
       },
       {
         "storage": "256GB",
-        "price": 15.79,
+        "product_price": 15.79,
         "product_sku": "X14T-256GB"
       }
     ]
@@ -61,7 +61,7 @@
       },
       {
         "storage": "518GB",
-        "price": 9.29,
+        "product_price": 9.29,
         "product_sku": "XRN13-518GB"
       }
     ]
@@ -118,7 +118,7 @@
       },
       {
         "storage": "256GB",
-        "price": 12.49,
+        "product_price": 12.49,
         "product_sku": "XPX6-256GB"
       }
     ]
@@ -155,7 +155,7 @@
       },
       {
         "storage": "256GB",
-        "price": 5.39,
+        "product_price": 5.39,
         "product_sku": "XR13C-256GB"
       }
     ]
@@ -176,7 +176,7 @@
       },
       {
         "storage": "256GB",
-        "price": 5.49,
+        "product_price": 5.49,
         "product_sku": "XR10-256GB"
       }
     ]
@@ -197,7 +197,7 @@
       },
       {
         "storage": "256GB",
-        "price": 17.79,
+        "product_price": 17.79,
         "product_sku": "X12-256GB"
       }
     ]
@@ -213,7 +213,7 @@
     "variants": [
       {
         "storage": "256GB",
-        "price": 8.99,
+        "product_price": 8.99,
         "product_sku": "OR13-256GB"
       }
     ]
@@ -234,7 +234,7 @@
       },
       {
         "storage": "256GB",
-        "price": 22.19,
+        "product_price": 22.19,
         "product_sku": "OFX8-256GB"
       }
     ]
@@ -255,7 +255,7 @@
       },
       {
         "storage": "256GB",
-        "price": 6.09,
+        "product_price": 6.09,
         "product_sku": "OA3-256GB"
       }
     ]
@@ -276,7 +276,7 @@
       },
       {
         "storage": "256GB",
-        "price": 11.99,
+        "product_price": 11.99,
         "product_sku": "OR12-256GB"
       }
     ]
@@ -313,7 +313,7 @@
       },
       {
         "storage": "256GB",
-        "price": 14.99,
+        "product_price": 14.99,
         "product_sku": "OFX5-256GB"
       }
     ]
@@ -329,7 +329,7 @@
     "variants": [
       {
         "storage": "256GB",
-        "price": 36.99,
+        "product_price": 36.99,
         "product_sku": "OFN3-256GB"
       }
     ]
@@ -350,7 +350,7 @@
       },
       {
         "storage": "256GB",
-        "price": 8.49,
+        "product_price": 8.49,
         "product_sku": "OR10-256GB"
       }
     ]
@@ -419,7 +419,7 @@
       },
       {
         "storage": "256GB",
-        "price": 6.19,
+        "product_price": 6.19,
         "product_sku": "VY100-256GB"
       }
     ]
@@ -440,7 +440,7 @@
       },
       {
         "storage": "256GB",
-        "price": 5.89,
+        "product_price": 5.89,
         "product_sku": "VY36-256GB"
       }
     ]
@@ -456,7 +456,7 @@
     "variants": [
       {
         "storage": "256GB",
-        "price": 8.99,
+        "product_price": 8.99,
         "product_sku": "VV30E-256GB"
       }
     ]
@@ -477,7 +477,7 @@
       },
       {
         "storage": "256GB",
-        "price": 5.49,
+        "product_price": 5.49,
         "product_sku": "VY18S-256GB"
       }
     ]
@@ -568,7 +568,7 @@
       },
       {
         "storage": "512GB",
-        "price": 38.79,
+        "product_price": 38.79,
         "product_sku": "IP16PM-512GB"
       }
     ]
@@ -590,7 +590,7 @@
       },
       {
         "storage": "256GB",
-        "price": 30.39,
+        "product_price": 30.39,
         "product_sku": "IP16P-256GB"
       }
     ]
@@ -612,7 +612,7 @@
       },
       {
         "storage": "256",
-        "price": 24.29,
+        "product_price": 24.29,
         "product_sku": "IP16-256GB"
       }
     ]
@@ -633,7 +633,7 @@
       },
       {
         "storage": "512GB",
-        "price": 33.99,
+        "product_price": 33.99,
         "product_sku": "IP15PM-512GB"
       }
     ]
@@ -654,7 +654,7 @@
       },
       {
         "storage": "256GB",
-        "price": 28.59,
+        "product_price": 28.59,
         "product_sku": "IP15P-256GB"
       }
     ]
@@ -675,7 +675,7 @@
       },
       {
         "storage": "256GB",
-        "price": 25.89,
+        "product_price": 25.89,
         "product_sku": "IP15PL-256GB"
       }
     ]
@@ -696,7 +696,7 @@
       },
       {
         "storage": "256GB",
-        "price": 21.99,
+        "product_price": 21.99,
         "product_sku": "IP15-256GB"
       }
     ]
@@ -717,7 +717,7 @@
       },
       {
         "storage": "256GB",
-        "price": 27.99,
+        "product_price": 27.99,
         "product_sku": "IP14PM-256GB"
       }
     ]
@@ -738,7 +738,7 @@
       },
       {
         "storage": "256GB",
-        "price": 22.39,
+        "product_price": 22.39,
         "product_sku": "IP14PL-256GB"
       }
     ]
@@ -759,7 +759,7 @@
       },
       {
         "storage": "256GB",
-        "price": 24.99,
+        "product_price": 24.99,
         "product_sku": "IP14P-256GB"
       }
     ]
@@ -797,7 +797,7 @@
       },
       {
         "storage": "256GB",
-        "price": 23.99,
+        "product_price": 23.99,
         "product_sku": "IP13PM-256GB"
       }
     ]
@@ -818,7 +818,7 @@
       },
       {
         "storage": "256GB",
-        "price": 24.49,
+        "product_price": 24.49,
         "product_sku": "IP13P-256GB"
       }
     ]
@@ -839,7 +839,7 @@
       },
       {
         "storage": "512GB",
-        "price": 29.99,
+        "product_price": 29.99,
         "product_sku": "SSG_Z_F6-521GB"
       }
     ]
@@ -876,7 +876,7 @@
       },
       {
         "storage": "256GB",
-        "price": 27.59,
+        "product_price": 27.59,
         "product_sku": "IP12PM-256GB"
       }
     ]
@@ -897,7 +897,7 @@
       },
       {
         "storage": "256GB",
-        "price": 24.99,
+        "product_price": 24.99,
         "product_sku": "IP12P-256GB"
       }
     ]
@@ -918,7 +918,7 @@
       },
       {
         "storage": "64GB",
-        "price": 10.49,
+        "product_price": 10.49,
         "product_sku": "IP12-64GB"
       }
     ]
@@ -939,7 +939,7 @@
       },
       {
         "storage": "512GB",
-        "price": 28.59,
+        "product_price": 28.59,
         "product_sku": "SSG_S24_U-512GB"
       }
     ]

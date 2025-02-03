@@ -1,18 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { CiSearch } from "react-icons/ci";
 const Navibar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setShowSearch(false);
+    }
+  };
+
   return (
     <Navbar fluid rounded>
       <Navbar.Brand as={Link} to="/">
-        <img
-          src="../../public/logo.png"
-          className="mr-3 h-6 sm:h-9"
-          alt="ZPHONE Logo"
-        />
+        <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="ZPHONE Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2">
+        <div className="relative flex items-center">
+          <button
+            onClick={() => setShowSearch(!showSearch)}
+            className="p-2 hover:bg-gray-100 rounded-full"
+          >
+            <CiSearch className="w-5 h-5" />
+          </button>
+          {showSearch && (
+            <form
+              onSubmit={handleSearch}
+              className="absolute right-0 top-full mt-2"
+            >
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </form>
+          )}
+        </div>
         <Dropdown
           arrowIcon={false}
           inline
