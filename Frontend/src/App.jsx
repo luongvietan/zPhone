@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import { Product } from "./pages/Product";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 const App = () => {
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/collection" element={<Collection />} />
         <Route path="/product/:product_id" element={<Product />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
     </div>
