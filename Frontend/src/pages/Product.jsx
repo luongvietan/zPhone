@@ -72,7 +72,7 @@ export const Product = () => {
                       className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                     >
                       {" "}
-                      Products{" "}
+                      Collection{" "}
                     </a>
                   </div>
                 </div>

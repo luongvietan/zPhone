@@ -1,10 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductItem = ({ product_id, product_image, product_name, price }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/product/${product_id}`);
+  };
+
   return (
-    <div className="hover:scale-110 transition ease-in-out relative m-3 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+    <div
+      className="hover:scale-110 transition ease-in-out relative m-3 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer"
+      onClick={handleClick}
+    >
       <Link
         className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
         to={`/product/${product_id}`}

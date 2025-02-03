@@ -10,7 +10,6 @@ const LatestCollection = () => {
     const fetchProducts = async () => {
       try {
         const response = await api.get("/products");
-        console.log("API response:", response.data); // Để debug
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);

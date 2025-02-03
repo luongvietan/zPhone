@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
-const Navibar = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
-  const navigate = useNavigate();
+import { ShopContext } from "../context/ShopContext";
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setShowSearch(false);
-    }
-  };
+const Navibar = () => {
+  const navigate = useNavigate();
+  const { setShowSearch } = useContext(ShopContext);
 
   return (
     <Navbar fluid rounded>
@@ -21,28 +14,12 @@ const Navibar = () => {
         <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="ZPHONE Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <div className="relative flex items-center">
-          <button
-            onClick={() => setShowSearch(!showSearch)}
-            className="p-2 hover:bg-gray-100 rounded-full"
-          >
-            <CiSearch className="w-5 h-5" />
-          </button>
-          {showSearch && (
-            <form
-              onSubmit={handleSearch}
-              className="absolute right-0 top-full mt-2"
-            >
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </form>
-          )}
-        </div>
+        {/* <button
+          onClick={() => setShowSearch(true)}
+          className="p-2 hover:bg-gray-100 rounded-full mr-2"
+        >
+          <CiSearch className="w-5 h-5" />
+        </button> */}
         <Dropdown
           arrowIcon={false}
           inline

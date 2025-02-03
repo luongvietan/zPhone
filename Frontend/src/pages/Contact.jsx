@@ -3,7 +3,7 @@ import React from "react";
 const Contact = () => {
   return (
     <>
-      <section className="relative z-10 overflow-hidden bg-white py-16 dark:bg-dark lg:py-[90px]">
+      <section className="relative z-[1] overflow-hidden bg-white py-16 dark:bg-dark lg:py-[90px]">
         <div className="container mx-auto max-w-[80%]">
           <div className="-mx-4 flex flex-wrap lg:justify-between">
             <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
@@ -15,9 +15,9 @@ const Contact = () => {
                   GET IN TOUCH WITH US
                 </h2>
                 <p className="mb-9 text-base leading-relaxed text-body-color dark:text-dark-6">
-                  We're always happy to hear from you! If you have any
+                  We&apos;re always happy to hear from you! If you have any
                   questions, feedback, or would like to collaborate, please
-                  don't hesitate to reach out via :
+                  don&apos;t hesitate to reach out via :
                 </p>
                 <div className="mb-8 flex w-full max-w-[370px]">
                   <div className="mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-primary/5 text-primary sm:h-[70px] sm:max-w-[70px]">
@@ -79,7 +79,7 @@ const Contact = () => {
                       Phone Number
                     </h4>
                     <p className="text-base text-body-color dark:text-dark-6">
-                      (+84)384 398 634
+                      (+84) 384 398 634
                     </p>
                   </div>
                 </div>
