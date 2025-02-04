@@ -8,6 +8,9 @@ import Collection from "./pages/Collection";
 import { Product } from "./pages/Product";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPwd from "./pages/ForgotPwd";
 const App = () => {
   return (
     <>
@@ -20,6 +23,9 @@ const App = () => {
           <Route path="/product/:product_id" element={<Product />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/recovery" element={<ForgotPwd />} />
         </Routes>
         <Footer />
       </div>
