@@ -1,12 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { ShopContext } from "../context/ShopContext";
+import { PiShoppingCartSimpleFill } from "react-icons/pi";
+import { CartContext } from "../context/CartContext";
 
 const Navibar = () => {
   const navigate = useNavigate();
   const { setShowSearch } = useContext(ShopContext);
+  const { toggleCart, cartItems } = useContext(CartContext);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const totalCount = cartItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    setCartCount(totalCount);
+  }, [cartItems]);
 
   return (
     <Navbar fluid rounded>
@@ -14,12 +26,17 @@ const Navibar = () => {
         <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="ZPHONE Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2">
-        {/* <button
-          onClick={() => setShowSearch(true)}
-          className="p-2 hover:bg-gray-100 rounded-full mr-2"
+        <button
+          onClick={toggleCart}
+          className="relative p-2 hover:bg-gray-100 rounded-full mr-2"
         >
-          <CiSearch className="w-5 h-5" />
-        </button> */}
+          <PiShoppingCartSimpleFill className="w-5 h-5" />
+          {cartCount > 0 && (
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
+              {cartCount}
+            </span>
+          )}
+        </button>
         <Dropdown
           arrowIcon={false}
           inline
