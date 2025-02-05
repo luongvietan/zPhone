@@ -51,10 +51,22 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    variants: {
-      type: [variantSchema],
-      required: true,
-    },
+    variants: [
+      {
+        storage: {
+          type: String,
+          required: true,
+        },
+        product_price: {
+          type: Number,
+          required: true,
+        },
+        product_sku: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

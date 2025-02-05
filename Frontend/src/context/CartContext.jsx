@@ -8,7 +8,7 @@ export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (product) => {
-    console.log("Adding to cart - Received product:", product);
+    // console.log("Adding to cart - Received product:", product);
 
     setCartItems((prevItems) => {
       // Check for an existing item with the same product_id AND storage
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
         quantity: 1,
       };
 
-      console.log("New cart item:", newItem);
+      // console.log("New cart item:", newItem);
       return [...prevItems, newItem];
     });
   };

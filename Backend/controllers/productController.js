@@ -1,7 +1,7 @@
 const Product = require("../models/productModel");
 
 // Create a new product
-exports.createProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const newProduct = new Product(req.body);
     const savedProduct = await newProduct.save();
@@ -12,17 +12,17 @@ exports.createProduct = async (req, res) => {
 };
 
 // Get all products
-exports.getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: "Error fetching products" });
   }
 };
 
 // Get a product by ID
-exports.getProductById = async (req, res) => {
+const getProductById = async (req, res) => {
   try {
     const product = await Product.findOne({ product_id: req.params.id });
     if (!product) {
@@ -35,7 +35,7 @@ exports.getProductById = async (req, res) => {
 };
 
 // Update a product by ID
-exports.updateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const updatedProduct = await Product.findOneAndUpdate(
       { product_id: req.params.id },
@@ -52,7 +52,7 @@ exports.updateProduct = async (req, res) => {
 };
 
 // Delete a product by ID
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const deletedProduct = await Product.findOneAndDelete({
       product_id: req.params.id,
@@ -64,4 +64,12 @@ exports.deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+module.exports = {
+  getAllProducts,
+  createProduct,
+  getProductById,
+  updateProduct,
+  deleteProduct,
 };

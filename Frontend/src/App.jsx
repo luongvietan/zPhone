@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
@@ -11,9 +12,13 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPwd from "./pages/ForgotPwd";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
+
 const App = () => {
   return (
-    <>
+    <AuthProvider>
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
         <Navibar />
         <Cart />
@@ -26,10 +31,18 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/recovery" element={<ForgotPwd />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Footer />
       </div>
-    </>
+    </AuthProvider>
   );
 };
 

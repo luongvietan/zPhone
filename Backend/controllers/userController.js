@@ -1,9 +1,9 @@
-const user = require("../models/userModel");
+const User = require("../models/userModel");
 
 // Create a new user
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
-    const newUser = new user(req.body);
+    const newUser = new User(req.body);
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
@@ -12,9 +12,9 @@ exports.createUser = async (req, res) => {
 };
 
 // Get all users
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
-    const users = await user.find();
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -22,9 +22,9 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Get a user by ID
-exports.getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
-    const foundUser = await user.findOne({ id: req.params.id });
+    const foundUser = await User.findOne({ id: req.params.id });
     if (!foundUser) {
       return res.status(404).json({ message: "user not found" });
     }
@@ -35,9 +35,9 @@ exports.getUserById = async (req, res) => {
 };
 
 // Update a user by ID
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
-    const updatedUser = await user.findOneAndUpdate(
+    const updatedUser = await User.findOneAndUpdate(
       { user_id: req.params.id },
       req.body,
       { new: true, runValidators: true }
@@ -52,9 +52,9 @@ exports.updateUser = async (req, res) => {
 };
 
 // Delete a user by ID
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
-    const deletedUser = await user.findOneAndDelete({
+    const deletedUser = await User.findOneAndDelete({
       id: req.params.id,
     });
     if (!deletedUser) {
@@ -64,4 +64,25 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+const getProfile = async (req, res) => {
+  try {
+    // Lấy thông tin người dùng từ request (đã được gắn bởi middleware)
+    const user = await User.findById(req.user.id).select("-password");
+
+    // Trả về thông tin người dùng
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: "Server error" });
+  }
+};
+
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getProfile,
 };

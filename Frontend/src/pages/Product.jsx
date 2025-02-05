@@ -53,7 +53,7 @@ export const Product = () => {
         storage: selectedVariant.storage,
       };
 
-      console.log("Product being added to cart:", productToAdd);
+      // console.log("Product being added to cart:", productToAdd);
       addToCart(productToAdd);
     }
   };

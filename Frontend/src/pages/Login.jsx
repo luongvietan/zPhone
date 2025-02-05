@@ -1,14 +1,30 @@
 import React, { useState } from "react";
-import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const { setEmail, setPassword, loginStatus, onSubmitHandler } =
-    useContext(ShopContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+      localStorage.setItem("token", res.data.token);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <form
-      onSubmit={onSubmitHandler}
+      onSubmit={handleLogin}
       className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-500"
     >
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
@@ -43,4 +59,5 @@ const Login = () => {
     </form>
   );
 };
+
 export default Login;

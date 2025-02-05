@@ -5,13 +5,14 @@ import { CiSearch } from "react-icons/ci";
 import { ShopContext } from "../context/ShopContext";
 import { PiShoppingCartSimpleFill } from "react-icons/pi";
 import { CartContext } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navibar = () => {
   const navigate = useNavigate();
   const { setShowSearch } = useContext(ShopContext);
   const { toggleCart, cartItems } = useContext(CartContext);
   const [cartCount, setCartCount] = useState(0);
-
+  const { user, logout } = useAuth();
   useEffect(() => {
     const totalCount = cartItems.reduce(
       (total, item) => total + item.quantity,
@@ -43,21 +44,30 @@ const Navibar = () => {
           label={
             <Avatar
               alt="User settings"
-              img="https://thispersondoesnotexist.com/"
+              img={user?.avatar || "https://thispersondoesnotexist.com/"}
               rounded
             />
           }
         >
           <Dropdown.Header>
-            <span className="block text-sm">Viet An</span>
+            <span className="block text-sm">{user?.name || "Guess mode"}</span>
             <span className="block truncate text-sm font-medium">
-              name@user.com
+              {user?.email || ""}
             </span>
           </Dropdown.Header>
-          <Dropdown.Item>Dashboard</Dropdown.Item>
-          <Dropdown.Item>Settings</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
+          {user ? (
+            <>
+              <Dropdown.Item>Dashboard</Dropdown.Item>
+              <Dropdown.Item href="/profile">Settings</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>
+            </>
+          ) : (
+            <>
+              <Dropdown.Item href="/login">Login</Dropdown.Item>
+              <Dropdown.Item href="/register">Register</Dropdown.Item>
+            </>
+          )}
         </Dropdown>
         <Navbar.Toggle />
       </div>
