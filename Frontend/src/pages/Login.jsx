@@ -16,6 +16,7 @@ const Login = () => {
         password,
       });
       localStorage.setItem("token", res.data.token);
+      console.log(`res.data.token : `, res.data.token);
       navigate("/");
     } catch (error) {
       console.error(error);

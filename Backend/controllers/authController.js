@@ -4,6 +4,12 @@ const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res) => {
   const { username, email, password, address, phone, id } = req.body;
+
+  // Kiểm tra xem tất cả các trường có tồn tại không
+  if (!username || !email || !password || !address || !phone || !id) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
