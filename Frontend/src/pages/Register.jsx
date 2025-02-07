@@ -132,7 +132,7 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <input
+      {/* <input
         type="text"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="ID"
@@ -145,17 +145,17 @@ const Register = () => {
         placeholder="Address"
         value={address}
         readOnly
-      />
+      /> */}
       <div className="flex justify-between w-full">
         <div className="css_select_div flex-1 mx-1">
           <select
             className="css_select w-full"
             id="tinh"
             name="tinh"
-            title="Chọn Tỉnh Thành"
+            title="Province / City"
             onChange={handleProvinceChange}
           >
-            <option value="0">Tỉnh Thành</option>
+            <option value="0">City</option>
             {provinces.map((province) => (
               <option key={province.id} value={province.id}>
                 {province.full_name}
@@ -168,10 +168,10 @@ const Register = () => {
             className="css_select w-full"
             id="quan"
             name="quan"
-            title="Chọn Quận Huyện"
+            title="District"
             onChange={handleDistrictChange}
           >
-            <option value="0">Quận Huyện</option>
+            <option value="0">District</option>
             {districts.map((district) => (
               <option key={district.id} value={district.id}>
                 {district.full_name}
@@ -184,10 +184,10 @@ const Register = () => {
             className="css_select w-full"
             id="phuong"
             name="phuong"
-            title="Chọn Phường Xã"
+            title="Ward"
             onChange={handleWardChange}
           >
-            <option value="0">Phường Xã</option>
+            <option value="0">Ward</option>
             {wards.map((ward) => (
               <option key={ward.id} value={ward.id}>
                 {ward.full_name}
