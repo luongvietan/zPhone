@@ -7,14 +7,14 @@ exports.register = async (req, res) => {
 
   // Kiểm tra xem tất cả các trường có tồn tại không
   if (!username || !email || !password || !address || !phone || !id) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "All fields required" });
   }
 
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User Already Exist" });
     }
 
     // Create new user with all required fields
@@ -29,12 +29,12 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "Registration Success" });
   } catch (error) {
     console.error("Registration error:", error);
     res
       .status(500)
-      .json({ message: "Registration failed", error: error.message });
+      .json({ message: "Registration Failed", error: error.message });
   }
 };
 
@@ -44,13 +44,13 @@ exports.login = async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Wrong Email" });
     }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Wrong Password" });
     }
 
     // Generate JWT token
@@ -63,12 +63,12 @@ exports.login = async (req, res) => {
     delete userResponse.password;
 
     res.status(200).json({
-      message: "Login successful",
+      message: "Login Success",
       user: userResponse,
       token,
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };

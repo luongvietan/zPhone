@@ -7,50 +7,57 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // const fetchUserProfile = async () => {
-  //   try {
-  //     const res = await axios.get("/auth/me");
-  //     setUser(res.data.user);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // fetchUserProfile();
-    } else {
+      const res = await axios.get("/api/auth/me", {
+        // Thêm /api vào đường dẫn
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data.user);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    } finally {
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
   }, []);
 
-  const refreshToken = async () => {
+  const login = async (email, password) => {
     try {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) return;
-
-      const res = await axios.post("/auth/refresh-token", { refreshToken });
+      const res = await axios.post("/api/auth/login", { email, password }); // Thêm /api vào đường dẫn
       localStorage.setItem("token", res.data.token);
-      return res.data.token;
+      setUser(res.data.user);
+      return { success: true };
     } catch (error) {
-      logout();
+      return {
+        success: false,
+        error: error.response?.data?.message || "Login failed!",
+      };
     }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
     setUser(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, logout }} //fetchUserProfile
+      value={{ user, isLoading, login, logout, fetchUserProfile }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

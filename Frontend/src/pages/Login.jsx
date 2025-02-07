@@ -1,25 +1,47 @@
+// Login.jsx
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const loadingToast = toast.loading("Logging in...");
+
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
-      localStorage.setItem("token", res.data.token);
-      console.log(`res.data.token : `, res.data.token);
-      navigate("/");
+      const result = await login(email, password);
+
+      if (result.success) {
+        toast.update(loadingToast, {
+          render: "Login successful!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        navigate("/");
+      } else {
+        toast.update(loadingToast, {
+          render: result.error,
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      }
     } catch (error) {
-      console.error(error);
+      toast.update(loadingToast, {
+        render: "Login failed!",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
   };
 
@@ -28,6 +50,7 @@ const Login = () => {
       onSubmit={handleLogin}
       className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-500"
     >
+      <ToastContainer position="top-center" />
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
         <p className="prata-regular text-3xl">Login</p>
         <hr className="border-none h-[1.5px] w-8 bg-gray-800" />

@@ -43,16 +43,11 @@ const Register = () => {
     fetchProvinces();
   }, []);
 
+  // Register.jsx
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log({
-      username,
-      email,
-      password,
-      id,
-      address,
-      phone,
-    });
+    const loadingToast = toast.loading("Creating account...");
+
     try {
       await axios.post("http://localhost:5000/api/auth/register", {
         username,
@@ -62,10 +57,24 @@ const Register = () => {
         address,
         phone,
       });
-      navigate("/login");
+
+      toast.update(loadingToast, {
+        render: "Registration successful! Please login.",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      console.error("Error response:", error.response.data);
-      toast.error(error.response.data.message || "Đăng ký không thành công!");
+      toast.update(loadingToast, {
+        render: error.response?.data?.message || "Registration failed!",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
   };
 
