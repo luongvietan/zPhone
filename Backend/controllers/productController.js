@@ -66,10 +66,46 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const addComment = async (req, res) => {
+  try {
+    const { user, content } = req.body;
+    const product = await Product.findOne({ product_id: req.params.id });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const newComment = { user, content, createdAt: new Date() };
+    product.comments.push(newComment);
+
+    await product.save();
+    res
+      .status(200)
+      .json({ message: "Comment added successfully", comment: newComment });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Lấy tất cả bình luận của sản phẩm
+const getComments = async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.id });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(product.comments);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching comments" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   createProduct,
   getProductById,
   updateProduct,
   deleteProduct,
+  addComment,
+  getComments,
 };

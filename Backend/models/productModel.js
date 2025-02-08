@@ -20,6 +20,24 @@ const variantSchema = new mongoose.Schema(
 );
 
 // Define product schema
+const commentSchema = new mongoose.Schema(
+  {
+    user: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
 const productSchema = new mongoose.Schema(
   {
     product_id: {
@@ -31,10 +49,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    product_quantity: {
-      type: Number,
-      required: true,
-    },
     product_description: {
       type: String,
       required: true,
@@ -43,35 +57,11 @@ const productSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    brand_id: {
-      type: Number,
-      required: true,
-    },
-    category_id: {
-      type: Number,
-      required: true,
-    },
-    variants: [
-      {
-        storage: {
-          type: String,
-          required: true,
-        },
-        product_price: {
-          type: Number,
-          required: true,
-        },
-        product_sku: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    variants: [variantSchema],
+    comments: [commentSchema],
   },
   { timestamps: true }
 );
 
-// Create the Product model
 const Product = mongoose.model("Product", productSchema);
-
 module.exports = Product;

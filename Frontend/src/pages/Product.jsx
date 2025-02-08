@@ -2,16 +2,70 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 export const Product = () => {
   const { product_id } = useParams();
   const { products, currency } = useContext(ShopContext);
   const { addToCart } = useContext(CartContext);
+  const { user } = useAuth();
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+
+  // Lấy bình luận từ server
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/products/${product_id}/comments`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  // Gửi bình luận lên server
+  const handleCommentSubmit = async () => {
+    if (!comment.trim() || !user?.username) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/products/${product_id}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user: user.username, content: comment }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setComments([...comments, data.comment]);
+      setComment("");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchProductData = useCallback(() => {
     if (products && products.length > 0 && product_id) {
@@ -56,6 +110,14 @@ export const Product = () => {
       // console.log("Product being added to cart:", productToAdd);
       addToCart(productToAdd);
     }
+  };
+
+  const handleCommentClick = () => {
+    setShowCommentForm(true);
+  };
+
+  const handleDescriptionClick = () => {
+    setShowCommentForm(false);
   };
 
   return (
@@ -214,16 +276,75 @@ export const Product = () => {
                     <a
                       href="#"
                       title=""
-                      className="border-b-2 border-gray-900 py-4 text-sm font-medium text-gray-900 hover:border-gray-400 hover:text-gray-800"
+                      onClick={handleDescriptionClick}
+                      className={`border-b-2 py-4 text-sm font-medium ${
+                        showCommentForm
+                          ? "border-gray-400 text-gray-400"
+                          : "border-gray-900 text-gray-900 hover:border-gray-400 hover:text-gray-800"
+                      }`}
                     >
                       Description
+                    </a>
+                    <a
+                      href="#"
+                      title=""
+                      onClick={handleCommentClick}
+                      className={`border-b-2 py-4 text-sm font-medium ${
+                        showCommentForm
+                          ? "border-gray-900 text-gray-900"
+                          : "border-gray-400 text-gray-400 hover:border-gray-400 hover:text-gray-800"
+                      }`}
+                    >
+                      Comment
                     </a>
                   </nav>
                 </div>
 
-                <div className="mt-8 flow-root sm:mt-12">
+                <div
+                  className={`mt-8 flow-root sm:mt-12 ${
+                    showCommentForm ? "hidden" : ""
+                  }`}
+                >
                   <p className="mt-4">{productData?.product_description}</p>
                 </div>
+
+                {showCommentForm && (
+                  <div className="mt-4">
+                    <textarea
+                      className="w-full border border-gray-300 rounded-md p-2"
+                      rows="4"
+                      placeholder="Type your comments..."
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="mt-2 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 px-4 py-2 text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                      onClick={handleCommentSubmit}
+                    >
+                      Gửi
+                    </button>
+
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold">Comments:</h3>
+                      {comments.length > 0 ? (
+                        <ul className="mt-2">
+                          {comments.map((cmt, index) => (
+                            <li key={index} className="border-b py-2">
+                              <p className="font-bold">{cmt.user}:</p>
+                              <p>{cmt.content}</p>
+                              <p className="text-sm text-gray-500">
+                                {new Date(cmt.createdAt).toLocaleString()}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>Chưa có bình luận nào.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
