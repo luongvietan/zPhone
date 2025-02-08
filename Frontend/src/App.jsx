@@ -16,6 +16,7 @@ import Register from "./pages/Register";
 import ForgotPwd from "./pages/ForgotPwd";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
           <Footer />
         </div>

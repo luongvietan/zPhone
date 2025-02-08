@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import axios from "../config/axios";
-
+import { Link } from "react-router-dom";
 const Cart = () => {
   const {
     cartItems = [], // Provide default empty array
@@ -202,11 +202,10 @@ const Cart = () => {
                   <p>{(total * 1000000).toLocaleString()} VND</p>
                 </div>
                 <div className="mt-6">
-                  <button
+                  <Link
                     className="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 disabled:opacity-50"
-                    onClick={() => {
-                      // Xử lý thanh toán
-                    }}
+                    to="/checkout"
+                    onClick={toggleCart}
                     disabled={loading}
                   >
                     Checkout
@@ -224,7 +223,7 @@ const Cart = () => {
                         d="M13 7l5 5m0 0l-5 5m5-5H6"
                       />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}
