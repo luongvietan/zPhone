@@ -340,7 +340,7 @@ export const Product = () => {
                           ))}
                         </ul>
                       ) : (
-                        <p>Chưa có bình luận nào.</p>
+                        <p>No comments yet.</p>
                       )}
                     </div>
                   </div>
