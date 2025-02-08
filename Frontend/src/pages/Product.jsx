@@ -322,7 +322,7 @@ export const Product = () => {
                       className="mt-2 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 px-4 py-2 text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
                       onClick={handleCommentSubmit}
                     >
-                      Gửi
+                      Send
                     </button>
 
                     <div className="mt-6">
