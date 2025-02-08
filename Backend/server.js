@@ -28,20 +28,6 @@ const storage = multer.memoryStorage(); // Sử dụng bộ nhớ tạm để l�
 
 const upload = multer({ storage });
 
-// app.post("/upload", upload.single("file"), async (req, res) => {
-//   const filename = `${path.parse(req.file.originalname).name}.png`; // Đổi tên file thành .png
-//   const filePath = `static/Phone_images/${filename}`;
-
-//   try {
-//     await sharp(req.file.buffer).png().toFile(filePath); // Chuyển đổi và lưu file ảnh thành .png
-//     res.json({ filePath });
-//     console.log(filename);
-//   } catch (err) {
-//     res.status(500).json({ error: "Error processing image" });
-//     console.error("Error processing image:", err);
-//   }
-// });
-
 app.get("/", (req, res) => {
   res.send("Welcome to the zPhone API");
 });
@@ -50,10 +36,13 @@ app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
 
+const paymentRoutes = require("./routes/payment");
 const productRoutes = require("./routes/productRouter");
 const userRoutes = require("./routes/userRouter");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+
+app.use("/api/payment", paymentRoutes);
 app.use("/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);

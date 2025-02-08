@@ -34,7 +34,7 @@ const Login = () => {
           render: result.error,
           type: "error",
           isLoading: false,
-          autoClose: 3000,
+          autoClose: 2000,
         });
       }
     } catch (error) {
@@ -42,7 +42,7 @@ const Login = () => {
         render: "Login failed!",
         type: "error",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };

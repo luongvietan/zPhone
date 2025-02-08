@@ -17,6 +17,9 @@ import ForgotPwd from "./pages/ForgotPwd";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Checkout from "./pages/Checkout";
+import Payment from "./components/Payment";
+import VNPayReturn from "./pages/VNPayReturn";
+import OrderSuccess from "./pages/OrderSuccess";
 
 const App = () => {
   return (
@@ -43,6 +46,9 @@ const App = () => {
               }
             />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/vnpay-return" element={<VNPayReturn />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
           </Routes>
           <Footer />
         </div>

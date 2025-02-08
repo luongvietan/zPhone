@@ -81,7 +81,7 @@ const Register = () => {
         render: errorMessage,
         type: "error",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };
