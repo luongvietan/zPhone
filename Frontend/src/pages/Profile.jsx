@@ -38,28 +38,30 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
+    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">
+        Profile
+      </h1>
 
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
 
       {profileData && (
-        <div className="space-y-4">
-          <div>
+        <div className="space-y-6">
+          <div className="bg-white p-4 rounded-lg shadow">
             <p className="font-semibold">Username:</p>
-            <p>{profileData.username}</p>
+            <p className="text-gray-700">{profileData.username}</p>
           </div>
-          <div>
+          <div className="bg-white p-4 rounded-lg shadow">
             <p className="font-semibold">Email:</p>
-            <p>{profileData.email}</p>
+            <p className="text-gray-700">{profileData.email}</p>
           </div>
-          <div>
+          <div className="bg-white p-4 rounded-lg shadow">
             <p className="font-semibold">Phone:</p>
-            <p>{profileData.phone}</p>
+            <p className="text-gray-700">{profileData.phone}</p>
           </div>
-          <div>
+          <div className="bg-white p-4 rounded-lg shadow">
             <p className="font-semibold">Address:</p>
-            <p>{profileData.address}</p>
+            <p className="text-gray-700">{profileData.address}</p>
           </div>
         </div>
       )}

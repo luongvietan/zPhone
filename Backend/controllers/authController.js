@@ -5,12 +5,12 @@ const mongoose = require("mongoose");
 exports.getCurrentUser = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.user._id);
-    console.log("User ID:", req.user?._id);
+    // console.log("User ID:", req.user?._id);
     const user = await User.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log("Fetched current user:", user);
+    // console.log("Fetched current user:", user);
     res.json({ user });
   } catch (error) {
     console.error("Error fetching current user:", error);
@@ -20,7 +20,7 @@ exports.getCurrentUser = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Login attempt for email:", email);
+  // console.log("Login attempt for email:", email);
 
   // Server-side validation
   if (!email || !password) {
@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
       email: user.email,
     };
 
-    console.log("User logged in successfully:", user);
+    // console.log("User logged in successfully:", user);
     res.json({
       token,
       user: userResponse,

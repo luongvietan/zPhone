@@ -28,7 +28,7 @@ const getAllUsers = async (req, res) => {
 // Get a user by ID
 const getUserById = async (req, res) => {
   try {
-    console.log("Fetching user with ID:", req.params.id);
+    // console.log("Fetching user with ID:", req.params.id);
     const foundUser = await User.findById(req.params.id);
     if (!foundUser) {
       return res.status(404).json({ message: "user not found" });
@@ -92,7 +92,7 @@ const getCurrentUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log("Fetched current user:", user);
+    // console.log("Fetched current user:", user);
     res.json({ user });
   } catch (error) {
     console.error("Error fetching current user:", error);

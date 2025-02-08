@@ -17,14 +17,13 @@ const Cart = () => {
   // Chỉ tính toán khi cartItems có giá trị
   const subtotal =
     cartItems?.reduce((sum, item) => {
-      return sum + Number(item.price) * Number(item.quantity) * 1000000;
+      return sum + Number(item.price) * Number(item.quantity);
     }, 0) || 0;
-  console.log(cartItems);
 
   const { user } = useAuth(); // Lấy thông tin người dùng
   const userCity = user?.address?.split(",")[0]?.trim(); // Lấy thành phố từ địa chỉ
 
-  const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 80000;
+  const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
 
   const total = subtotal + shipping;
 
@@ -118,7 +117,10 @@ const Cart = () => {
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>{item.product_name}</h3>
                               <p className="ml-4">
-                                {Number(item.price).toLocaleString()} VND
+                                {(
+                                  Number(item.price) * 1000000
+                                ).toLocaleString()}{" "}
+                                VND
                               </p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
@@ -159,7 +161,9 @@ const Cart = () => {
                             </div>
                             <p className="ml-4">
                               {(
-                                Number(item.price) * item.quantity
+                                Number(item.price) *
+                                item.quantity *
+                                1000000
                               ).toLocaleString()}{" "}
                               VND
                             </p>
@@ -187,15 +191,15 @@ const Cart = () => {
               <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                 <div className="flex justify-between text-base font-medium text-gray-900">
                   <p>Subtotal</p>
-                  <p>{subtotal.toLocaleString()} VND</p>
+                  <p>{(subtotal * 1000000).toLocaleString()} VND</p>
                 </div>
                 <div className="flex justify-between text-base font-medium text-gray-900">
                   <p>Shipping</p>
-                  <p>{shipping.toLocaleString()} VND</p>
+                  <p>{(shipping * 1000000).toLocaleString()} VND</p>
                 </div>
                 <div className="mt-2 flex justify-between text-base font-medium text-gray-900">
                   <p>Total</p>
-                  <p>{total.toLocaleString()} VND</p>
+                  <p>{(total * 1000000).toLocaleString()} VND</p>
                 </div>
                 <div className="mt-6">
                   <button
