@@ -1,14 +1,15 @@
-// Login.jsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { CartContext } from "../context/CartContext";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { fetchCart } = useContext(CartContext);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -20,6 +21,7 @@ const Login = () => {
       const result = await login(email, password);
 
       if (result.success) {
+        await fetchCart();
         toast.update(loadingToast, {
           render: "Login successful!",
           type: "success",
@@ -71,7 +73,7 @@ const Login = () => {
       />
       <div className="w-full flex justify-between text-sm mt-[-8px]">
         <Link to="/recovery">
-          <p className="cursor-pointer">Forgot your password ?</p>
+          <p className="cursor-pointer">Forgot your password?</p>
         </Link>
         <Link to="/register">
           <p className="cursor-pointer">Create new account</p>

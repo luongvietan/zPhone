@@ -43,20 +43,22 @@ const Register = () => {
     fetchProvinces();
   }, []);
 
-  // Register.jsx
   const handleRegister = async (e) => {
     e.preventDefault();
     const loadingToast = toast.loading("Creating account...");
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password,
-        id,
-        address,
-        phone,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        {
+          username,
+          email,
+          password,
+          id, // Ensure this is being sent
+          address,
+          phone,
+        }
+      );
 
       toast.update(loadingToast, {
         render: "Registration successful! Please login.",
@@ -69,8 +71,14 @@ const Register = () => {
         navigate("/login");
       }, 2000);
     } catch (error) {
+      console.error("Full Registration Error:", error.response?.data);
+
+      const errorMessage = error.response?.data?.errors
+        ? error.response.data.errors.join(", ")
+        : error.response?.data?.message || "Registration failed!";
+
       toast.update(loadingToast, {
-        render: error.response?.data?.message || "Registration failed!",
+        render: errorMessage,
         type: "error",
         isLoading: false,
         autoClose: 3000,

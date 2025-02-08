@@ -1,18 +1,31 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import axios from "../config/axios";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, isCartOpen, toggleCart } =
-    useContext(CartContext);
+  const {
+    cartItems = [], // Provide default empty array
+    removeFromCart,
+    updateQuantity,
+    isCartOpen,
+    toggleCart,
+    loading,
+    error,
+  } = useContext(CartContext);
 
-  // console.log("Current cart items:", cartItems);
+  // Chỉ tính toán khi cartItems có giá trị
+  const subtotal =
+    cartItems?.reduce((sum, item) => {
+      return sum + Number(item.price) * Number(item.quantity) * 1000000;
+    }, 0) || 0;
+  console.log(cartItems);
 
-  // Tính tổng tiền sản phẩm
-  const subtotal = cartItems.reduce((sum, item) => {
-    return sum + Number(item.price) * Number(item.quantity);
-  }, 0);
+  const { user } = useAuth(); // Lấy thông tin người dùng
+  const userCity = user?.address?.split(",")[0]?.trim(); // Lấy thành phố từ địa chỉ
 
-  const shipping = 80000; // Phí ship cố định
+  const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 80000;
+
   const total = subtotal + shipping;
 
   if (!isCartOpen) return null;
@@ -51,14 +64,35 @@ const Cart = () => {
               </button>
             </div>
 
-            {/* Cart content */}
-            {cartItems.length === 0 ? (
+            {/* Loading State */}
+            {loading && (
               <div className="flex-1 px-4 py-6 sm:px-6">
                 <div className="text-center">
-                  <p className="mt-1 text-gray-500">Empty Cart</p>
+                  <p className="mt-1 text-gray-500">Loading...</p>
                 </div>
               </div>
-            ) : (
+            )}
+
+            {/* Error State */}
+            {error && (
+              <div className="flex-1 px-4 py-6 sm:px-6">
+                <div className="text-center text-red-500">
+                  <p className="mt-1">{error}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Empty Cart */}
+            {!loading && !error && (!cartItems || cartItems.length === 0) && (
+              <div className="flex-1 px-4 py-6 sm:px-6">
+                <div className="text-center">
+                  <p className="mt-1 text-gray-500">Your cart is empty</p>
+                </div>
+              </div>
+            )}
+
+            {/* Cart Items */}
+            {!loading && !error && cartItems && cartItems.length > 0 && (
               <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                 <div className="flow-root">
                   <ul className="divide-y divide-gray-200">
@@ -70,8 +104,8 @@ const Cart = () => {
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
                             src={
-                              item.image
-                                ? `http://localhost:5000/phone_images/${item.image}.png`
+                              item.product_image
+                                ? `${axios.defaults.baseURL}/phone_images/${item.product_image}.png`
                                 : ""
                             }
                             alt={item.name}
@@ -82,7 +116,7 @@ const Cart = () => {
                         <div className="ml-4 flex flex-1 flex-col">
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
-                              <h3>{item.name}</h3>
+                              <h3>{item.product_name}</h3>
                               <p className="ml-4">
                                 {Number(item.price).toLocaleString()} VND
                               </p>
@@ -98,10 +132,11 @@ const Cart = () => {
                                   updateQuantity(
                                     item.product_id,
                                     item.storage,
-                                    item.quantity - 1
+                                    Math.max(0, item.quantity - 1)
                                   )
                                 }
                                 className="px-2 py-1 border rounded-l"
+                                disabled={loading}
                               >
                                 -
                               </button>
@@ -117,6 +152,7 @@ const Cart = () => {
                                   )
                                 }
                                 className="px-2 py-1 border rounded-r"
+                                disabled={loading}
                               >
                                 +
                               </button>
@@ -133,6 +169,7 @@ const Cart = () => {
                                 removeFromCart(item.product_id, item.storage)
                               }
                               className="font-medium text-red-600 hover:text-red-500"
+                              disabled={loading}
                             >
                               X
                             </button>
@@ -145,44 +182,48 @@ const Cart = () => {
               </div>
             )}
 
-            <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-              <div className="flex justify-between text-base font-medium text-gray-900">
-                <p>Subtotal</p>
-                <p>{subtotal.toLocaleString()} VND</p>
-              </div>
-              <div className="flex justify-between text-base font-medium text-gray-900">
-                <p>Shipping</p>
-                <p>{shipping.toLocaleString()} VND</p>
-              </div>
-              <div className="mt-2 flex justify-between text-base font-medium text-gray-900">
-                <p>Total</p>
-                <p>{total.toLocaleString()} VND</p>
-              </div>
-              <div className="mt-6">
-                <button
-                  className="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
-                  onClick={() => {
-                    // console.log("Thanh toán:", total);
-                  }}
-                >
-                  Checkout
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="group-hover:ml-8 ml-4 h-6 w-6 transition-all"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
+            {/* Cart Summary */}
+            {!loading && !error && cartItems && cartItems.length > 0 && (
+              <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                <div className="flex justify-between text-base font-medium text-gray-900">
+                  <p>Subtotal</p>
+                  <p>{subtotal.toLocaleString()} VND</p>
+                </div>
+                <div className="flex justify-between text-base font-medium text-gray-900">
+                  <p>Shipping</p>
+                  <p>{shipping.toLocaleString()} VND</p>
+                </div>
+                <div className="mt-2 flex justify-between text-base font-medium text-gray-900">
+                  <p>Total</p>
+                  <p>{total.toLocaleString()} VND</p>
+                </div>
+                <div className="mt-6">
+                  <button
+                    className="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 disabled:opacity-50"
+                    onClick={() => {
+                      // Xử lý thanh toán
+                    }}
+                    disabled={loading}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </button>
+                    Checkout
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="group-hover:ml-8 ml-4 h-6 w-6 transition-all"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

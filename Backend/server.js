@@ -19,7 +19,11 @@ mongoose
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
-
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
+});
 const storage = multer.memoryStorage(); // Sử dụng bộ nhớ tạm để lưu trữ file ảnh
 
 const upload = multer({ storage });
@@ -49,7 +53,8 @@ app.listen(process.env.PORT, () => {
 const productRoutes = require("./routes/productRouter");
 const userRoutes = require("./routes/userRouter");
 const authRoutes = require("./routes/authRoutes");
-
+const cartRoutes = require("./routes/cartRoutes");
 app.use("/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/cart", cartRoutes);

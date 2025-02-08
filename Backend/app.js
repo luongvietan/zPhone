@@ -8,7 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRouter = require("./routes/userRouter");
 const authController = require("./controllers/authController");
 const routes = require("./routes");
-const verifyToken = require("./middleware/authMiddleware");
+const verifyToken = require("./middleware/verifyToken");
 
 var app = express();
 const port = process.env.PORT || 3000;
@@ -25,12 +25,21 @@ app.use(express.static(path.join(__dirname, "public")));
 connectDB();
 
 // Authentication routes
-app.post("/register", authController.register);
+app.post(
+  "/api/auth/register",
+  (req, res, next) => {
+    console.log("Registration Request Body:", req.body);
+    next();
+  },
+  authController.register
+);
 app.post("/login", authController.login); // Thay đổi từ authenticate sang login
 
 // Protected routes
 app.use("/api/user", verifyToken, userRouter);
 app.use("/api/auth", authRoutes);
+const cartRoutes = require("./routes/cartRoutes");
+app.use("/api/cart", cartRoutes);
 app.use("/", routes);
 
 // Khởi động server

@@ -1,73 +1,131 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
+import axios from "../config/axios";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const CartContext = createContext();
+export const CartContext = createContext({
+  cartItems: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  updateQuantity: () => {},
+  clearCart: () => {},
+  isCartOpen: false,
+  toggleCart: () => {},
+  getCartTotal: () => 0,
+  loading: false,
+  error: null,
+});
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const auth = useAuth();
 
-  const addToCart = (product) => {
-    // console.log("Adding to cart - Received product:", product);
+  useEffect(() => {
+    if (auth?.user) {
+      fetchCart();
+    } else {
+      // Reset cart when user logs out
+      setCartItems([]);
+      setIsCartOpen(false);
+      setError(null);
+    }
+  }, [auth?.user]);
 
-    setCartItems((prevItems) => {
-      // Check for an existing item with the same product_id AND storage
-      const existingItem = prevItems.find(
-        (item) =>
-          item.product_id === product.product_id &&
-          item.storage === product.storage
-      );
+  const fetchCart = async () => {
+    if (!auth?.user) return;
 
-      if (existingItem) {
-        // If item exists with same product_id and storage, increment quantity
-        return prevItems.map((item) =>
-          item.product_id === product.product_id &&
-          item.storage === product.storage
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
+    try {
+      setLoading(true);
+      setError(null);
 
-      // Create a new cart item
-      const newItem = {
+      const response = await axios.get("/api/cart");
+      setCartItems(response.data.items || []);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+      const errorMessage =
+        error.response?.data?.message || "Error fetching cart";
+      setError(errorMessage);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addToCart = async (product) => {
+    if (!auth?.user) return;
+
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/cart/add", {
         product_id: product.product_id,
-        name: product.product_name,
-        price: product.price, // Use the price passed from Product component
-        image: product.product_image?.[0],
         storage: product.storage,
         quantity: 1,
-      };
-
-      // console.log("New cart item:", newItem);
-      return [...prevItems, newItem];
-    });
-  };
-
-  const removeFromCart = (productId, storage) => {
-    setCartItems((prevItems) =>
-      prevItems.filter(
-        (item) => !(item.product_id === productId && item.storage === storage)
-      )
-    );
-  };
-
-  const updateQuantity = (productId, storage, newQuantity) => {
-    if (newQuantity < 1) {
-      removeFromCart(productId, storage);
-      return;
+      });
+      setCartItems(response.data.items);
+    } catch (error) {
+      setError(error.response?.data?.message || "Error adding to cart");
+    } finally {
+      setLoading(false);
     }
-
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.product_id === productId && item.storage === storage
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    );
   };
 
-  const toggleCart = () => {
-    setIsCartOpen(!isCartOpen);
+  const updateQuantity = async (productId, storage, newQuantity) => {
+    if (!auth?.user) return;
+
+    try {
+      setLoading(true);
+      if (newQuantity < 1) {
+        await removeFromCart(productId, storage);
+        return;
+      }
+      const response = await axios.put("/api/cart/update", {
+        product_id: productId,
+        storage,
+        quantity: newQuantity,
+      });
+      setCartItems(response.data.items);
+    } catch (error) {
+      setError(error.response?.data?.message || "Error updating quantity");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeFromCart = async (productId, storage) => {
+    if (!auth?.user) return;
+
+    try {
+      setLoading(true);
+      await axios.delete("/api/cart/remove", {
+        data: { product_id: productId, storage },
+      });
+      setCartItems((prev) =>
+        prev.filter(
+          (item) => !(item.product_id === productId && item.storage === storage)
+        )
+      );
+    } catch (error) {
+      setError(error.response?.data?.message || "Error removing item");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearCart = async () => {
+    if (!auth?.user) return;
+
+    try {
+      setLoading(true);
+      await axios.delete("/api/cart/clear");
+      setCartItems([]);
+    } catch (error) {
+      setError(error.response?.data?.message || "Error clearing cart");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getCartTotal = () => {
@@ -84,9 +142,13 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        clearCart,
         isCartOpen,
-        toggleCart,
+        toggleCart: () => setIsCartOpen(!isCartOpen),
         getCartTotal,
+        loading,
+        error,
+        fetchCart,
       }}
     >
       {children}
