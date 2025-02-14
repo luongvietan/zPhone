@@ -81,16 +81,16 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    console.log("Registering user with data:", req.body);
+    // console.log("Registering user with data:", req.body);
     const { username, email, password, id, address, phone } = req.body;
 
-    console.log("Received Registration Data:", {
-      username,
-      email,
-      id,
-      address,
-      phone: phone.replace(/./g, "*"), // Mask phone for security
-    });
+    // console.log("Received Registration Data:", {
+    //   username,
+    //   email,
+    //   id,
+    //   address,
+    //   phone: phone.replace(/./g, "*"), // Mask phone for security
+    // });
 
     // Comprehensive Input Validation
     const validationErrors = [];
@@ -131,7 +131,7 @@ exports.register = async (req, res) => {
 
     const newUser = new User(req.body);
     await newUser.save();
-    console.log("User registered successfully:", newUser);
+    // console.log("User registered successfully:", newUser);
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Error during registration:", error.message);
