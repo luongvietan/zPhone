@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BiShowAlt } from "react-icons/bi";
 
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
   const ordersPerPage = 5;
 
   useEffect(() => {
@@ -45,8 +48,12 @@ const Dashboard = () => {
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-
   const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const handleShowDetails = (order) => {
+    setSelectedOrder(order);
+    setShowPopup(true);
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
@@ -71,30 +78,39 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {Array.isArray(orders) && orders.length > 0 ? (
+      {orders.length > 0 ? (
         <div className="bg-white shadow-lg rounded-lg p-6">
           <ul className="divide-y divide-gray-300">
             {currentOrders.map((order) => (
-              <li key={order._id} className="py-4">
-                <p className="text-lg font-medium text-gray-800">
-                  Transaction ID:{" "}
-                  <span className="text-blue-600">{order.transactionId}</span>
-                </p>
-                <p className="text-gray-600">
-                  Order Date:{" "}
-                  {order.orderDate
-                    ? new Date(order.orderDate).toLocaleString("en-US")
-                    : "No information"}
-                </p>
-                <p className="text-gray-600 font-semibold">
-                  Total Amount:{" "}
-                  <span className="text-green-600">
-                    {order.total !== undefined && order.total !== null
-                      ? (order.total * 1000000).toLocaleString("en-US")
-                      : "0"}{" "}
-                    VND
-                  </span>
-                </p>
+              <li
+                key={order._id}
+                className="py-4 flex justify-between items-center"
+              >
+                <div>
+                  <p className="text-lg font-medium text-gray-800">
+                    Transaction ID:{" "}
+                    <span className="text-blue-600">{order.transactionId}</span>
+                  </p>
+                  <p className="text-gray-600">
+                    Order Date:{" "}
+                    {order.orderDate
+                      ? new Date(order.orderDate).toLocaleString("en-US")
+                      : "No information"}
+                  </p>
+                  <p className="text-gray-600 font-semibold">
+                    Total Amount:{" "}
+                    <span className="text-green-600">
+                      {order.total !== undefined && order.total !== null
+                        ? (order.total * 1000000).toLocaleString("en-US")
+                        : "0"}{" "}
+                      VND
+                    </span>
+                  </p>
+                </div>
+                <BiShowAlt
+                  className="text-xl cursor-pointer text-blue-600"
+                  onClick={() => handleShowDetails(order)}
+                />
               </li>
             ))}
           </ul>
@@ -105,42 +121,46 @@ const Dashboard = () => {
         </p>
       )}
 
-      <nav
-        aria-label="Page Navigation"
-        className="mx-auto my-10 flex max-w-xs justify-between space-x-2 rounded-md bg-white py-2"
-      >
-        <button
-          onClick={() => setCurrentPage(1)}
-          disabled={currentPage === 1}
-          className="font-medium hover:text-blue-600"
-        >
-          « First
-        </button>
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="font-medium hover:text-blue-600"
-        >
-          ‹ Prev
-        </button>
-        <span className="px-2 text-lg font-medium text-gray-600">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="font-medium hover:text-blue-600"
-        >
-          Next ›
-        </button>
-        <button
-          onClick={() => setCurrentPage(totalPages)}
-          disabled={currentPage === totalPages}
-          className="font-medium hover:text-blue-600"
-        >
-          Last »
-        </button>
-      </nav>
+      {showPopup && selectedOrder && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
+            <h2 className="text-xl font-bold mb-4">Order Details</h2>
+            <p>
+              <strong>Transaction ID:</strong> {selectedOrder.transactionId}
+            </p>
+            <p>
+              <strong>Order Date:</strong>{" "}
+              {new Date(selectedOrder.orderDate).toLocaleString("en-US")}
+            </p>
+
+            <p>
+              <strong>Shipping:</strong> {selectedOrder.shipping} VND
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedOrder.status}
+            </p>
+            <p>
+              <strong className="text-green-600">Total Amount:</strong>{" "}
+              {(selectedOrder.total * 1000000).toLocaleString("en-US")} VND
+            </p>
+            <h3 className="text-lg font-bold mt-4">Items:</h3>
+            <ul className="list-disc ml-5">
+              {selectedOrder.items.map((item, index) => (
+                <li key={index}>
+                  {item.product_name} ({item.storage}) - {item.quantity} x{" "}
+                  {(item.price * 1000000).toLocaleString("en-US")} VND
+                </li>
+              ))}
+            </ul>
+            <button
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+              onClick={() => setShowPopup(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

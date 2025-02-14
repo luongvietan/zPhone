@@ -25,10 +25,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Something went wrong!" });
 });
 
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(`${req.method} ${req.path}`);
+//   next();
+// });
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
