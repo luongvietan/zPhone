@@ -31,7 +31,7 @@ export const Product = () => {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/products/${product_id}/comments`
+        `${import.meta.env.VITE_API_URL}/products/${product_id}/comments`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -49,7 +49,7 @@ export const Product = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/products/${product_id}/comments`,
+        `${import.meta.env.VITE_API_URL}/products/${product_id}/comments`,
         {
           method: "POST",
           headers: {
@@ -178,7 +178,9 @@ export const Product = () => {
                   <div className="max-w-xl overflow-hidden rounded-lg transition-transform duration-300 hover:scale-110">
                     <img
                       className="h-full w-full max-w-full object-cover transition-transform duration-300"
-                      src={`http://localhost:5000/phone_images/${image}.png`}
+                      src={`${
+                        import.meta.env.VITE_API_URL
+                      }/phone_images/${image}.png`}
                       alt={productData?.product_name}
                     />
                   </div>
@@ -199,7 +201,9 @@ export const Product = () => {
                       >
                         <img
                           className="h-full w-full object-cover"
-                          src={`http://localhost:5000/phone_images/${img}.png`}
+                          src={`${
+                            import.meta.env.VITE_API_URL
+                          }/phone_images/${img}.png`}
                           alt=""
                         />
                       </button>

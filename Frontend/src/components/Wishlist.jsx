@@ -49,7 +49,9 @@ const Wishlist = ({ isWishlistOpen, toggleWishlist }) => {
                 >
                   {/* Hình ảnh sản phẩm */}
                   <img
-                    src={`http://localhost:5000/phone_images/${item.product_image}.png`}
+                    src={`${import.meta.env.VITE_API_URL}/phone_images/${
+                      item.product_image
+                    }.png`}
                     alt={item.product_name}
                     className="w-20 h-20 object-cover rounded-lg border"
                   />

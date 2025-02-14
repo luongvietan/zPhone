@@ -40,7 +40,9 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
       >
         <img
           className="object-cover"
-          src={`http://localhost:5000/phone_images/${product_image[0]}.png`}
+          src={`${import.meta.env.VITE_API_URL}/phone_images/${
+            product_image[0]
+          }.png`}
           alt={product_image[0]}
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">

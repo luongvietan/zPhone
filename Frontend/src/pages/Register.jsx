@@ -21,7 +21,9 @@ const Register = () => {
   useEffect(() => {
     const fetchLastUserId = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/users");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users`
+        );
         const lastUser = response.data[response.data.length - 1];
         const newId = String(Number(lastUser.id) + 1);
         setId(newId);
@@ -49,7 +51,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         {
           username,
           email,
