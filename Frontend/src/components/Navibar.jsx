@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext";
 import { FaHeart } from "react-icons/fa";
 import { WishlistContext } from "../context/WishlistContext";
 import Wishlist from "../components/Wishlist";
+import { FaUserCircle } from "react-icons/fa";
 
 const Navibar = () => {
   const navigate = useNavigate();
@@ -61,11 +62,15 @@ const Navibar = () => {
             arrowIcon={false}
             inline
             label={
-              <Avatar
-                alt="User settings"
-                img={user?.avatar || "https://thispersondoesnotexist.com/"}
-                rounded
-              />
+              user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full border border-gray-300"
+                />
+              ) : (
+                <FaUserCircle className="w-6 h-6" />
+              )
             }
           >
             <Dropdown.Header>
