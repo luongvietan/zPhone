@@ -116,7 +116,7 @@ const VNPayReturn = () => {
       const timer = setTimeout(() => {
         navigate(status === "success" ? "/order-success" : "/order-failed");
         window.location.reload();
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [status, navigate]);
