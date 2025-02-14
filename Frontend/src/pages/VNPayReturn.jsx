@@ -57,10 +57,7 @@ const VNPayReturn = () => {
         );
         const userCity = user?.address?.split(",")[0]?.trim();
         const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
-        console.log("User city:", userCity);
-        console.log("Calculated shipping:", shipping);
         const total = subtotal + shipping;
-        console.log(`shipping :`, shipping);
         const orderInfo = {
           user_id: user._id,
           items: items.map((item) => ({
@@ -109,6 +106,7 @@ const VNPayReturn = () => {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -5,25 +5,14 @@ const OrderSuccess = () => {
 
   useEffect(() => {
     const savedOrder = localStorage.getItem("orderInfo");
+    const totalcost = JSON.parse(localStorage.getItem("total"));
+    console.log(totalcost);
     if (savedOrder) {
       const parsedOrder = JSON.parse(savedOrder);
-      console.log("Order Info from LocalStorage:", parsedOrder); // Kiểm tra giá trị shipping
+      parsedOrder.total = totalcost;
       setOrderInfo(parsedOrder);
     }
   }, []);
-
-  // const formatCurrency = (amount) => {
-  //   if (typeof amount === "string") {
-  //     amount = parseInt(amount);
-  //   }
-  //   if (!amount || isNaN(amount)) {
-  //     return "N/A"; // Xử lý khi giá trị không hợp lệ
-  //   }
-  //   return new Intl.NumberFormat("vi-VN", {
-  //     style: "currency",
-  //     currency: "VND",
-  //   }).format(amount);
-  // };
 
   return (
     <div className="max-w-2xl mx-auto p-4">

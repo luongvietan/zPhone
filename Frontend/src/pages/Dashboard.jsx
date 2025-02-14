@@ -121,44 +121,38 @@ const Dashboard = () => {
         </p>
       )}
 
-      {showPopup && selectedOrder && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-            <h2 className="text-xl font-bold mb-4">Order Details</h2>
-            <p>
-              <strong>Transaction ID:</strong> {selectedOrder.transactionId}
-            </p>
-            <p>
-              <strong>Order Date:</strong>{" "}
-              {new Date(selectedOrder.orderDate).toLocaleString("en-US")}
-            </p>
-
-            <p>
-              <strong>Shipping:</strong> {selectedOrder.shipping} VND
-            </p>
-            <p>
-              <strong>Status:</strong> {selectedOrder.status}
-            </p>
-            <p>
-              <strong className="text-green-600">Total Amount:</strong>{" "}
-              {(selectedOrder.total * 1000000).toLocaleString("en-US")} VND
-            </p>
-            <h3 className="text-lg font-bold mt-4">Items:</h3>
-            <ul className="list-disc ml-5">
-              {selectedOrder.items.map((item, index) => (
-                <li key={index}>
-                  {item.product_name} ({item.storage}) - {item.quantity} x{" "}
-                  {(item.price * 1000000).toLocaleString("en-US")} VND
-                </li>
-              ))}
-            </ul>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 space-x-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="rounded-full border border-slate-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
-              onClick={() => setShowPopup(false)}
+              key={index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`min-w-9 rounded-full py-2 px-3.5 text-center text-sm transition-all shadow-sm hover:shadow-lg ${
+                currentPage === index + 1
+                  ? "bg-slate-800 text-white border-transparent shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700"
+                  : "border border-slate-300 text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800"
+              }`}
             >
-              Close
+              {index + 1}
             </button>
-          </div>
+          ))}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="rounded-full border border-slate-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       )}
     </div>

@@ -1,28 +1,46 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
 
+const validVouchers = {
+  DISCOUNT10: 0.1, // Giảm 10%
+  DISCOUNT20: 0.2, // Giảm 20%
+};
+
 const Checkout = () => {
   const { cartItems } = useContext(CartContext);
   const { user } = useAuth();
-  const userCity = user?.address?.split(",")[0]?.trim(); // Lấy thành phố từ địa chỉ
+  const userCity = user?.address?.split(",")[0]?.trim();
   const navigate = useNavigate();
-  const userName = user?.username || ""; // Lấy tên người dùng
-  const userPhone = user?.phone || ""; // Lấy email người dùng
-  const userAddress = user?.address || ""; // Lấy địa chỉ người dùng
+  const userName = user?.username || "";
+  const userPhone = user?.phone || "";
+  const userAddress = user?.address || "";
 
-  // Cập nhật logic shipping
   const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + Number(item.price) * Number(item.quantity),
+    0
+  );
 
-  // Tính toán subtotal
-  const subtotal = cartItems.reduce((sum, item) => {
-    return sum + Number(item.price) * Number(item.quantity);
-  }, 0);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 
-  const total = subtotal + shipping;
+  const applyVoucher = () => {
+    if (validVouchers[voucherCode]) {
+      setDiscount(validVouchers[voucherCode]);
+      setIsDiscountApplied(true);
+    } else {
+      setDiscount(0);
+      setIsDiscountApplied(false);
+      alert("Mã giảm giá không hợp lệ!");
+    }
+  };
 
+  const total = subtotal * (1 - discount) + shipping;
+  localStorage.setItem("total", JSON.stringify(total));
   const handlePlaceOrder = useCallback(() => {
     navigate("/payment", { state: { amount: total * 1000000 } });
   }, [total, navigate]);
@@ -66,16 +84,9 @@ const Checkout = () => {
               </div>
             ))}
           </div>
-
-          <div className="mt-6 flex items-center justify-between">
-            <p className="text-sm font-medium text-gray-900">Subtotal</p>
-            <p className="text-2xl font-semibold text-gray-900">
-              {(subtotal * 1000000).toLocaleString()} VND
-            </p>
-          </div>
         </div>
         <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-          <p className="text-xl font-medium">Personal Infomation</p>
+          <p className="text-xl font-medium">Personal Information</p>
           <p className="text-gray-400">
             Complete your order by providing neccessary infomation.
           </p>
@@ -131,27 +142,54 @@ const Checkout = () => {
                 readOnly
               />
             </div>
-
-            <div className="mt-6 border-t border-b py-2">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                <p className="font-semibold text-gray-900">
-                  {(subtotal * 1000000).toLocaleString()} VND
-                </p>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Shipping</p>
-                <p className="font-semibold text-gray-900">
-                  {(shipping * 1000000).toLocaleString()} VND
-                </p>
-              </div>
-            </div>
-            <div className="mt-6 flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-900">Total</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {(total * 1000000).toLocaleString()} VND
+          </div>
+          <div className="mt-6 border-t border-b py-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Subtotal</p>
+              <p className="font-semibold text-gray-900">
+                {(subtotal * 1000000).toLocaleString()} VND
               </p>
             </div>
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Shipping</p>
+              <p className="font-semibold text-gray-900">
+                {(shipping * 1000000).toLocaleString()} VND
+              </p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <label className="mb-2 block text-sm font-medium">
+              Voucher Code
+            </label>
+            <div className="flex">
+              <input
+                type="text"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Enter voucher code"
+                value={voucherCode}
+                onChange={(e) => setVoucherCode(e.target.value)}
+              />
+              <button
+                onClick={applyVoucher}
+                className="ml-2 rounded-md bg-blue-500 px-4 py-3 text-white"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+          {isDiscountApplied && (
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Discount</p>
+              <p className="font-semibold text-red-500">
+                -{(subtotal * discount * 1000000).toLocaleString()} VND
+              </p>
+            </div>
+          )}
+          <div className="mt-6 flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-900">Total</p>
+            <p className="text-2xl font-semibold text-gray-900">
+              {(total * 1000000).toLocaleString()} VND
+            </p>
           </div>
           <button
             className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
