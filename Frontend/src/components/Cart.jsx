@@ -21,10 +21,10 @@ const Cart = () => {
     }, 0) || 0;
 
   const { user } = useAuth(); // Lấy thông tin người dùng
-  const userCity = user?.address?.split(",")[0]?.trim(); // Lấy thành phố từ địa chỉ
-
+  const userCity = user?.address?.split(",")[0]?.trim();
+  // console.log(`userCity : `, userCity);
   const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
-
+  // console.log(shipping);
   const total = subtotal + shipping;
 
   if (!isCartOpen) return null;

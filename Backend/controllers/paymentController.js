@@ -1,4 +1,4 @@
-const { VNPay, ProductCode, VnpLocale, consoleLogger } = require("vnpay");
+const { VNPay } = require("vnpay");
 
 const vnpayConfig = {
   tmnCode: process.env.VNP_TMN_CODE,
@@ -16,17 +16,13 @@ exports.createPayment = async (req, res) => {
     }
 
     const payUrl = await vnpayInstance.buildPaymentUrl({
-      vnp_Amount: req.body.amount,
-      vnp_IpAddr:
-        req.headers["x-forwarded-for"] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.ip,
-      vnp_TxnRef: "12345",
-      vnp_OrderInfo: "Thanh toan don hang 12345",
-      vnp_OrderType: ProductCode.Other,
-      vnp_ReturnUrl: "http://localhost:5173/vnpay-return",
-      vnp_Locale: VnpLocale.VN,
+      vnp_Amount: Math.floor(req.body.amount),
+      vnp_IpAddr: req.clientIp || req.ip,
+      vnp_TxnRef: `ORDER_${Date.now()}`,
+      vnp_OrderInfo: "Thanh toan don hang",
+      vnp_OrderType: "other",
+      vnp_ReturnUrl: `${process.env.CLIENT_URL}/vnpay-return`,
+      vnp_Locale: "vn",
     });
 
     res.json({ payUrl });
@@ -59,7 +55,6 @@ exports.handleIPN = async (req, res) => {
     if (!verify.isVerified) {
       return res.json({ code: "97", message: "Checksum failed" });
     }
-
     return res.json({ code: "00", message: "Success" });
   } catch (error) {
     console.error("IPN handling error:", error);

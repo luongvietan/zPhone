@@ -43,6 +43,7 @@ export const CartProvider = ({ children }) => {
       setError(null);
 
       const response = await axios.get("/api/cart");
+      console.log("Cart data from server:", response.data);
       setCartItems(response.data.items || []);
     } catch (error) {
       console.error("Error fetching cart:", error);

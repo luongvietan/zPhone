@@ -17,9 +17,11 @@ import ForgotPwd from "./pages/ForgotPwd";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Checkout from "./pages/Checkout";
-import Payment from "./components/Payment";
+import Payment from "./pages/Payment";
 import VNPayReturn from "./pages/VNPayReturn";
 import OrderSuccess from "./pages/OrderSuccess";
+import OrderFailed from "./pages/OrderFailed";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
@@ -49,6 +51,8 @@ const App = () => {
             <Route path="/payment" element={<Payment />} />
             <Route path="/vnpay-return" element={<VNPayReturn />} />
             <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/order-failed" element={<OrderFailed />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
           <Footer />
         </div>

@@ -32,12 +32,15 @@ export const AuthProvider = ({ children }) => {
 
       if (res.data.user) {
         setUser(res.data.user);
+        // Lưu thông tin người dùng vào localStorage
+        localStorage.setItem("user", JSON.stringify(res.data.user));
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
       if (error.response?.status === 401) {
         setAuthToken(null);
         setUser(null);
+        localStorage.removeItem("user"); // Xóa thông tin người dùng nếu có lỗi xác thực
       }
     } finally {
       setIsLoading(false);
@@ -61,6 +64,9 @@ export const AuthProvider = ({ children }) => {
       setAuthToken(token);
       setUser(userData);
 
+      // Lưu thông tin người dùng vào localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+
       return {
         success: true,
       };
@@ -76,7 +82,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setAuthToken(null);
     setUser(null);
-    window.location.href = "/login"; // Force reload after logout
+    localStorage.removeItem("user");
+    window.location.href = "/login"; // Force reload
   };
 
   const value = {

@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Order = require("../models/orderModel");
 
 // Create a new user
 const createUser = async (req, res) => {
@@ -100,6 +101,17 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user_id: req.user._id });
+    res.json(orders);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching orders", error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -108,4 +120,5 @@ module.exports = {
   deleteUser,
   getProfile,
   getCurrentUser,
+  getUserOrders,
 };

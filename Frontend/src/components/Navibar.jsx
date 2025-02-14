@@ -59,7 +59,7 @@ const Navibar = () => {
           </Dropdown.Header>
           {user ? (
             <>
-              <Dropdown.Item>Dashboard</Dropdown.Item>
+              <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
               <Dropdown.Item href="/profile">Settings</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>

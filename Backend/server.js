@@ -24,8 +24,12 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong!" });
 });
-const storage = multer.memoryStorage(); // Sử dụng bộ nhớ tạm để lưu trữ file ảnh
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.get("/", (req, res) => {
@@ -41,9 +45,22 @@ const productRoutes = require("./routes/productRouter");
 const userRoutes = require("./routes/userRouter");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
-
+const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/payment", paymentRoutes);
 app.use("/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
+// app._router.stack.forEach((r) => {
+//   if (r.route) {
+//     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
+//   }
+// });
+// // Debug danh sách route
+// console.log("Available routes:");
+// app._router.stack.forEach((r) => {
+//   if (r.route) {
+//     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
+//   }
+// });

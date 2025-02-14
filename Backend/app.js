@@ -11,7 +11,12 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(logger("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -24,14 +29,22 @@ connectDB();
 const authRoutes = require("./routes/authRoutes");
 const userRouter = require("./routes/userRouter");
 const cartRoutes = require("./routes/cartRoutes");
-const paymentRoutes = require("./routes/payment"); // Đảm bảo đường dẫn này đúng
-const verifyToken = require("./middleware/verifyToken");
+const paymentRoutes = require("./routes/payment");
 
 // Routes
-app.use("/api/payment", paymentRoutes); // Đặt route này trước các routes khác
-app.use("/api/user", verifyToken, userRouter);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/user", userRouter);
 app.use("/api/auth", authRoutes);
-app.use("/api/cart", verifyToken, cartRoutes);
+app.use("/api/cart", cartRoutes);
+
+// Debug routes during development
+if (process.env.NODE_ENV !== "production") {
+  app._router.stack.forEach((r) => {
+    if (r.route) {
+      console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
+    }
+  });
+}
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -43,13 +56,6 @@ app.use((err, req, res, next) => {
 app
   .listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    // Log available routes for debugging
-    console.log("Available routes:");
-    app._router.stack.forEach(function (r) {
-      if (r.route && r.route.path) {
-        console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
-      }
-    });
   })
   .on("error", (err) => {
     if (err.code === "EADDRINUSE") {

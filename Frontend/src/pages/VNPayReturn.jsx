@@ -5,46 +5,132 @@ import { CartContext } from "../context/CartContext";
 
 const VNPayReturn = () => {
   const [status, setStatus] = useState("processing");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const { clearCart } = useContext(CartContext);
 
   useEffect(() => {
+    let isMounted = true;
+
     const verifyPayment = async () => {
+      if (!isMounted) return;
       try {
-        const queryParams = new URLSearchParams(window.location.search);
-        const response = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/api/payment/vnpay-return?${queryParams}`
+        const queryString = window.location.search.substring(1);
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("User not authenticated");
+
+        const transactionNo = new URLSearchParams(queryString).get(
+          "vnp_TransactionNo"
         );
+        if (!transactionNo) throw new Error("Transaction ID missing");
 
-        setStatus(response.data.success ? "success" : "failed");
-
-        if (response.data.success) {
-          clearCart();
+        // Kiểm tra nếu đơn hàng đã tồn tại
+        const checkOrder = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/orders/check/${transactionNo}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (checkOrder.data.exists) {
+          console.log("Order already exists, skipping...");
+          setStatus("success");
+          return;
         }
 
-        // Redirect after 3 seconds
-        setTimeout(() => {
-          navigate(response.data.success ? "/order-success" : "/order-failed");
-        }, 3000);
+        // Lấy thông tin giỏ hàng
+        const apiUrlCart = `${import.meta.env.VITE_API_URL}/api/cart`;
+        const cartResponse = await axios.get(apiUrlCart, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const items = cartResponse.data.items || [];
+
+        if (!items.length) {
+          setStatus("failed");
+          setErrorMessage("Cart is empty. Cannot create order.");
+          return;
+        }
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user._id) throw new Error("User information not found");
+
+        const subtotal = items.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const userCity = user?.address?.split(",")[0]?.trim();
+        const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
+        console.log("User city:", userCity);
+        console.log("Calculated shipping:", shipping);
+        const total = subtotal + shipping;
+        console.log(`shipping :`, shipping);
+        const orderInfo = {
+          user_id: user._id,
+          items: items.map((item) => ({
+            ...item,
+            product_id: item.product_id,
+          })),
+          orderDate: new Date().toISOString(),
+          transactionId: transactionNo,
+          amount: new URLSearchParams(queryString).get("vnp_Amount") / 100,
+          subtotal,
+          shipping,
+          total,
+          status: "pending",
+        };
+        console.log("Saving order info to LocalStorage:", orderInfo);
+        localStorage.setItem("orderInfo", JSON.stringify(orderInfo));
+        // Tạo order
+        const apiUrlOrder = `${import.meta.env.VITE_API_URL}/api/orders/add`;
+        const response = await axios.post(apiUrlOrder, orderInfo, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 201) {
+          // Chỉ xóa giỏ hàng nếu đơn hàng đã tạo thành công
+          const apiUrlClearCart = `${
+            import.meta.env.VITE_API_URL
+          }/api/cart/clear`;
+          await axios.delete(apiUrlClearCart, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          clearCart();
+          setStatus("success");
+        } else {
+          setStatus("failed");
+          setErrorMessage("Failed to create order");
+        }
       } catch (error) {
-        console.error("Payment verification error:", error);
+        console.error("Error:", error);
+        setErrorMessage(error.message || "Unknown error");
         setStatus("failed");
-        setTimeout(() => {
-          navigate("/order-failed");
-        }, 3000);
       }
     };
 
     verifyPayment();
-  }, [navigate, clearCart]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status !== "processing") {
+      const timer = setTimeout(() => {
+        navigate(status === "success" ? "/order-success" : "/order-failed");
+        window.location.reload();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status, navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {status === "processing" && <div>Payment Processing...</div>}
-      {status === "success" && <div>Payment Successfull! Redirecting...</div>}
-      {status === "failed" && <div>Payment Failed! Redirecting...</div>}
+      {status === "success" && <div>Payment Successful! Redirecting...</div>}
+      {status === "failed" && (
+        <div>
+          <p>Payment Failed! Redirecting...</p>
+          {errorMessage && <p>Error: {errorMessage}</p>}
+        </div>
+      )}
     </div>
   );
 };

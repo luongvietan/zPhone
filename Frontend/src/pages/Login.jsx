@@ -28,6 +28,7 @@ const Login = () => {
           isLoading: false,
           autoClose: 2000,
         });
+
         navigate("/");
       } else {
         toast.update(loadingToast, {

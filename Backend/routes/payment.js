@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const {
-  createPayment,
-  verifyPayment,
-  handleIPN,
-} = require("../controllers/paymentController");
+const paymentController = require("../controllers/paymentController");
 
-// Bỏ middleware verifyToken
-router.post("/create", createPayment);
-router.get("/vnpay-return", verifyPayment);
-router.post("/vnpay-ipn", handleIPN);
+router.post("/create", paymentController.createPayment);
+router.get("/vnpay-return", paymentController.verifyPayment);
+router.post("/vnpay-ipn", paymentController.handleIPN);
 
 module.exports = router;

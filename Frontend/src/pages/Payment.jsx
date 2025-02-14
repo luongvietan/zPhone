@@ -13,6 +13,12 @@ const Payment = () => {
       setIsLoading(true);
       setError(null);
 
+      // Kiểm tra và lưu thông tin người dùng
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        throw new Error("User information not found. Please log in again.");
+      }
+
       const response = await axios.post(
         `${
           import.meta.env.VITE_API_URL || "http://localhost:5000"
@@ -49,6 +55,13 @@ const Payment = () => {
       )}
       <div className="mb-4">
         <h2>Total Amount: {amount.toLocaleString()} VND</h2>
+      </div>
+      <div className="mb-4">
+        <h2>Test bank : NCB</h2>
+        <h2>Card number : 9704198526191432198</h2>
+        <h2>Owner : NGUYEN VAN A</h2>
+        <h2>Date : 0715</h2>
+        <h2>OTP : 123456</h2>
       </div>
       <button
         onClick={handlePayment}
