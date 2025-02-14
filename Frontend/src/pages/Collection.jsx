@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 import api from "../api";
@@ -15,6 +21,55 @@ const Collection = () => {
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [sortType, setSortType] = useState("default");
+  const [visibleProductsCount, setVisibleProductsCount] = useState(12);
+
+  // Refs để theo dõi giá trị hiện tại của state
+  const visibleProductsCountRef = useRef(visibleProductsCount);
+  const filterProductsRef = useRef(filterProducts);
+
+  // Cập nhật ref khi state thay đổi
+  useEffect(() => {
+    visibleProductsCountRef.current = visibleProductsCount;
+  }, [visibleProductsCount]);
+
+  useEffect(() => {
+    filterProductsRef.current = filterProducts;
+  }, [filterProducts]);
+
+  // Reset số lượng sản phẩm hiển thị khi bộ lọc thay đổi
+  useEffect(() => {
+    setVisibleProductsCount(12);
+  }, [filterProducts]);
+
+  // Xử lý scroll để load thêm sản phẩm
+  useEffect(() => {
+    const throttle = (func, limit) => {
+      let inThrottle;
+      return function () {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+          func.apply(context, args);
+          inThrottle = true;
+          setTimeout(() => (inThrottle = false), limit);
+        }
+      };
+    };
+
+    const handleScroll = throttle(() => {
+      if (visibleProductsCountRef.current >= filterProductsRef.current.length)
+        return;
+
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
+        setVisibleProductsCount((prev) => prev + 12);
+      }
+    }, 200);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -219,7 +274,7 @@ const Collection = () => {
             <p className="text-gray-500 text-center py-8">No products found</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">
-              {filterProducts.map((item) => (
+              {filterProducts.slice(0, visibleProductsCount).map((item) => (
                 <ProductItem
                   key={item.id || item._id}
                   product_id={item.product_id || item._id}
