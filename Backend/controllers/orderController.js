@@ -28,7 +28,7 @@ exports.createOrder = async (req, res) => {
       total,
       status,
     } = req.body;
-    console.log("Received order data:", req.body);
+    // console.log("Received order data:", req.body);
     // if (!items || !Array.isArray(items) || items.length === 0) {
     //   return res
     //     .status(400)
@@ -55,8 +55,8 @@ exports.createOrder = async (req, res) => {
       status: status || "pending",
       orderDate: new Date(),
     });
-    console.log("Order being saved:", newOrder);
-    console.log(`shipping : `, shipping);
+    // console.log("Order being saved:", newOrder);
+    // console.log(`shipping : `, shipping);
 
     await newOrder.save();
     res.status(201).json(newOrder);

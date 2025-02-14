@@ -2,18 +2,27 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
+import { WishlistContext } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Product = () => {
   const { product_id } = useParams();
   const { products, currency } = useContext(ShopContext);
   const { addToCart } = useContext(CartContext);
+  const { addToWishlist, removeFromWishlist, isInWishlist } =
+    useContext(WishlistContext);
   const { user } = useAuth();
+
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
+
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -106,7 +115,7 @@ export const Product = () => {
         product_image: productData.product_image,
         storage: selectedVariant.storage,
       };
-
+      toast.success("Product Added To Cart");
       // console.log("Product being added to cart:", productToAdd);
       addToCart(productToAdd);
     }
@@ -119,7 +128,22 @@ export const Product = () => {
   const handleDescriptionClick = () => {
     setShowCommentForm(false);
   };
+  const handleWishlistClick = () => {
+    if (!productData) return;
 
+    if (isInWishlist(productData.product_id)) {
+      removeFromWishlist(productData.product_id);
+      toast.info("Removed from Wishlist");
+    } else {
+      addToWishlist({
+        product_id: productData.product_id,
+        product_name: productData.product_name,
+        price: selectedVariant.product_price,
+        product_image: productData.product_image[0], // Lấy ảnh chính xác
+      });
+      toast.success("Added to Wishlist");
+    }
+  };
   return (
     <div>
       <section className="py-12 sm:py-16">
@@ -127,43 +151,22 @@ export const Product = () => {
           <nav className="flex">
             <ol role="list" className="flex items-center">
               <li className="text-left">
-                <div className="-m-1">
-                  <a
-                    href="/"
-                    className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                  >
-                    Home
-                  </a>
-                </div>
+                <a href="/" className="text-gray-600 hover:text-gray-800">
+                  Home
+                </a>
               </li>
-
+              <li className="text-left mx-2 text-gray-400">/</li>
               <li className="text-left">
-                <div className="flex items-center">
-                  <span className="mx-2 text-gray-400">/</span>
-                  <div className="-m-1">
-                    <a
-                      href="/collection"
-                      className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                    >
-                      Collection
-                    </a>
-                  </div>
-                </div>
+                <a
+                  href="/collection"
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  Collection
+                </a>
               </li>
-
-              <li className="text-left">
-                <div className="flex items-center">
-                  <span className="mx-2 text-gray-400">/</span>
-                  <div className="-m-1">
-                    <a
-                      href=""
-                      className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
-                      aria-current="page"
-                    >
-                      {productData?.product_name}
-                    </a>
-                  </div>
-                </div>
+              <li className="text-left mx-2 text-gray-400">/</li>
+              <li className="text-left text-gray-800 font-bold">
+                {productData?.product_name}
               </li>
             </ol>
           </nav>
@@ -207,6 +210,23 @@ export const Product = () => {
             </div>
 
             <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+              <button
+                type="button"
+                onClick={handleWishlistClick}
+                className="mt-4 flex items-center space-x-2 rounded-md border px-5 py-2 text-gray-900 transition hover:bg-gray-900 hover:text-white"
+              >
+                {isInWishlist(productData?.product_id) ? (
+                  <FaHeart className="w-5 h-5 text-red-500" />
+                ) : (
+                  <CiHeart className="w-5 h-5" />
+                )}
+                <span>
+                  {isInWishlist(productData?.product_id)
+                    ? "Remove from Wishlist"
+                    : "Add to Wishlist"}
+                </span>
+              </button>
+              <br />
               <h1 className="sm: text-2xl font-bold text-gray-900 sm:text-3xl">
                 {productData?.product_name}
               </h1>
@@ -350,6 +370,7 @@ export const Product = () => {
           </div>
         </div>
       </section>
+      <ToastContainer />
     </div>
   );
 };

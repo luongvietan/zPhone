@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { WishlistContext } from "../context/WishlistContext";
 
 const ProductItem = ({ product_id, product_image, product_name, price }) => {
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, isInWishlist } =
+    useContext(WishlistContext);
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation();
+    if (isInWishlist(product_id)) {
+      removeFromWishlist(product_id);
+    } else {
+      // Lưu các trường cần thiết; backend yêu cầu product_id, product_name, price, product_image
+      addToWishlist({
+        product_id,
+        product_name,
+        price,
+        product_image: product_image[0],
+      });
+    }
+  };
 
   const handleClick = () => {
     navigate(`/product/${product_id}`);
@@ -27,12 +47,14 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
           39% OFF
         </span>
       </Link>
+
       <div className="mt-4 px-5 pb-5">
         <Link to={`/product/${product_id}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
             {product_name}
           </h5>
         </Link>
+
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
             <span className="text-xl font-bold text-slate-900">
@@ -40,61 +62,39 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
             </span>
           </p>
         </div>
+
         <div className="flex items-center">
-          <svg
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
+          {[...Array(5)].map((_, i) => (
+            <svg
+              key={i}
+              aria-hidden="true"
+              className="h-5 w-5 text-yellow-300"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          ))}
           <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
             5.0
           </span>
+
+          <button
+            onClick={handleWishlistClick}
+            className="ml-auto p-2 rounded-full transition-colors duration-200"
+          >
+            {isInWishlist(product_id) ? (
+              <FaHeart className="w-6 h-6 text-red-500" />
+            ) : (
+              <CiHeart className="w-6 h-6 text-gray-500" />
+            )}
+          </button>
         </div>
+
         <br />
-        <a
-          href="#"
-          className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-        >
+
+        <button className="flex items-center justify-center w-full rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="mr-2 h-6 w-6"
@@ -110,7 +110,7 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
             />
           </svg>
           Add to cart
-        </a>
+        </button>
       </div>
     </div>
   );

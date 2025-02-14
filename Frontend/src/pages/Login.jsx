@@ -28,8 +28,8 @@ const Login = () => {
           isLoading: false,
           autoClose: 2000,
         });
-
         navigate("/");
+        window.location.reload();
       } else {
         toast.update(loadingToast, {
           render: result.error,

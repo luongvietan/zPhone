@@ -5,8 +5,8 @@ import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
 
 const validVouchers = {
-  DISCOUNT10: 0.1, // Giảm 10%
-  DISCOUNT20: 0.2, // Giảm 20%
+  DISCOUNT10: 0.1,
+  DISCOUNT20: 0.2,
 };
 
 const Checkout = () => {
@@ -35,7 +35,7 @@ const Checkout = () => {
     } else {
       setDiscount(0);
       setIsDiscountApplied(false);
-      alert("Mã giảm giá không hợp lệ!");
+      alert("Invalid Voucher!");
     }
   };
 

@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
-
+const wishlistRoutes = require("./routes/wishlistRoutes");
 const paymentRoutes = require("./routes/payment");
 const productRoutes = require("./routes/productRouter");
 const userRoutes = require("./routes/userRouter");
@@ -52,6 +52,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 // app._router.stack.forEach((r) => {
 //   if (r.route) {
 //     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
