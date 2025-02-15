@@ -11,6 +11,7 @@ import api from "../api";
 import { MdArrowDropDown, MdOutlineCancel } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { ShopContext } from "../context/ShopContext";
+import { Spinner } from "@material-tailwind/react";
 
 const Collection = () => {
   const { filteredProducts, search, setSearch } = useContext(ShopContext);
@@ -22,7 +23,7 @@ const Collection = () => {
   const [category, setCategory] = useState([]);
   const [sortType, setSortType] = useState("default");
   const [visibleProductsCount, setVisibleProductsCount] = useState(12);
-
+  const [isLoading, setIsLoading] = useState(false);
   // Refs để theo dõi giá trị hiện tại của state
   const visibleProductsCountRef = useRef(visibleProductsCount);
   const filterProductsRef = useRef(filterProducts);
@@ -42,6 +43,7 @@ const Collection = () => {
   }, [filterProducts]);
 
   // Xử lý scroll để load thêm sản phẩm
+  // Xử lý scroll với loading state
   useEffect(() => {
     const throttle = (func, limit) => {
       let inThrottle;
@@ -57,19 +59,26 @@ const Collection = () => {
     };
 
     const handleScroll = throttle(() => {
-      if (visibleProductsCountRef.current >= filterProductsRef.current.length)
+      if (
+        visibleProductsCountRef.current >= filterProductsRef.current.length ||
+        isLoading
+      )
         return;
 
       const { scrollTop, clientHeight, scrollHeight } =
         document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 100) {
-        setVisibleProductsCount((prev) => prev + 12);
+        setIsLoading(true);
+        setTimeout(() => {
+          setVisibleProductsCount((prev) => prev + 12);
+          setIsLoading(false);
+        }, 500); // Giả lập thời gian tải
       }
     }, 200);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -273,17 +282,31 @@ const Collection = () => {
           {filterProducts.length === 0 ? (
             <p className="text-gray-500 text-center py-8">No products found</p>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">
-              {filterProducts.slice(0, visibleProductsCount).map((item) => (
-                <ProductItem
-                  key={item.id || item._id}
-                  product_id={item.product_id || item._id}
-                  product_image={item.product_image || item.images}
-                  product_name={item.product_name || item.product_name}
-                  price={parseFloat(item.variants[0].product_price)}
-                  onClick={handleProductClick}
-                />
-              ))}
+            <div className="relative">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">
+                {filterProducts.slice(0, visibleProductsCount).map((item) => (
+                  <ProductItem
+                    key={item.id || item._id}
+                    product_id={item.product_id || item._id}
+                    product_image={item.product_image || item.images}
+                    product_name={item.product_name || item.product_name}
+                    price={parseFloat(item.variants[0].product_price)}
+                    onClick={handleProductClick}
+                  />
+                ))}
+              </div>
+              {/* Hiển thị Spinner khi đang tải */}
+              {/* {isLoading && (
+                <div className="w-full flex justify-center my-8">
+                  <Spinner className="h-8 w-8 text-blue-500" />
+                </div>
+              )} */}
+              {/* Hiển thị thông báo hết sản phẩm */}
+              {/* {!isLoading && visibleProductsCount >= filterProducts.length && (
+                <p className="text-center text-gray-500 mt-4">
+                  You've reached the end of products
+                </p>
+              )} */}
             </div>
           )}
         </div>
