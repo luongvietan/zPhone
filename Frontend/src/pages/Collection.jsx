@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, {
   useContext,
   useEffect,
@@ -24,6 +25,8 @@ const Collection = () => {
   const [sortType, setSortType] = useState("default");
   const [visibleProductsCount, setVisibleProductsCount] = useState(12);
   const [isLoading, setIsLoading] = useState(false);
+  const observerRef = useRef(null);
+  const lastProductRef = useRef(null);
   // Refs để theo dõi giá trị hiện tại của state
   const visibleProductsCountRef = useRef(visibleProductsCount);
   const filterProductsRef = useRef(filterProducts);
@@ -41,9 +44,48 @@ const Collection = () => {
   useEffect(() => {
     setVisibleProductsCount(12);
   }, [filterProducts]);
+  // Optimized scroll handler với Intersection Observer
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
 
-  // Xử lý scroll để load thêm sản phẩm
-  // Xử lý scroll với loading state
+    const observer = new IntersectionObserver((entries) => {
+      const firstEntry = entries[0];
+      if (
+        firstEntry.isIntersecting &&
+        !isLoading &&
+        visibleProductsCount < filterProducts.length
+      ) {
+        setIsLoading(true);
+        // Giả lập API call nhanh hơn
+        setTimeout(() => {
+          setVisibleProductsCount((prev) => prev + 12);
+          setIsLoading(false);
+        }, 100); // Giảm thời gian delay
+      }
+    }, options);
+
+    if (lastProductRef.current) {
+      observer.observe(lastProductRef.current);
+    }
+
+    return () => {
+      if (lastProductRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        observer.unobserve(lastProductRef.current);
+      }
+    };
+  }, [isLoading, visibleProductsCount, filterProducts.length]);
+  // Reset số lượng sản phẩm hiển thị khi filter thay đổi
+  useEffect(() => {
+    setVisibleProductsCount(12);
+    // Cuộn lên đầu trang khi filter thay đổi
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [filterProducts]);
+  // Xử lý scroll
   useEffect(() => {
     const throttle = (func, limit) => {
       let inThrottle;
@@ -284,29 +326,48 @@ const Collection = () => {
           ) : (
             <div className="relative">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">
-                {filterProducts.slice(0, visibleProductsCount).map((item) => (
-                  <ProductItem
-                    key={item.id || item._id}
-                    product_id={item.product_id || item._id}
-                    product_image={item.product_image || item.images}
-                    product_name={item.product_name || item.product_name}
-                    price={parseFloat(item.variants[0].product_price)}
-                    onClick={handleProductClick}
-                  />
-                ))}
+                {filterProducts
+                  .slice(0, visibleProductsCount)
+                  .map((item, index) => {
+                    // Thêm ref cho sản phẩm cuối cùng
+                    if (index === visibleProductsCount - 1) {
+                      return (
+                        <div ref={lastProductRef} key={item.id || item._id}>
+                          <ProductItem
+                            product_id={item.product_id || item._id}
+                            product_image={item.product_image || item.images}
+                            product_name={
+                              item.product_name || item.product_name
+                            }
+                            price={parseFloat(item.variants[0].product_price)}
+                            onClick={handleProductClick}
+                          />
+                        </div>
+                      );
+                    }
+                    return (
+                      <ProductItem
+                        key={item.id || item._id}
+                        product_id={item.product_id || item._id}
+                        product_image={item.product_image || item.images}
+                        product_name={item.product_name || item.product_name}
+                        price={parseFloat(item.variants[0].product_price)}
+                        onClick={handleProductClick}
+                      />
+                    );
+                  })}
               </div>
               {/* Hiển thị Spinner khi đang tải */}
-              {/* {isLoading && (
+              {isLoading && (
                 <div className="w-full flex justify-center my-8">
-                  <Spinner className="h-8 w-8 text-blue-500" />
+                  <Spinner className="h-8 w-8" />
                 </div>
-              )} */}
-              {/* Hiển thị thông báo hết sản phẩm */}
-              {/* {!isLoading && visibleProductsCount >= filterProducts.length && (
+              )}
+              {!isLoading && visibleProductsCount >= filterProducts.length && (
                 <p className="text-center text-gray-500 mt-4">
                   You've reached the end of products
                 </p>
-              )} */}
+              )}
             </div>
           )}
         </div>
