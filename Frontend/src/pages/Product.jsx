@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import RelatedProducts from "../components/RelatedProducts";
 
 export const Product = () => {
   const { product_id } = useParams();
@@ -372,6 +373,12 @@ export const Product = () => {
               </div>
             </div>
           </div>
+          {productData && (
+            <RelatedProducts
+              brand={productData.brand_id}
+              category={productData.category_id}
+            />
+          )}
         </div>
       </section>
       <ToastContainer />

@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import LatestCollection from "../components/LastestCollection";
 import Policy from "../components/Policy";
 import NewsletterBox from "../components/NewsLetterBox";
-import RelatedProducts from "../components/RelatedProduct";
+import RelatedProducts from "../components/RelatedProducts";
 import BestSeller from "../components/BestSeller";
 
 const Home = () => {
