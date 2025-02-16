@@ -111,13 +111,27 @@ const addReview = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const newReview = { user, review, rating, createdAt: new Date() };
-    product.reviews.push(newReview);
+    // Kiểm tra xem user đã có review chưa
+    const existingReview = product.reviews.find((r) => r.user === user);
+
+    if (existingReview) {
+      // Nếu đã có review, cập nhật nội dung
+      existingReview.review = review;
+      existingReview.rating = rating;
+      existingReview.createdAt = new Date();
+    } else {
+      // Nếu chưa có review, thêm mới
+      const newReview = { user, review, rating, createdAt: new Date() };
+      product.reviews.push(newReview);
+    }
 
     await product.save();
     res
       .status(200)
-      .json({ message: "Review added successfully", review: newReview });
+      .json({
+        message: "Review submitted successfully",
+        reviews: product.reviews,
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

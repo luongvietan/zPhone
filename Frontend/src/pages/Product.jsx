@@ -135,8 +135,8 @@ export const Product = () => {
 
   // Submit review
   const handleReviewSubmit = async () => {
-    // Chỉ cho phép submit nếu đã mua hàng, có đánh giá chữ và đã chọn số sao (khác 0)
     if (!canReview || !userReview.trim() || selectedRating === 0) return;
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/products/${product_id}/reviews`,
@@ -152,11 +152,10 @@ export const Product = () => {
         }
       );
 
-      setReviews([...reviews, response.data.review]);
+      setReviews(response.data.reviews);
       setUserReview("");
       setSelectedRating(0);
-      window.location.reload();
-      toast.success("Review submitted!");
+      toast.success("Review updated!");
     } catch (error) {
       console.error("Error submitting review:", error);
       toast.error("Error submitting review.");
