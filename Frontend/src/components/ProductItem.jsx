@@ -1,21 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
+import { IoMdStar, IoMdStarHalf } from "react-icons/io";
 import { WishlistContext } from "../context/WishlistContext";
+import axios from "axios";
 
 const ProductItem = ({ product_id, product_image, product_name, price }) => {
   const navigate = useNavigate();
   const { addToWishlist, removeFromWishlist, isInWishlist } =
     useContext(WishlistContext);
+  const [averageRating, setAverageRating] = useState(0);
+
+  useEffect(() => {
+    const fetchAverageRating = async () => {
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/products/${product_id}/average-rating`
+        );
+        setAverageRating(parseFloat(response.data.averageRating)); // Chuyển thành số
+      } catch (error) {
+        console.error("Error fetching average rating:", error);
+      }
+    };
+
+    fetchAverageRating();
+  }, [product_id]);
 
   const handleWishlistClick = (e) => {
     e.stopPropagation();
     if (isInWishlist(product_id)) {
       removeFromWishlist(product_id);
     } else {
-      // Lưu các trường cần thiết; backend yêu cầu product_id, product_name, price, product_image
       addToWishlist({
         product_id,
         product_name,
@@ -27,6 +46,29 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
 
   const handleClick = () => {
     navigate(`/product/${product_id}`);
+  };
+
+  const renderStars = () => {
+    const fullStars = Math.floor(averageRating);
+    const halfStar = averageRating - fullStars >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStar;
+    let stars = [];
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <IoMdStar key={`full-${i}`} className="h-5 w-5 text-yellow-500" />
+      );
+    }
+    if (halfStar) {
+      stars.push(
+        <IoMdStarHalf key="half" className="h-5 w-5 text-yellow-500" />
+      );
+    }
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(
+        <IoMdStar key={`empty-${i}`} className="h-5 w-5 text-gray-300" />
+      );
+    }
+    return stars;
   };
 
   return (
@@ -66,22 +108,10 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
         </div>
 
         <div className="flex items-center">
-          {[...Array(5)].map((_, i) => (
-            <svg
-              key={i}
-              aria-hidden="true"
-              className="h-5 w-5 text-yellow-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-            </svg>
-          ))}
+          {renderStars()}
           <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-            5.0
+            {averageRating?.toFixed(1) || "0.0"}
           </span>
-
           <button
             onClick={handleWishlistClick}
             className="ml-auto p-2 rounded-full transition-colors duration-200"

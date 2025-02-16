@@ -28,4 +28,5 @@ router.delete(
   productController.deleteReview
 );
 
+router.get("/:id/average-rating", productController.getAverageRating);
 module.exports = router;

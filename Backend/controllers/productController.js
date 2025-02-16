@@ -221,6 +221,27 @@ const deleteReview = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getAverageRating = async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.id });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const reviews = product.reviews;
+    if (reviews.length === 0) {
+      return res.json({ averageRating: 0 });
+    }
+
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / reviews.length;
+
+    res.json({ averageRating: averageRating.toFixed(1) }); // Làm tròn 1 số thập phân
+  } catch (error) {
+    res.status(500).json({ message: "Error calculating average rating" });
+  }
+};
 module.exports = {
   getAllProducts,
   createProduct,
@@ -235,4 +256,5 @@ module.exports = {
   deleteAllComments,
   deleteComment,
   deleteReview,
+  getAverageRating,
 };
