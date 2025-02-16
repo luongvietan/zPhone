@@ -19,7 +19,7 @@ const variantSchema = new mongoose.Schema(
   { _id: false }
 );
 
-// Define product schema
+// Define comment schema
 const commentSchema = new mongoose.Schema(
   {
     user: {
@@ -38,6 +38,26 @@ const commentSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Define review schema
+const reviewSchema = new mongoose.Schema(
+  {
+    user: {
+      type: String,
+      required: true,
+    },
+    review: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
+// Define product schema
 const productSchema = new mongoose.Schema(
   {
     product_id: {
@@ -59,6 +79,7 @@ const productSchema = new mongoose.Schema(
     },
     variants: [variantSchema],
     comments: [commentSchema],
+    reviews: [reviewSchema], // Thêm trường reviews
   },
   { timestamps: true }
 );

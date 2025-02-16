@@ -66,6 +66,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// Add a comment to a product
 const addComment = async (req, res) => {
   try {
     const { user, content } = req.body;
@@ -87,7 +88,7 @@ const addComment = async (req, res) => {
   }
 };
 
-// Lấy tất cả bình luận của sản phẩm
+// Get all comments of a product
 const getComments = async (req, res) => {
   try {
     const product = await Product.findOne({ product_id: req.params.id });
@@ -100,6 +101,41 @@ const getComments = async (req, res) => {
   }
 };
 
+// Add a review to a product
+const addReview = async (req, res) => {
+  try {
+    const { user, review } = req.body;
+    const product = await Product.findOne({ product_id: req.params.id });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const newReview = { user, review, createdAt: new Date() };
+    product.reviews.push(newReview);
+
+    await product.save();
+    res
+      .status(200)
+      .json({ message: "Review added successfully", review: newReview });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all reviews of a product
+const getReviews = async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.id });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(product.reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching reviews" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   createProduct,
@@ -108,4 +144,6 @@ module.exports = {
   deleteProduct,
   addComment,
   getComments,
+  addReview,
+  getReviews,
 };

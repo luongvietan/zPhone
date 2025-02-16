@@ -9,6 +9,7 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import RelatedProducts from "../components/RelatedProducts";
+import axios from "axios";
 
 export const Product = () => {
   const { product_id } = useParams();
@@ -24,11 +25,16 @@ export const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
 
-  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [activeTab, setActiveTab] = useState("description");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  // Lấy bình luận từ server
+  const [reviews, setReviews] = useState([]);
+  const [userReview, setUserReview] = useState("");
+  const [canReview, setCanReview] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Fetch comments
   const fetchComments = async () => {
     try {
       const response = await fetch(
@@ -44,7 +50,7 @@ export const Product = () => {
     }
   };
 
-  // Gửi bình luận lên server
+  // Submit comment
   const handleCommentSubmit = async () => {
     if (!comment.trim() || !user?.username) return;
 
@@ -72,11 +78,7 @@ export const Product = () => {
     }
   };
 
-  useEffect(() => {
-    fetchComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  // Fetch product data
   const fetchProductData = useCallback(() => {
     if (products && products.length > 0 && product_id) {
       const foundProduct = products.find(
@@ -85,17 +87,83 @@ export const Product = () => {
       if (foundProduct) {
         setProductData(foundProduct);
         setImage(foundProduct.product_image[0]);
-
-        // Set default size to first variant
         setSize(foundProduct.variants[0].storage);
         setSelectedVariant(foundProduct.variants[0]);
       }
     }
   }, [products, product_id]);
 
+  // Check if user has purchased the product
+  const checkPurchaseStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/orders/dashboard`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const userOrders = response.data;
+      const hasPurchased = userOrders.some((order) =>
+        order.items.some((item) => item.product_id === parseInt(product_id))
+      );
+      setCanReview(hasPurchased);
+      if (!hasPurchased) {
+        setMessage("You have to buy this product before reviewing.");
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
+  // Fetch reviews
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/products/${product_id}/reviews`
+      );
+      setReviews(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  // Submit review
+  const handleReviewSubmit = async () => {
+    if (!canReview || !userReview.trim()) return;
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/products/${product_id}/reviews`,
+        {
+          user: user.username,
+          review: userReview,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      // Cập nhật danh sách reviews sau khi gửi thành công
+      setReviews([...reviews, response.data]);
+      setUserReview("");
+      window.location.reload();
+      toast.success("Reviews send !");
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      toast.error("Error submitting review.");
+    }
+  };
+
   useEffect(() => {
+    fetchComments();
     fetchProductData();
-  }, [fetchProductData]);
+    checkPurchaseStatus();
+    fetchReviews();
+  }, [fetchProductData, product_id]);
 
   const handleQuantityChange = (event) => {
     const value =
@@ -116,19 +184,11 @@ export const Product = () => {
         product_image: productData.product_image,
         storage: selectedVariant.storage,
       };
-      toast.success("Product Added To Cart");
-      // console.log("Product being added to cart:", productToAdd);
+      toast.success("Added To Cart");
       addToCart(productToAdd);
     }
   };
 
-  const handleCommentClick = () => {
-    setShowCommentForm(true);
-  };
-
-  const handleDescriptionClick = () => {
-    setShowCommentForm(false);
-  };
   const handleWishlistClick = () => {
     if (!productData) return;
 
@@ -140,11 +200,12 @@ export const Product = () => {
         product_id: productData.product_id,
         product_name: productData.product_name,
         price: selectedVariant.product_price,
-        product_image: productData.product_image[0], // Lấy ảnh chính xác
+        product_image: productData.product_image[0],
       });
       toast.success("Added to Wishlist");
     }
   };
+
   return (
     <div>
       <section className="py-12 sm:py-16">
@@ -300,40 +361,47 @@ export const Product = () => {
                   <nav className="flex gap-4">
                     <a
                       href="#"
-                      title=""
-                      onClick={handleDescriptionClick}
+                      onClick={() => setActiveTab("description")}
                       className={`border-b-2 py-4 text-sm font-medium ${
-                        showCommentForm
-                          ? "border-gray-400 text-gray-400"
-                          : "border-gray-900 text-gray-900 hover:border-gray-400 hover:text-gray-800"
+                        activeTab === "description"
+                          ? "border-gray-900 text-gray-900"
+                          : "border-gray-400 text-gray-400 hover:border-gray-400 hover:text-gray-800"
                       }`}
                     >
                       Description
                     </a>
                     <a
                       href="#"
-                      title=""
-                      onClick={handleCommentClick}
+                      onClick={() => setActiveTab("comment")}
                       className={`border-b-2 py-4 text-sm font-medium ${
-                        showCommentForm
+                        activeTab === "comment"
                           ? "border-gray-900 text-gray-900"
                           : "border-gray-400 text-gray-400 hover:border-gray-400 hover:text-gray-800"
                       }`}
                     >
                       Comment
                     </a>
+                    <a
+                      href="#"
+                      onClick={() => setActiveTab("review")}
+                      className={`border-b-2 py-4 text-sm font-medium ${
+                        activeTab === "review"
+                          ? "border-gray-900 text-gray-900"
+                          : "border-gray-400 text-gray-400 hover:border-gray-400 hover:text-gray-800"
+                      }`}
+                    >
+                      Review
+                    </a>
                   </nav>
                 </div>
 
-                <div
-                  className={`mt-8 flow-root sm:mt-12 ${
-                    showCommentForm ? "hidden" : ""
-                  }`}
-                >
-                  <p className="mt-4">{productData?.product_description}</p>
-                </div>
+                {activeTab === "description" && (
+                  <div className="mt-8 flow-root sm:mt-12">
+                    <p className="mt-4">{productData?.product_description}</p>
+                  </div>
+                )}
 
-                {showCommentForm && (
+                {activeTab === "comment" && (
                   <div className="mt-4">
                     <textarea
                       className="w-full border border-gray-300 rounded-md p-2"
@@ -366,6 +434,51 @@ export const Product = () => {
                         </ul>
                       ) : (
                         <p>No comments yet.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "review" && (
+                  <div className="mt-4">
+                    {/* Nếu đã mua hàng, hiển thị phần nhập review */}
+                    {canReview ? (
+                      <div>
+                        <textarea
+                          className="w-full border border-gray-300 rounded-md p-2"
+                          rows="4"
+                          placeholder="Write your reviews..."
+                          value={userReview}
+                          onChange={(e) => setUserReview(e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className="mt-2 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 px-4 py-2 text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                          onClick={handleReviewSubmit}
+                        >
+                          Send reviews
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-red-500 mt-4">{message}</p>
+                    )}
+                    {/* Luôn hiển thị danh sách reviews cho tất cả người dùng */}
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold">Reviews:</h3>
+                      {reviews.length > 0 ? (
+                        <ul className="mt-2">
+                          {reviews.map((review, index) => (
+                            <li key={index} className="border-b py-2">
+                              <p className="font-bold">{review.user}</p>
+                              <p>{review.review}</p>
+                              <p className="text-sm text-gray-500">
+                                {new Date(review.createdAt).toLocaleString()}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No reviews yet.</p>
                       )}
                     </div>
                   </div>
