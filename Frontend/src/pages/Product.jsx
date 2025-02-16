@@ -10,6 +10,8 @@ import { FaHeart } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import RelatedProducts from "../components/RelatedProducts";
 import axios from "axios";
+import { IoMdStar } from "react-icons/io";
+import { IoMdStarHalf } from "react-icons/io";
 
 export const Product = () => {
   const { product_id } = useParams();
@@ -33,6 +35,7 @@ export const Product = () => {
   const [userReview, setUserReview] = useState("");
   const [canReview, setCanReview] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedRating, setSelectedRating] = useState(0);
 
   // Fetch comments
   const fetchComments = async () => {
@@ -132,13 +135,15 @@ export const Product = () => {
 
   // Submit review
   const handleReviewSubmit = async () => {
-    if (!canReview || !userReview.trim()) return;
+    // Chỉ cho phép submit nếu đã mua hàng, có đánh giá chữ và đã chọn số sao (khác 0)
+    if (!canReview || !userReview.trim() || selectedRating === 0) return;
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/products/${product_id}/reviews`,
         {
           user: user.username,
           review: userReview,
+          rating: selectedRating,
         },
         {
           headers: {
@@ -147,11 +152,11 @@ export const Product = () => {
         }
       );
 
-      // Cập nhật danh sách reviews sau khi gửi thành công
-      setReviews([...reviews, response.data]);
+      setReviews([...reviews, response.data.review]);
       setUserReview("");
+      setSelectedRating(0);
       window.location.reload();
-      toast.success("Reviews send !");
+      toast.success("Review submitted!");
     } catch (error) {
       console.error("Error submitting review:", error);
       toast.error("Error submitting review.");
@@ -163,6 +168,7 @@ export const Product = () => {
     fetchProductData();
     checkPurchaseStatus();
     fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchProductData, product_id]);
 
   const handleQuantityChange = (event) => {
@@ -205,6 +211,29 @@ export const Product = () => {
       toast.success("Added to Wishlist");
     }
   };
+
+  const renderStars = (rating) => {
+    const rounded = Math.round(rating * 2) / 2;
+    const fullStars = Math.floor(rounded);
+    const halfStar = rounded - fullStars === 0.5 ? 1 : 0;
+    let stars = [];
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <IoMdStar key={`full-${i}`} className="text-yellow-500 text-xl" />
+      );
+    }
+    if (halfStar) {
+      stars.push(
+        <IoMdStarHalf key="half" className="text-yellow-500 text-xl" />
+      );
+    }
+    return stars;
+  };
+  let averageRating = 0;
+  if (reviews.length > 0) {
+    const total = reviews.reduce((acc, cur) => acc + cur.rating, 0);
+    averageRating = Math.round((total / reviews.length) * 2) / 2;
+  }
 
   return (
     <div>
@@ -296,6 +325,19 @@ export const Product = () => {
               <h1 className="sm: text-2xl font-bold text-gray-900 sm:text-3xl">
                 {productData?.product_name}
               </h1>
+              <div className="mb-4 flex items-center">
+                <span className="font-semibold mr-2">Average Rating:</span>
+                {reviews.length > 0 ? (
+                  <>
+                    {renderStars(averageRating)}
+                    <span className="ml-2 text-sm">
+                      ({averageRating} out of 5)
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-sm">No ratings yet</span>
+                )}
+              </div>
 
               <h2 className="mt-8 text-base text-gray-900">Storage</h2>
               <div className="mt-3 flex select-none flex-wrap items-center gap-1">
@@ -441,9 +483,25 @@ export const Product = () => {
 
                 {activeTab === "review" && (
                   <div className="mt-4">
-                    {/* Nếu đã mua hàng, hiển thị phần nhập review */}
+                    {/* Phần nhập review chỉ hiện khi canReview = true */}
                     {canReview ? (
                       <div>
+                        <div className="my-4">
+                          <p className="font-semibold">Your Rating:</p>
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <IoMdStar
+                                key={star}
+                                className={`cursor-pointer text-2xl ${
+                                  selectedRating >= star
+                                    ? "text-yellow-500"
+                                    : "text-gray-300"
+                                }`}
+                                onClick={() => setSelectedRating(star)}
+                              />
+                            ))}
+                          </div>
+                        </div>
                         <textarea
                           className="w-full border border-gray-300 rounded-md p-2"
                           rows="4"
@@ -462,14 +520,20 @@ export const Product = () => {
                     ) : (
                       <p className="text-red-500 mt-4">{message}</p>
                     )}
-                    {/* Luôn hiển thị danh sách reviews cho tất cả người dùng */}
+
+                    {/* Luôn hiển thị danh sách reviews */}
                     <div className="mt-6">
                       <h3 className="text-lg font-semibold">Reviews:</h3>
                       {reviews.length > 0 ? (
                         <ul className="mt-2">
                           {reviews.map((review, index) => (
                             <li key={index} className="border-b py-2">
-                              <p className="font-bold">{review.user}</p>
+                              <div className="flex items-center">
+                                <p className="font-bold">{review.user}</p>
+                                <div className="ml-2 flex">
+                                  {renderStars(review.rating)}
+                                </div>
+                              </div>
                               <p>{review.review}</p>
                               <p className="text-sm text-gray-500">
                                 {new Date(review.createdAt).toLocaleString()}

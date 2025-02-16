@@ -16,5 +16,7 @@ router.get("/:id/comments", productController.getComments);
 // Review routes
 router.post("/:id/reviews", productController.addReview);
 router.get("/:id/reviews", productController.getReviews);
+router.delete("/reviews/all", productController.deleteAllReviews);
+router.delete("/comments/all", productController.deleteAllComments);
 
 module.exports = router;

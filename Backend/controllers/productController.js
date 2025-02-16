@@ -104,14 +104,14 @@ const getComments = async (req, res) => {
 // Add a review to a product
 const addReview = async (req, res) => {
   try {
-    const { user, review } = req.body;
+    const { user, review, rating } = req.body;
     const product = await Product.findOne({ product_id: req.params.id });
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const newReview = { user, review, createdAt: new Date() };
+    const newReview = { user, review, rating, createdAt: new Date() };
     product.reviews.push(newReview);
 
     await product.save();
@@ -135,7 +135,23 @@ const getReviews = async (req, res) => {
     res.status(500).json({ message: "Error fetching reviews" });
   }
 };
-
+// Xóa tất cả review của tất cả sản phẩm
+const deleteAllReviews = async (req, res) => {
+  try {
+    await Product.updateMany({}, { $set: { reviews: [] } });
+    res.status(200).json({ message: "All reviews deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const deleteAllComments = async (req, res) => {
+  try {
+    await Product.updateMany({}, { $set: { comments: [] } });
+    res.status(200).json({ message: "All comments deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getAllProducts,
   createProduct,
@@ -146,4 +162,6 @@ module.exports = {
   getComments,
   addReview,
   getReviews,
+  deleteAllReviews,
+  deleteAllComments,
 };
