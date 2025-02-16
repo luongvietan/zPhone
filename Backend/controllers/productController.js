@@ -126,12 +126,10 @@ const addReview = async (req, res) => {
     }
 
     await product.save();
-    res
-      .status(200)
-      .json({
-        message: "Review submitted successfully",
-        reviews: product.reviews,
-      });
+    res.status(200).json({
+      message: "Review submitted successfully",
+      reviews: product.reviews,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -166,6 +164,63 @@ const deleteAllComments = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// Xóa comment của người dùng
+const deleteComment = async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.productId });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const comment = product.comments.find(
+      (c) => c._id.toString() === req.params.commentId
+    );
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Kiểm tra quyền xóa
+    if (comment.user !== req.user.username) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this comment" });
+    }
+    product.comments.pull(req.params.commentId);
+    await product.save();
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Xóa review của người dùng
+const deleteReview = async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.productId });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const review = product.reviews.id(req.params.reviewId);
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    // Kiểm tra quyền xóa
+    if (review.user !== req.user.username) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this review" });
+    }
+
+    product.reviews.pull(req.params.reviewId);
+    await product.save();
+
+    res.status(200).json({ message: "Review deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getAllProducts,
   createProduct,
@@ -178,4 +233,6 @@ module.exports = {
   getReviews,
   deleteAllReviews,
   deleteAllComments,
+  deleteComment,
+  deleteReview,
 };

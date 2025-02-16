@@ -3,8 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
-const sharp = require("sharp"); // Thêm thư viện sharp để xử lý ảnh
-const dotenv = require("dotenv"); // Thêm dòng này để import dotenv
+const sharp = require("sharp");
+const dotenv = require("dotenv");
 
 dotenv.config();
 const app = express();

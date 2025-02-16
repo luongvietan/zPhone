@@ -35,7 +35,7 @@ const commentSchema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { _id: false }
+  { _id: true }
 );
 
 // Define review schema
@@ -55,7 +55,7 @@ const reviewSchema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { _id: false }
+  { _id: true }
 );
 
 // Define product schema

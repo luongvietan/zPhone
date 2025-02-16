@@ -47,6 +47,8 @@ export const Product = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+      // console.log(data);
+
       setComments(data);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -76,6 +78,8 @@ export const Product = () => {
       const data = await response.json();
       setComments([...comments, data.comment]);
       setComment("");
+      toast.success("Comment updated!");
+      fetchComments();
     } catch (error) {
       console.error("Error submitting comment:", error);
     }
@@ -127,7 +131,6 @@ export const Product = () => {
         `${import.meta.env.VITE_API_URL}/products/${product_id}/reviews`
       );
       setReviews(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }
@@ -233,7 +236,50 @@ export const Product = () => {
     const total = reviews.reduce((acc, cur) => acc + cur.rating, 0);
     averageRating = Math.round((total / reviews.length) * 2) / 2;
   }
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await axios.delete(
+        `${
+          import.meta.env.VITE_API_URL
+        }/products/${product_id}/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
+      if (response.status === 200) {
+        setComments(comments.filter((comment) => comment._id !== commentId));
+        toast.success("Comment deleted successfully");
+      }
+    } catch (error) {
+      toast.error("Error deleting comment");
+    }
+  };
+
+  // Thêm hàm xử lý xóa review
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const response = await axios.delete(
+        `${
+          import.meta.env.VITE_API_URL
+        }/products/${product_id}/reviews/${reviewId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setReviews(reviews.filter((review) => review._id !== reviewId));
+        toast.success("Review deleted successfully");
+      }
+    } catch (error) {
+      toast.error("Error deleting review");
+    }
+  };
   return (
     <div>
       <section className="py-12 sm:py-16">
@@ -465,11 +511,23 @@ export const Product = () => {
                         <ul className="mt-2">
                           {comments.map((cmt, index) => (
                             <li key={index} className="border-b py-2">
-                              <p className="font-bold">{cmt.user}:</p>
-                              <p>{cmt.content}</p>
-                              <p className="text-sm text-gray-500">
-                                {new Date(cmt.createdAt).toLocaleString()}
-                              </p>
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <p className="font-bold">{cmt.user}:</p>
+                                  <p>{cmt.content}</p>
+                                  <p className="text-sm text-gray-500">
+                                    {new Date(cmt.createdAt).toLocaleString()}
+                                  </p>
+                                </div>
+                                {user?.username === cmt.user && (
+                                  <button
+                                    onClick={() => handleDeleteComment(cmt._id)}
+                                    className="text-red-500 hover:text-red-700 ml-4"
+                                  >
+                                    Delete
+                                  </button>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -527,16 +585,32 @@ export const Product = () => {
                         <ul className="mt-2">
                           {reviews.map((review, index) => (
                             <li key={index} className="border-b py-2">
-                              <div className="flex items-center">
-                                <p className="font-bold">{review.user}</p>
-                                <div className="ml-2 flex">
-                                  {renderStars(review.rating)}
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <div className="flex items-center">
+                                    <p className="font-bold">{review.user}</p>
+                                    <div className="ml-2 flex">
+                                      {renderStars(review.rating)}
+                                    </div>
+                                  </div>
+                                  <p>{review.review}</p>
+                                  <p className="text-sm text-gray-500">
+                                    {new Date(
+                                      review.createdAt
+                                    ).toLocaleString()}
+                                  </p>
                                 </div>
+                                {user?.username === review.user && (
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteReview(review._id)
+                                    }
+                                    className="text-red-500 hover:text-red-700 ml-4"
+                                  >
+                                    Delete
+                                  </button>
+                                )}
                               </div>
-                              <p>{review.review}</p>
-                              <p className="text-sm text-gray-500">
-                                {new Date(review.createdAt).toLocaleString()}
-                              </p>
                             </li>
                           ))}
                         </ul>
