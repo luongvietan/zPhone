@@ -94,7 +94,7 @@ const Dashboard = () => {
                   <p className="text-gray-600">
                     Order Date:{" "}
                     {order.orderDate
-                      ? new Date(order.orderDate).toLocaleString("en-US")
+                      ? new Date(order.orderDate).toLocaleString("vi-VN")
                       : "No information"}
                   </p>
                   <p className="text-gray-600 font-semibold">
@@ -162,7 +162,7 @@ const Dashboard = () => {
             </p>
             <p>
               <strong>Order Date:</strong>{" "}
-              {new Date(selectedOrder.orderDate).toLocaleString("en-US")}
+              {new Date(selectedOrder.orderDate).toLocaleString("vi-VN")}
             </p>
             <p>
               <strong>Shipping:</strong> {selectedOrder.shipping} VND
