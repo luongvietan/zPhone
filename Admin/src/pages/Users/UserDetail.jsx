@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getUserById } from "../../services/userService";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  Avatar,
-} from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
+import { User } from "lucide-react";
 
 const UserDetail = () => {
   const { id } = useParams();
@@ -23,41 +15,37 @@ const UserDetail = () => {
     fetchUser();
   }, [id]);
 
-  if (!user) return <Typography>Loading...</Typography>;
+  if (!user) return <p className="text-gray-600">Loading...</p>;
 
   return (
-    <Card
-      sx={{
-        maxWidth: 500,
-        margin: "auto",
-        mt: 4,
-        p: 2,
-        boxShadow: 3,
-        "&:hover": { boxShadow: 6 },
-      }}
-    >
-      <CardContent>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <Avatar sx={{ bgcolor: "primary.main", width: 56, height: 56 }}>
-              <PersonIcon fontSize="large" />
-            </Avatar>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5" fontWeight="bold">
-              User Details
-            </Typography>
-          </Grid>
-        </Grid>
-        <Typography sx={{ mt: 2 }}>Username: {user.username}</Typography>
-        <Typography>Email: {user.email}</Typography>
-        <Typography>Phone: {user.phone}</Typography>
-        <Typography>Address: {user.address}</Typography>
-      </CardContent>
-      <Button component={Link} to="/users" variant="contained" sx={{ mt: 2 }}>
+    <div className="max-w-md mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
+      <div className="flex items-center gap-4 mb-6">
+        <div className="bg-indigo-600 text-white rounded-full p-3">
+          <User className="w-6 h-6" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">User Details</h2>
+      </div>
+      <div className="space-y-4">
+        <p className="text-gray-700">
+          <span className="font-semibold">Username:</span> {user.username}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Email:</span> {user.email}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Phone:</span> {user.phone}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Address:</span> {user.address}
+        </p>
+      </div>
+      <Link
+        to="/users"
+        className="mt-6 inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+      >
         Back to Users
-      </Button>
-    </Card>
+      </Link>
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ export const getUsers = async () => {
 // Lấy chi tiết user
 export const getUserById = async (id) => {
   const response = await axios.get(`${API_URL}/${id}`);
-  return { ...response.data, id: response.data._id }; // Chuyển _id thành id
+  return { ...response.data, id: response.data._id };
 };
 
 // Cập nhật user

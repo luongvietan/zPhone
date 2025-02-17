@@ -78,9 +78,24 @@ const productSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    stock_quantity: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    brand_id: {
+      type: Number,
+      required: true,
+      enum: [1, 2, 3, 4, 5], // Chỉ cho phép giá trị từ 1 đến 5
+    },
+    category: {
+      type: Number,
+      required: true,
+      enum: [1, 2], // Chỉ cho phép giá trị từ 1 đến 2
+    },
     variants: [variantSchema],
     comments: [commentSchema],
-    reviews: [reviewSchema], // Thêm trường reviews
+    reviews: [reviewSchema],
   },
   { timestamps: true }
 );

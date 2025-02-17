@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
-import { Delete, Visibility, Edit, Search } from "@mui/icons-material";
+import { Eye, Edit, Trash2, Search } from "lucide-react";
 import axios from "axios";
 
 const UsersList = () => {
@@ -33,6 +21,7 @@ const UsersList = () => {
         .then(() => setUsers(users.filter((user) => user.id !== id)))
         .catch((error) => console.error("Error deleting user:", error));
     }
+    window.location.reload();
   };
 
   const filteredUsers = users.filter((user) =>
@@ -40,78 +29,57 @@ const UsersList = () => {
   );
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxWidth: 1000, margin: "auto", mt: 4, boxShadow: 3 }}
-    >
-      <TextField
-        fullWidth
-        placeholder="Search users..."
-        variant="outlined"
-        sx={{ mb: 2 }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Table>
-        <TableHead>
-          <TableRow sx={{ backgroundColor: "#1976d2" }}>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              Username
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              Email
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              Phone
-            </TableCell>
-            <TableCell
-              sx={{ color: "white", fontWeight: "bold" }}
-              align="center"
-            >
-              Actions
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+    <div className="max-w-4xl mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        />
+        <Search className="text-gray-500" />
+      </div>
+      <table className="w-full">
+        <thead>
+          <tr className="bg-indigo-600 text-white">
+            <th className="px-4 py-2 text-left">Username</th>
+            <th className="px-4 py-2 text-left">Email</th>
+            <th className="px-4 py-2 text-left">Phone</th>
+            <th className="px-4 py-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
           {filteredUsers.map((user) => (
-            <TableRow
-              key={user.id}
-              sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}
-            >
-              <TableCell>{user.username}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.phone}</TableCell>
-              <TableCell align="center">
-                <IconButton
-                  component={Link}
+            <tr key={user.id} className="hover:bg-gray-100">
+              <td className="px-4 py-2">{user.username}</td>
+              <td className="px-4 py-2">{user.email}</td>
+              <td className="px-4 py-2">{user.phone}</td>
+              <td className="px-4 py-2 flex justify-center gap-2">
+                <Link
                   to={`/users/${user._id}`}
-                  color="primary"
+                  className="text-indigo-600 hover:text-indigo-800"
                 >
-                  <Visibility />
-                </IconButton>
-                <IconButton
-                  component={Link}
+                  <Eye className="w-5 h-5" />
+                </Link>
+                <Link
                   to={`/users/edit/${user._id}`}
-                  color="warning"
+                  className="text-yellow-600 hover:text-yellow-800"
                 >
-                  <Edit />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(user.id)} color="error">
-                  <Delete />
-                </IconButton>
-              </TableCell>
-            </TableRow>
+                  <Edit className="w-5 h-5" />
+                </Link>
+                <button
+                  onClick={() => handleDelete(user._id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </td>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   );
 };
 

@@ -165,14 +165,15 @@ const Collection = () => {
     }
 
     if (brand.length > 0) {
-      productCopy = productCopy.filter((item) =>
-        brand.includes(item.brand_id.toString())
+      productCopy = productCopy.filter(
+        (item) => item.brand_id && brand.includes(item.brand_id.toString())
       );
     }
 
     if (category.length > 0) {
-      productCopy = productCopy.filter((item) =>
-        category.includes(item.category_id.toString())
+      productCopy = productCopy.filter(
+        (item) =>
+          item.category_id && category.includes(item.category_id.toString())
       );
     }
 

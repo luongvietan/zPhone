@@ -1,9 +1,31 @@
+const express = require("express");
 const Product = require("../models/productModel");
-
+const multer = require("multer");
+const path = require("path");
+const router = express.Router();
 // Create a new product
 const createProduct = async (req, res) => {
   try {
-    const newProduct = new Product(req.body);
+    const {
+      product_id,
+      product_name,
+      product_description,
+      product_image,
+      stock_quantity,
+      brand_id,
+      category,
+      variants,
+    } = req.body;
+    const newProduct = new Product({
+      product_id,
+      product_name,
+      product_description,
+      product_image,
+      stock_quantity,
+      brand_id,
+      category,
+      variants,
+    });
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (error) {
@@ -11,6 +33,21 @@ const createProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { product_id: req.params.id },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 // Get all products
 const getAllProducts = async (req, res) => {
   try {
@@ -29,23 +66,6 @@ const getProductById = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
     res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Update a product by ID
-const updateProduct = async (req, res) => {
-  try {
-    const updatedProduct = await Product.findOneAndUpdate(
-      { product_id: req.params.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -78,8 +98,8 @@ const addComment = async (req, res) => {
 
     const newComment = { user, content, createdAt: new Date() };
     product.comments.push(newComment);
-
     await product.save();
+
     res
       .status(200)
       .json({ message: "Comment added successfully", comment: newComment });
@@ -111,16 +131,16 @@ const addReview = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Kiểm tra xem user đã có review chưa
+    // Check if the user has already reviewed the product
     const existingReview = product.reviews.find((r) => r.user === user);
 
     if (existingReview) {
-      // Nếu đã có review, cập nhật nội dung
+      // Update existing review
       existingReview.review = review;
       existingReview.rating = rating;
       existingReview.createdAt = new Date();
     } else {
-      // Nếu chưa có review, thêm mới
+      // Add new review
       const newReview = { user, review, rating, createdAt: new Date() };
       product.reviews.push(newReview);
     }
@@ -147,24 +167,8 @@ const getReviews = async (req, res) => {
     res.status(500).json({ message: "Error fetching reviews" });
   }
 };
-// Xóa tất cả review của tất cả sản phẩm
-const deleteAllReviews = async (req, res) => {
-  try {
-    await Product.updateMany({}, { $set: { reviews: [] } });
-    res.status(200).json({ message: "All reviews deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-const deleteAllComments = async (req, res) => {
-  try {
-    await Product.updateMany({}, { $set: { comments: [] } });
-    res.status(200).json({ message: "All comments deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-// Xóa comment của người dùng
+
+// Delete a comment by ID
 const deleteComment = async (req, res) => {
   try {
     const product = await Product.findOne({ product_id: req.params.productId });
@@ -172,19 +176,12 @@ const deleteComment = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const comment = product.comments.find(
-      (c) => c._id.toString() === req.params.commentId
-    );
+    const comment = product.comments.id(req.params.commentId);
     if (!comment) {
       return res.status(404).json({ message: "Comment not found" });
     }
 
-    // Kiểm tra quyền xóa
-    if (comment.user !== req.user.username) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to delete this comment" });
-    }
+    // Remove authorization check
     product.comments.pull(req.params.commentId);
     await product.save();
     res.status(200).json({ message: "Comment deleted successfully" });
@@ -193,7 +190,7 @@ const deleteComment = async (req, res) => {
   }
 };
 
-// Xóa review của người dùng
+// Delete a review by ID
 const deleteReview = async (req, res) => {
   try {
     const product = await Product.findOne({ product_id: req.params.productId });
@@ -206,25 +203,19 @@ const deleteReview = async (req, res) => {
       return res.status(404).json({ message: "Review not found" });
     }
 
-    // Kiểm tra quyền xóa
-    if (review.user !== req.user.username) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to delete this review" });
-    }
-
+    // Remove authorization check
     product.reviews.pull(req.params.reviewId);
     await product.save();
-
     res.status(200).json({ message: "Review deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get average rating of a product
 const getAverageRating = async (req, res) => {
   try {
     const product = await Product.findOne({ product_id: req.params.id });
-
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -237,14 +228,55 @@ const getAverageRating = async (req, res) => {
     const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
     const averageRating = totalRating / reviews.length;
 
-    res.json({ averageRating: averageRating.toFixed(1) }); // Làm tròn 1 số thập phân
+    res.json({ averageRating: averageRating.toFixed(1) });
   } catch (error) {
     res.status(500).json({ message: "Error calculating average rating" });
   }
 };
+
+// Update stock quantity of a product
+const updateStock = async (req, res) => {
+  try {
+    const { stock_quantity } = req.body;
+    const product = await Product.findOneAndUpdate(
+      { product_id: req.params.id },
+      { stock_quantity },
+      { new: true, runValidators: true }
+    );
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+// Endpoint upload ảnh
+router.post("/upload", upload.single("file"), (req, res) => {
+  try {
+    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
+      req.file.filename
+    }`;
+    res.status(200).json({ imageUrl });
+  } catch (error) {
+    res.status(500).json({ message: "Error uploading image" });
+  }
+});
+
 module.exports = {
-  getAllProducts,
   createProduct,
+  getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
@@ -252,9 +284,8 @@ module.exports = {
   getComments,
   addReview,
   getReviews,
-  deleteAllReviews,
-  deleteAllComments,
   deleteComment,
   deleteReview,
   getAverageRating,
+  updateStock,
 };
