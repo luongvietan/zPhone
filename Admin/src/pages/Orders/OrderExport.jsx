@@ -10,13 +10,15 @@ const OrderExport = ({ orders }) => {
 
   const handleExportCSV = () => {
     const csvContent =
-      "data:text/csv;charset=utf-8," +
+      ["Transaction ID", "User ID", "Total", "Status", "Order Date", "\n"].join(
+        ","
+      ) +
       validOrders
         .map((order) =>
           [
             order.transactionId,
             order.user_id,
-            order.total,
+            order.total * 1000000,
             order.status,
             new Date(order.orderDate).toLocaleDateString(),
           ].join(",")
@@ -34,7 +36,7 @@ const OrderExport = ({ orders }) => {
       body: validOrders.map((order) => [
         order.transactionId,
         order.user_id,
-        order.total,
+        (order.total * 1000000).toLocaleString(),
         order.status,
         new Date(order.orderDate).toLocaleDateString(),
       ]),

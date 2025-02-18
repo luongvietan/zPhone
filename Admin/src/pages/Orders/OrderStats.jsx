@@ -30,7 +30,7 @@ const OrderStats = () => {
     : 0;
   return (
     <div className="p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Order Statistics</h2>
+      <h2 className="text-xl font-semibold mb-4">Daily Order Statistics</h2>
       <p>Total Revenue: {validRevenue.toLocaleString()} VND</p>
       <p>Total Orders: {stats.totalOrders}</p>
     </div>

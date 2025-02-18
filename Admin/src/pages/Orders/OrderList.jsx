@@ -61,10 +61,7 @@ const OrderList = () => {
 
   // Hàm định dạng số tiền với dấu phẩy ngăn cách
   const formatCurrency = (amount) => {
-    return (amount * 1000000).toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+    return (amount * 1000000).toLocaleString();
   };
 
   // Hàm xử lý khi nhấp vào icon để hiển thị thông tin chi tiết
@@ -81,8 +78,8 @@ const OrderList = () => {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Orders</h2>
       <OrderStats />
+      <br />
       <OrderExport orders={orders} />
       <table className="min-w-full bg-white mt-4">
         <thead>
@@ -110,6 +107,7 @@ const OrderList = () => {
                       0
                     )
                   )}
+                  {" VND"}
                 </td>
                 <td className="py-2 px-4 border-b">
                   {groupedOrders[transactionId][0].status}
@@ -117,7 +115,7 @@ const OrderList = () => {
                 <td className="py-2 px-4 border-b">
                   {new Date(
                     groupedOrders[transactionId][0].orderDate
-                  ).toLocaleDateString()}
+                  ).toLocaleDateString("vi-VN")}
                 </td>
                 <td className="py-2 px-4 border-b">
                   <button
