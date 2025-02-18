@@ -281,6 +281,7 @@ exports.getTopSellingProducts = async (req, res) => {
         $group: {
           _id: "$items.product_id",
           product_name: { $first: "$items.product_name" },
+          storage: { $first: "$items.storage" },
           total_quantity: { $sum: "$items.quantity" },
           total_revenue: {
             $sum: { $multiply: ["$items.price", "$items.quantity"] },

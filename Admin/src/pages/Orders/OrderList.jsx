@@ -3,14 +3,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OrderStats from "./OrderStats";
 import OrderExport from "./OrderExport";
-import { FaInfoCircle } from "react-icons/fa";
+import { Info, ArrowUp, ArrowDown } from "lucide-react";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [groupedOrders, setGroupedOrders] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedOrderId, setExpandedOrderId] = useState(null); // State để quản lý đơn hàng được mở rộng
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [sortCriteria, setSortCriteria] = useState("total"); // Tiêu chí sắp xếp
+  const [sortDirection, setSortDirection] = useState("desc"); // Hướng sắp xếp
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,12 +32,10 @@ const OrderList = () => {
         );
 
         if (Array.isArray(response.data.orders)) {
-          // Lọc bỏ đơn hàng không hợp lệ
           const filteredOrders = response.data.orders.filter(
             (order) => !isNaN(order.total) && order.items.length > 0
           );
 
-          // Nhóm các đơn hàng có cùng Transaction ID
           const grouped = filteredOrders.reduce((acc, order) => {
             if (!acc[order.transactionId]) {
               acc[order.transactionId] = [];
@@ -61,26 +61,120 @@ const OrderList = () => {
 
   // Hàm định dạng số tiền với dấu phẩy ngăn cách
   const formatCurrency = (amount) => {
-    return (amount * 1000000).toLocaleString();
+    return (amount * 1000000).toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
   };
 
   // Hàm xử lý khi nhấp vào icon để hiển thị thông tin chi tiết
   const toggleOrderDetails = (transactionId) => {
     if (expandedOrderId === transactionId) {
-      setExpandedOrderId(null); // Đóng nếu đã mở
+      setExpandedOrderId(null);
     } else {
-      setExpandedOrderId(transactionId); // Mở thông tin chi tiết
+      setExpandedOrderId(transactionId);
     }
   };
+
+  // Hàm sắp xếp các đơn hàng
+  const sortOrders = (criteria, direction) => {
+    console.log("Sorting by:", criteria, "Direction:", direction);
+    const groupArray = Object.entries(groupedOrders);
+
+    // Log giá trị total của từng nhóm trước khi sắp xếp
+    groupArray.forEach(([key, orders]) => {
+      const total = orders.reduce((sum, order) => sum + order.total, 0);
+      console.log(`Transaction ID: ${key}, Total: ${total}`);
+    });
+
+    groupArray.sort(([aKey], [bKey]) => {
+      const orderA = groupedOrders[aKey][0];
+      const orderB = groupedOrders[bKey][0];
+
+      if (criteria === "total") {
+        const totalA = groupedOrders[aKey].reduce(
+          (sum, order) => sum + order.total,
+          0
+        );
+        const totalB = groupedOrders[bKey].reduce(
+          (sum, order) => sum + order.total,
+          0
+        );
+        return direction === "asc" ? totalA - totalB : totalB - totalA;
+      } else if (criteria === "status") {
+        return direction === "asc"
+          ? orderA.status.localeCompare(orderB.status)
+          : orderB.status.localeCompare(orderA.status);
+      } else if (criteria === "orderDate") {
+        const dateA = new Date(orderA.orderDate);
+        const dateB = new Date(orderB.orderDate);
+        return direction === "asc" ? dateA - dateB : dateB - dateA;
+      }
+      return 0;
+    });
+
+    // Log giá trị total của từng nhóm sau khi sắp xếp
+    groupArray.forEach(([key, orders]) => {
+      const total = orders.reduce((sum, order) => sum + order.total, 0);
+      console.log(`Transaction ID: ${key}, Total: ${total}`);
+    });
+
+    const sortedGroupedOrders = Object.fromEntries(groupArray);
+    setGroupedOrders(sortedGroupedOrders);
+  };
+
+  // Hàm xử lý khi thay đổi tiêu chí sắp xếp
+  const handleSortChange = (criteria) => {
+    if (criteria === sortCriteria) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortCriteria(criteria);
+      setSortDirection("desc");
+    }
+  };
+
+  // Gọi hàm sắp xếp mỗi khi sortCriteria hoặc sortDirection thay đổi
+  useEffect(() => {
+    sortOrders(sortCriteria, sortDirection);
+  }, [sortCriteria, sortDirection]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-xl font-semibold mb-4">Orders</h2>
       <OrderStats />
       <br />
       <OrderExport orders={orders} />
+      <br />
+      {/* Dropdown để chọn tiêu chí sắp xếp */}
+      <div className="mb-4 flex items-center">
+        <label htmlFor="sortCriteria" className="mr-2">
+          Sort by:
+        </label>
+        <select
+          id="sortCriteria"
+          value={sortCriteria}
+          onChange={(e) => handleSortChange(e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="total">Total</option>
+          <option value="status">Status</option>
+          <option value="orderDate">Order Date</option>
+        </select>
+        <button
+          onClick={() => handleSortChange(sortCriteria)}
+          className="ml-2 p-2 bg-blue-500 text-white rounded flex items-center"
+        >
+          {sortDirection === "asc" ? (
+            <ArrowUp size={16} />
+          ) : (
+            <ArrowDown size={16} />
+          )}
+        </button>
+      </div>
+
       <table className="min-w-full bg-white mt-4">
         <thead>
           <tr>
@@ -107,7 +201,6 @@ const OrderList = () => {
                       0
                     )
                   )}
-                  {" VND"}
                 </td>
                 <td className="py-2 px-4 border-b">
                   {groupedOrders[transactionId][0].status}
@@ -115,14 +208,14 @@ const OrderList = () => {
                 <td className="py-2 px-4 border-b">
                   {new Date(
                     groupedOrders[transactionId][0].orderDate
-                  ).toLocaleDateString("vi-VN")}
+                  ).toLocaleDateString()}
                 </td>
                 <td className="py-2 px-4 border-b">
                   <button
                     onClick={() => toggleOrderDetails(transactionId)}
                     className="text-blue-500 hover:text-blue-700"
                   >
-                    <FaInfoCircle />
+                    <Info size={16} />
                   </button>
                 </td>
               </tr>

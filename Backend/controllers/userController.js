@@ -44,7 +44,7 @@ const getUserById = async (req, res) => {
 // Update a user by ID
 const updateUser = async (req, res) => {
   try {
-    console.log("Updating user with ID:", req.params.id, "Data:", req.body);
+    // console.log("Updating user with ID:", req.params.id, "Data:", req.body);
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -52,7 +52,7 @@ const updateUser = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ message: "user not found" });
     }
-    console.log("User updated successfully:", updatedUser);
+    // console.log("User updated successfully:", updatedUser);
     res.status(200).json(updatedUser);
   } catch (error) {
     console.error("Error updating user:", error.message);

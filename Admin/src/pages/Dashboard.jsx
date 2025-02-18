@@ -73,6 +73,7 @@ const Dashboard = () => {
           }
         );
         setTopSellingProducts(topSelling.data || []);
+        // console.log(`topSellingProducts : `, topSellingProducts);
 
         const revenue = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/orders/stats/weekly-revenue`,
@@ -83,26 +84,6 @@ const Dashboard = () => {
           }
         );
         setWeeklyRevenue(revenue.data || []);
-
-        const status = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders/stats/order-status`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setOrderStatusStats(Array.isArray(status.data) ? status.data : []);
-
-        const ordersResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setOrders(ordersResponse.data);
       } catch (error) {
         console.error("Error fetching stats:", error);
         setError("Failed to fetch data. Please try again later.");
@@ -120,40 +101,6 @@ const Dashboard = () => {
       style: "currency",
       currency: "VND",
     });
-  };
-
-  const handleExportCSV = () => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      orders
-        .map((order) =>
-          [
-            order.transactionId,
-            order.user_id,
-            formatCurrency(order.total),
-            order.status,
-            new Date(order.orderDate).toLocaleDateString(),
-          ].join(",")
-        )
-        .join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, "orders.csv");
-  };
-
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({
-      head: [["Transaction ID", "User ID", "Total", "Status", "Order Date"]],
-      body: orders.map((order) => [
-        order.transactionId,
-        order.user_id,
-        formatCurrency(order.total),
-        order.status,
-        new Date(order.orderDate).toLocaleDateString(),
-      ]),
-    });
-    doc.save("orders.pdf");
   };
 
   if (loading) {
@@ -207,8 +154,9 @@ const Dashboard = () => {
           {Array.isArray(topSellingProducts) &&
             topSellingProducts.map((product) => (
               <li key={product._id} className="mb-2">
-                {product.product_name} - Quantity: {product.total_quantity} -
-                Revenue: {formatCurrency(product.total_revenue || 0)}
+                {product.product_name} - {product.storage} - Quantity:{" "}
+                {product.total_quantity} - Revenue:{" "}
+                {formatCurrency(product.total_revenue || 0)}
               </li>
             ))}
         </ul>
@@ -216,7 +164,7 @@ const Dashboard = () => {
 
       {/* Monthly Revenue Chart */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Monthly Revenue</h2>
+        <h2 className="text-xl font-semibold mb-4">Weekly Revenue</h2>
         <Bar
           data={{
             labels: Array.isArray(weeklyRevenue)
@@ -234,64 +182,6 @@ const Dashboard = () => {
           }}
         />
       </div>
-
-      {/* Order Status Statistics */}
-      {/* <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Order Status</h2>
-        <ul>
-          {Array.isArray(orderStatusStats) &&
-            orderStatusStats.map((status) => (
-              <li key={status._id} className="mb-2">
-                {status._id}: {status.count} orders
-              </li>
-            ))}
-        </ul>
-      </div> */}
-
-      {/* Orders Table */}
-      {/* <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Orders</h2>
-        <div className="mb-4">
-          <button
-            onClick={handleExportCSV}
-            className="bg-blue-500 text-white p-2 rounded mr-2"
-          >
-            Export to CSV
-          </button>
-          <button
-            onClick={handleExportPDF}
-            className="bg-green-500 text-white p-2 rounded"
-          >
-            Export to PDF
-          </button>
-        </div>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">Transaction ID</th>
-              <th className="py-2 px-4 border-b">User ID</th>
-              <th className="py-2 px-4 border-b">Total</th>
-              <th className="py-2 px-4 border-b">Status</th>
-              <th className="py-2 px-4 border-b">Order Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td className="py-2 px-4 border-b">{order.transactionId}</td>
-                <td className="py-2 px-4 border-b">{order.user_id}</td>
-                <td className="py-2 px-4 border-b">
-                  {formatCurrency(order.total || 0)}
-                </td>
-                <td className="py-2 px-4 border-b">{order.status}</td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>*/}
     </div>
   );
 };
