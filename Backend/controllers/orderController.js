@@ -51,8 +51,15 @@ exports.getUserOrders = async (req, res) => {
     }
 
     const orders = await Order.find({ user_id: req.user._id });
-    res.json(orders);
+
+    // Lọc bỏ đơn hàng có total NaN hoặc items rỗng
+    const validOrders = orders.filter(
+      (order) => !isNaN(order.total) && order.items.length > 0
+    );
+
+    res.json(validOrders);
   } catch (error) {
+    console.error("Error fetching orders:", error);
     res
       .status(500)
       .json({ message: "Error fetching orders", error: error.message });
@@ -123,5 +130,223 @@ exports.checkOrderExists = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error checking order", error: error.message });
+  }
+};
+// Hàm thống kê theo ngày
+exports.getDailyStats = async (req, res) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const orders = await Order.find({
+      orderDate: { $gte: startOfDay, $lte: endOfDay },
+    });
+    const validOrders = orders.filter(
+      (order) => !isNaN(order.total) && order.items.length > 0
+    );
+    const totalRevenue = validOrders.reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
+    const totalOrders = validOrders.length;
+
+    res.json({
+      totalRevenue,
+      totalOrders,
+      orders,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching daily stats", error: error.message });
+  }
+};
+
+// Hàm thống kê theo tuần
+exports.getWeeklyStats = async (req, res) => {
+  try {
+    const startOfWeek = new Date();
+    startOfWeek.setHours(0, 0, 0, 0);
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Bắt đầu từ Chủ Nhật
+
+    const endOfWeek = new Date();
+    endOfWeek.setHours(23, 59, 59, 999);
+    endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay())); // Kết thúc vào Thứ Bảy
+
+    const orders = await Order.find({
+      orderDate: { $gte: startOfWeek, $lte: endOfWeek },
+    });
+    const validOrders = orders.filter(
+      (order) => !isNaN(order.total) && order.items.length > 0
+    );
+
+    const totalRevenue = validOrders.reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
+    const totalOrders = validOrders.length;
+
+    res.json({
+      totalRevenue,
+      totalOrders,
+      orders,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching weekly stats", error: error.message });
+  }
+};
+
+// Hàm thống kê theo tháng
+exports.getMonthlyStats = async (req, res) => {
+  try {
+    const startOfMonth = new Date();
+    startOfMonth.setHours(0, 0, 0, 0);
+    startOfMonth.setDate(1); // Bắt đầu từ ngày đầu tiên của tháng
+
+    const endOfMonth = new Date();
+    endOfMonth.setHours(23, 59, 59, 999);
+    endOfMonth.setMonth(endOfMonth.getMonth() + 1, 0); // Kết thúc vào ngày cuối cùng của tháng
+
+    const orders = await Order.find({
+      orderDate: { $gte: startOfMonth, $lte: endOfMonth },
+    });
+    const validOrders = orders.filter(
+      (order) => !isNaN(order.total) && order.items.length > 0
+    );
+
+    const totalRevenue = validOrders.reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
+    const totalOrders = validOrders.length;
+
+    res.json({
+      totalRevenue,
+      totalOrders,
+      orders,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching monthly stats", error: error.message });
+  }
+};
+
+// Hàm thống kê theo năm
+exports.getYearlyStats = async (req, res) => {
+  try {
+    const startOfYear = new Date();
+    startOfYear.setHours(0, 0, 0, 0);
+    startOfYear.setMonth(0, 1); // Bắt đầu từ ngày đầu tiên của năm
+
+    const endOfYear = new Date();
+    endOfYear.setHours(23, 59, 59, 999);
+    endOfYear.setMonth(11, 31); // Kết thúc vào ngày cuối cùng của năm
+
+    const orders = await Order.find({
+      orderDate: { $gte: startOfYear, $lte: endOfYear },
+    });
+    const validOrders = orders.filter(
+      (order) => !isNaN(order.total) && order.items.length > 0
+    );
+
+    const totalRevenue = validOrders.reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
+    const totalOrders = validOrders.length;
+
+    res.json({
+      totalRevenue,
+      totalOrders,
+      orders,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching yearly stats", error: error.message });
+  }
+};
+
+exports.getTopSellingProducts = async (req, res) => {
+  try {
+    const orders = await Order.aggregate([
+      { $unwind: "$items" },
+      {
+        $group: {
+          _id: "$items.product_id",
+          product_name: { $first: "$items.product_name" },
+          total_quantity: { $sum: "$items.quantity" },
+          total_revenue: {
+            $sum: { $multiply: ["$items.price", "$items.quantity"] },
+          },
+        },
+      },
+      { $sort: { total_quantity: -1 } },
+      { $limit: 10 }, // Lấy top 10 sản phẩm bán chạy nhất
+    ]);
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching top selling products",
+      error: error.message,
+    });
+  }
+};
+exports.getWeeklyRevenue = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const startOfYear = new Date(currentYear, 0, 1); // Ngày đầu tiên của năm
+
+    const weeklyRevenue = await Order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: startOfYear,
+            $lt: new Date(currentYear + 1, 0, 1),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $week: "$orderDate" },
+          totalRevenue: { $sum: "$total" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.json(weeklyRevenue);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching weekly revenue",
+      error: error.message,
+    });
+  }
+};
+
+exports.getOrderStatusStats = async (req, res) => {
+  try {
+    const statusStats = await Order.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.json(statusStats || []);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching order status stats",
+      error: error.message,
+    });
   }
 };
