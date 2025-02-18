@@ -1,5 +1,7 @@
 const express = require("express");
 const Product = require("../models/productModel");
+const Brand = require("../models/brandModel");
+const Category = require("../models/categoryModel");
 const multer = require("multer");
 const path = require("path");
 const router = express.Router();
@@ -13,9 +15,15 @@ const createProduct = async (req, res) => {
       product_image,
       stock_quantity,
       brand_id,
-      category,
+      category_id,
       variants,
     } = req.body;
+
+    // Kiểm tra xem category_id có được cung cấp hay không
+    if (!category_id) {
+      return res.status(400).json({ message: "Category ID is required" });
+    }
+
     const newProduct = new Product({
       product_id,
       product_name,
@@ -23,12 +31,14 @@ const createProduct = async (req, res) => {
       product_image,
       stock_quantity,
       brand_id,
-      category,
+      category_id,
       variants,
     });
+
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (error) {
+    console.error("Error creating product:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -261,19 +271,36 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
 // Endpoint upload ảnh
 router.post("/upload", upload.single("file"), (req, res) => {
   try {
-    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
-      req.file.filename
-    }`;
-    res.status(200).json({ imageUrl });
+    const fileName = req.file.filename; // Lấy tên tệp
+    res.status(200).json({ fileName }); // Chỉ trả về tên tệp
   } catch (error) {
     res.status(500).json({ message: "Error uploading image" });
   }
 });
+// Get all brands
+const getBrands = async (req, res) => {
+  try {
+    const brands = await Brand.find(); // Lấy danh sách brands từ Brand model
+    res.status(200).json(brands);
+  } catch (error) {
+    console.error("Error fetching brands:", error); // Log lỗi chi tiết
+    res.status(500).json({ message: error.message });
+  }
+};
 
+// Get all categories
+const getCategories = async (req, res) => {
+  try {
+    const categories = await Category.find(); // Lấy danh sách categories từ Category model
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error); // Log lỗi chi tiết
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   createProduct,
   getAllProducts,
@@ -288,4 +315,7 @@ module.exports = {
   deleteReview,
   getAverageRating,
   updateStock,
+  upload,
+  getBrands,
+  getCategories,
 };

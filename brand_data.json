@@ -1,9 +1,7 @@
-{
-  "BRAND": [
-    { "brand_id": 1, "brand_name": "Apple" },
-    { "brand_id": 2, "brand_name": "Samsung" },
-    { "brand_id": 3, "brand_name": "Xiaomi" },
-    { "brand_id": 4, "brand_name": "OPPO" },
-    { "brand_id": 5, "brand_name": "vivo" }
-  ]
-}
+[
+  { "brand_id": "1", "brand_name": "Apple" },
+  { "brand_id": "2", "brand_name": "Samsung" },
+  { "brand_id": "3", "brand_name": "Xiaomi" },
+  { "brand_id": "4", "brand_name": "OPPO" },
+  { "brand_id": "5", "brand_name": "vivo" }
+]

@@ -136,6 +136,7 @@ const OrderList = () => {
   // Gọi hàm sắp xếp mỗi khi sortCriteria hoặc sortDirection thay đổi
   useEffect(() => {
     sortOrders(sortCriteria, sortDirection);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortCriteria, sortDirection]);
 
   if (loading) return <div>Loading...</div>;

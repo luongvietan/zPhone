@@ -97,10 +97,7 @@ const Dashboard = () => {
 
   // Hàm định dạng số tiền với dấu phẩy ngăn cách
   const formatCurrency = (amount) => {
-    return (amount * 1000000).toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+    return (amount * 1000000).toLocaleString();
   };
 
   if (loading) {
@@ -141,7 +138,7 @@ const Dashboard = () => {
           {selectedPeriod.charAt(0).toUpperCase() + selectedPeriod.slice(1)}{" "}
           Statistics
         </h2>
-        <p>Total Revenue: {formatCurrency(stats.totalRevenue || 0)}</p>
+        <p>Total Revenue: {formatCurrency(stats.totalRevenue || 0)} VND</p>
         <p>Total Orders: {stats.totalOrders}</p>
       </div>
 
@@ -156,7 +153,7 @@ const Dashboard = () => {
               <li key={product._id} className="mb-2">
                 {product.product_name} - {product.storage} - Quantity:{" "}
                 {product.total_quantity} - Revenue:{" "}
-                {formatCurrency(product.total_revenue || 0)}
+                {formatCurrency(product.total_revenue || 0)} VND
               </li>
             ))}
         </ul>

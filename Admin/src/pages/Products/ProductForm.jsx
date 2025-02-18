@@ -4,6 +4,8 @@ import {
   updateProduct,
   getProducts,
   uploadImage,
+  getBrands,
+  getCategories,
 } from "../../services/productService";
 import { useNavigate, useParams } from "react-router-dom";
 import { Plus, Save, ArrowLeft } from "lucide-react";
@@ -14,10 +16,14 @@ const ProductForm = ({ product = {} }) => {
     product_description: product.product_description || "",
     product_image: product.product_image || [],
     stock_quantity: product.stock_quantity || 0,
-    brand_id: product.brand_id || 1, // Mặc định là 1
-    category_id: product.category_id || 1, // Mặc định là 1
+    brand_id: product.brand_id || "",
+    category_id: product.category_id || "",
     variants: product.variants || [],
   });
+
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,7 +39,18 @@ const ProductForm = ({ product = {} }) => {
       };
       fetchLastProductId();
     }
+
+    // Lấy danh sách brands và categories
+    const fetchBrandsAndCategories = async () => {
+      const brandsData = await getBrands();
+      const categoriesData = await getCategories();
+      setBrands(brandsData);
+      setCategories(categoriesData);
+    };
+    fetchBrandsAndCategories();
   }, [id]);
+  // console.log("Brands:", brands);
+  // console.log("Categories:", categories);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,8 +76,9 @@ const ProductForm = ({ product = {} }) => {
     const file = e.target.files[0];
     if (file) {
       try {
-        const imageUrl = await uploadImage(file); // Gọi API upload ảnh
-        setFormData({ ...formData, product_image: [imageUrl] }); // Lưu URL hình ảnh vào formData
+        const fileName = await uploadImage(file); // Gọi API upload ảnh và lấy tên tệp
+        setFormData({ ...formData, product_image: [fileName] }); // Lưu tên tệp vào formData
+        setPreviewImage(URL.createObjectURL(file)); // Hiển thị ảnh preview
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -69,19 +87,50 @@ const ProductForm = ({ product = {} }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data before submit:", formData); // Log dữ liệu trước khi submit
+    console.log("Form Data before submit:", formData);
+
+    // Chuyển đổi category_id thành số nếu cần
+    const updatedFormData = {
+      ...formData,
+      category_id: Number(formData.category_id),
+    };
+
     try {
       if (id) {
-        await updateProduct(id, formData);
+        await updateProduct(id, updatedFormData);
       } else {
-        await createProduct(formData);
+        await createProduct(updatedFormData);
       }
       navigate("/products");
     } catch (error) {
       console.error("Error saving product:", error);
     }
   };
+  useEffect(() => {
+    if (!id) {
+      // Tự động tạo product_id khi tạo sản phẩm mới
+      const fetchLastProductId = async () => {
+        const products = await getProducts();
+        const lastProductId =
+          products.length > 0 ? products[products.length - 1].product_id : 0;
+        setFormData((prev) => ({ ...prev, product_id: lastProductId + 1 }));
+      };
+      fetchLastProductId();
+    }
 
+    // Lấy danh sách brands và categories
+    const fetchBrandsAndCategories = async () => {
+      try {
+        const brandsData = await getBrands();
+        const categoriesData = await getCategories();
+        setBrands(brandsData);
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Error fetching brands and categories:", error);
+      }
+    };
+    fetchBrandsAndCategories();
+  }, [id]);
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,7 +195,7 @@ const ProductForm = ({ product = {} }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand ID
+                  Brand
                 </label>
                 <select
                   name="brand_id"
@@ -154,9 +203,10 @@ const ProductForm = ({ product = {} }) => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  {[1, 2, 3, 4, 5].map((brandId) => (
-                    <option key={brandId} value={brandId}>
-                      Brand {brandId}
+                  <option value="">All Brands</option>
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand.brand_id}>
+                      {brand.brand_name}
                     </option>
                   ))}
                 </select>
@@ -168,13 +218,14 @@ const ProductForm = ({ product = {} }) => {
                 </label>
                 <select
                   name="category_id"
-                  value={formData.category}
+                  value={formData.category_id}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  {[1, 2].map((categoryId) => (
-                    <option key={categoryId} value={categoryId}>
-                      Category {categoryId}
+                  <option value="">All Categories</option>
+                  {categories.map((category) => (
+                    <option key={category._id} value={category.category_id}>
+                      {category.category_name}
                     </option>
                   ))}
                 </select>
@@ -190,11 +241,9 @@ const ProductForm = ({ product = {} }) => {
                   onChange={handleImageUpload}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
-                {formData.product_image.length > 0 && (
+                {previewImage && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/phone_images/${
-                      formData.product_image[0]
-                    }.png`}
+                    src={`http://localhost:5000/uploads/${formData.product_image[0]}`} // Xây dựng lại đường dẫn
                     alt="Product Preview"
                     className="mt-2 w-32 h-32 object-cover rounded-lg"
                   />

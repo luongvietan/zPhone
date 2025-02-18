@@ -1,3 +1,4 @@
+// productService.js
 import axios from "axios";
 
 const API_URL = "http://localhost:5000/products";
@@ -16,12 +17,18 @@ export const getProductById = async (id) => {
 
 // Create a new product
 export const createProduct = async (productData) => {
-  const response = await axios.post(API_URL, {
-    ...productData,
-    category_id: productData.category_id, // Đổi từ category thành category_id
-  });
-  return response.data;
+  try {
+    const response = await axios.post(API_URL, {
+      ...productData,
+      category_id: productData.category_id, // Đổi từ category thành category_id
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating product:", error.response?.data); // Log chi tiết lỗi từ server
+    throw error;
+  }
 };
+
 // Update a product by ID
 export const updateProduct = async (id, productData) => {
   const response = await axios.put(`${API_URL}/${id}`, productData);
@@ -78,17 +85,31 @@ export const updateStock = async (id, stockData) => {
   const response = await axios.put(`${API_URL}/${id}/stock`, stockData);
   return response.data;
 };
+
+// Get all brands
+export const getBrands = async () => {
+  const response = await axios.get(`${API_URL}/brands`);
+  return response.data;
+};
+
+// Get all categories
+export const getCategories = async () => {
+  const response = await axios.get(`${API_URL}/categories`);
+  return response.data;
+};
+
+// Upload image
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
 
   try {
-    const response = await axios.post("/api/upload", formData, {
+    const response = await axios.post(`${API_URL}/upload`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    return response.data.imageUrl; // Đảm bảo API trả về URL hình ảnh
+    return response.data.fileName; // Chỉ lấy tên tệp từ phản hồi
   } catch (error) {
     console.error("Error uploading image:", error);
     throw error;
