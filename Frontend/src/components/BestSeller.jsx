@@ -1,38 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 import api from "../api";
 
 const BestSeller = () => {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get("/products");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setProducts([]);
-      }
-    };
-    fetchProducts();
-  }, []);
   const [bestSeller, setBestSeller] = useState([]);
 
-  // Kiểm tra kiểu dữ liệu của products
-
   useEffect(() => {
-    if (Array.isArray(products)) {
-      const bestProduct = products.filter((item) => item.bestseller);
-      setBestSeller(bestProduct.slice(0, 5));
-    } else {
-      console.error("products is not an array");
-    }
-  }, [products]);
-
-  useEffect(() => {
-    console.log(`best seller : `, bestSeller);
-  }, [bestSeller]);
+    const fetchTopSellingProducts = async () => {
+      try {
+        const response = await api.get("api/orders/stats/top-selling");
+        setBestSeller(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching top selling products:", error);
+        setBestSeller([]);
+      }
+    };
+    fetchTopSellingProducts();
+  }, []);
 
   return (
     <div className="my-10">
@@ -44,15 +30,19 @@ const BestSeller = () => {
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        {bestSeller.map((item, index) => (
-          <ProductItem
-            key={item.id || item._id} // Tùy thuộc vào cấu trúc API của bạn
-            product_id={item.product_id || item._id}
-            product_image={item.product_image || item.images} // Điều chỉnh theo tên trường trong API
-            product_name={item.product_name || item.product_name}
-            price={parseFloat(item.variants[0].product_price)}
-          />
-        ))}
+        {bestSeller.slice(0, 5).map((item, index) => {
+          const price = item.product_price?.[0] ?? 0; // Giá trị mặc định là 0 nếu không có giá
+          return (
+            <ProductItem
+              key={item._id}
+              product_id={item._id}
+              product_image={item.product_image}
+              product_name={item.product_name}
+              price={price}
+              stock_quantity={item.stock_quantity ?? 0} // Thêm stock_quantity, mặc định là 0 nếu không có
+            />
+          );
+        })}
       </div>
     </div>
   );

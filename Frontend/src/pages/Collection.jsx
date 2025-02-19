@@ -330,7 +330,6 @@ const Collection = () => {
                 {filterProducts
                   .slice(0, visibleProductsCount)
                   .map((item, index) => {
-                    // Thêm ref cho sản phẩm cuối cùng
                     if (index === visibleProductsCount - 1) {
                       return (
                         <div ref={lastProductRef} key={item.id || item._id}>
@@ -341,6 +340,7 @@ const Collection = () => {
                               item.product_name || item.product_name
                             }
                             price={parseFloat(item.variants[0].product_price)}
+                            stock_quantity={item.stock_quantity ?? 0} // Thêm stock_quantity, mặc định là 0 nếu không có
                             onClick={handleProductClick}
                           />
                         </div>
@@ -353,6 +353,7 @@ const Collection = () => {
                         product_image={item.product_image || item.images}
                         product_name={item.product_name || item.product_name}
                         price={parseFloat(item.variants[0].product_price)}
+                        stock_quantity={item.stock_quantity ?? 0} // Thêm stock_quantity, mặc định là 0 nếu không có
                         onClick={handleProductClick}
                       />
                     );

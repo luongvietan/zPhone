@@ -7,7 +7,13 @@ import { IoMdStar, IoMdStarHalf } from "react-icons/io";
 import { WishlistContext } from "../context/WishlistContext";
 import axios from "axios";
 
-const ProductItem = ({ product_id, product_image, product_name, price }) => {
+const ProductItem = ({
+  product_id,
+  product_image,
+  product_name,
+  price,
+  stock_quantity,
+}) => {
   const navigate = useNavigate();
   const { addToWishlist, removeFromWishlist, isInWishlist } =
     useContext(WishlistContext);
@@ -45,7 +51,9 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
   };
 
   const handleClick = () => {
-    navigate(`/product/${product_id}`);
+    if (stock_quantity > 0) {
+      navigate(`/product/${product_id}`);
+    }
   };
 
   const renderStars = () => {
@@ -71,9 +79,13 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
     return stars;
   };
 
+  const isOutOfStock = stock_quantity === 0;
+
   return (
     <div
-      className="hover:scale-110 transition ease-in-out relative m-3 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer"
+      className={`hover:scale-110 transition ease-in-out relative m-3 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer ${
+        isOutOfStock ? "opacity-50" : ""
+      }`}
       onClick={handleClick}
     >
       <Link
@@ -87,9 +99,14 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
           }.png`}
           alt={product_image[0]}
         />
-        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
+        {isOutOfStock && (
+          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black text-white px-4 py-2 rounded-full">
+            Sold out
+          </span>
+        )}
+        {/* <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
           39% OFF
-        </span>
+        </span> */}
       </Link>
 
       <div className="mt-4 px-5 pb-5">
@@ -126,7 +143,12 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
 
         <br />
 
-        <button className="flex items-center justify-center w-full rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        <button
+          className={`flex items-center justify-center w-full rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${
+            isOutOfStock ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={isOutOfStock}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="mr-2 h-6 w-6"
@@ -141,7 +163,7 @@ const ProductItem = ({ product_id, product_image, product_name, price }) => {
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          Add to cart
+          {isOutOfStock ? "Sold out" : "Add to cart"}
         </button>
       </div>
     </div>
@@ -156,6 +178,7 @@ ProductItem.propTypes = {
   ]).isRequired,
   product_name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  stock_quantity: PropTypes.number.isRequired, // Thêm prop stock_quantity
 };
 
 export default ProductItem;

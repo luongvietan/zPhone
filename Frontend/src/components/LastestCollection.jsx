@@ -42,11 +42,12 @@ const LatestCollection = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
         {latestProduct.map((item) => (
           <ProductItem
-            key={item.id || item._id} // Tùy thuộc vào cấu trúc API của bạn
+            key={item.id || item._id}
             product_id={item.product_id || item._id}
-            product_image={item.product_image || item.images} // Điều chỉnh theo tên trường trong API
+            product_image={item.product_image || item.images}
             product_name={item.product_name || item.product_name}
             price={parseFloat(item.variants[0].product_price)}
+            stock_quantity={item.stock_quantity ?? 0} // Thêm stock_quantity, mặc định là 0 nếu không có
           />
         ))}
       </div>

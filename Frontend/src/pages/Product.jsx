@@ -37,6 +37,7 @@ export const Product = () => {
   const [message, setMessage] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
 
+  const isOutOfStock = productData?.stock_quantity === 0;
   // Fetch comments
   const fetchComments = async () => {
     try {
@@ -182,6 +183,11 @@ export const Product = () => {
   };
 
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast.error("Product is out of stock.");
+      return;
+    }
+
     if (productData && selectedVariant) {
       const price = selectedVariant.product_price * 1000000;
 
@@ -420,34 +426,37 @@ export const Product = () => {
                   </h1>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleAddToCart}
-                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="shrink-0 mr-3 h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
+                {isOutOfStock ? (
+                  <div className="text-red-500 font-bold">Sold out</div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddToCart}
+                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                    />
-                  </svg>
-                  Add to cart
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="shrink-0 mr-3 h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                    Add to cart
+                  </button>
+                )}
               </div>
 
               <div className="lg:col-span-3">
                 <div className="border-b border-gray-300">
                   <nav className="flex gap-4">
                     <a
-                      href="#"
                       onClick={() => setActiveTab("description")}
                       className={`border-b-2 py-4 text-sm font-medium ${
                         activeTab === "description"
@@ -458,7 +467,6 @@ export const Product = () => {
                       Description
                     </a>
                     <a
-                      href="#"
                       onClick={() => setActiveTab("comment")}
                       className={`border-b-2 py-4 text-sm font-medium ${
                         activeTab === "comment"
@@ -469,7 +477,6 @@ export const Product = () => {
                       Comment
                     </a>
                     <a
-                      href="#"
                       onClick={() => setActiveTab("review")}
                       className={`border-b-2 py-4 text-sm font-medium ${
                         activeTab === "review"

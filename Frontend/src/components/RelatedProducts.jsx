@@ -8,11 +8,23 @@ const RelatedProducts = ({ brand, category }) => {
   const [related, setRelated] = useState([]);
 
   useEffect(() => {
-    if (products.length > 0 && brand !== undefined && category !== undefined) {
+    if (
+      products.length > 0 &&
+      (brand !== undefined || category !== undefined)
+    ) {
+      // Lọc sản phẩm có cùng brand hoặc category
       let filteredProducts = products.filter(
-        (item) => item.brand_id === brand && item.category_id === category
+        (item) => item.brand_id === brand || item.category_id === category
       );
-      setRelated(filteredProducts.slice(0, 5)); // Take up to 5 related products
+
+      // Loại bỏ sản phẩm hiện tại (nếu có) để không hiển thị sản phẩm đang xem
+      filteredProducts = filteredProducts.filter(
+        (item) => item.brand_id !== brand || item.category_id !== category
+      );
+
+      // Chọn ngẫu nhiên 5 sản phẩm từ danh sách đã lọc
+      const shuffledProducts = filteredProducts.sort(() => 0.5 - Math.random());
+      setRelated(shuffledProducts.slice(0, 5));
     }
   }, [products, brand, category]);
 
@@ -29,6 +41,7 @@ const RelatedProducts = ({ brand, category }) => {
             product_name={item.product_name}
             price={item.variants?.[0]?.product_price ?? 0}
             product_image={item.product_image ?? ["fallback-image"]}
+            stock_quantity={item.stock_quantity ?? 0} // Thêm stock_quantity, mặc định là 0 nếu không có
           />
         ))}
       </div>

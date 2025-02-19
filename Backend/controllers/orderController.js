@@ -307,6 +307,8 @@ exports.getTopSellingProducts = async (req, res) => {
           total_quantity: 1,
           total_revenue: 1,
           product_image: "$productDetails.product_image", // Lấy thông tin ảnh từ Product
+          product_price: "$productDetails.variants.product_price", // Lấy giá từ variants của Product
+          stock_quantity: "$productDetails.stock_quantity",
         },
       },
     ]);
