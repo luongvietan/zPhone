@@ -81,7 +81,6 @@ const VNPayReturn = () => {
         });
 
         if (response.status === 201) {
-          // Chỉ xóa giỏ hàng nếu đơn hàng đã tạo thành công
           const apiUrlClearCart = `${
             import.meta.env.VITE_API_URL
           }/api/cart/clear`;

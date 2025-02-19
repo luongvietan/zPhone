@@ -6,7 +6,7 @@ const OrderSuccess = () => {
   useEffect(() => {
     const savedOrder = localStorage.getItem("orderInfo");
     const totalcost = JSON.parse(localStorage.getItem("total"));
-    console.log(totalcost);
+    // console.log(totalcost);
     if (savedOrder) {
       const parsedOrder = JSON.parse(savedOrder);
       parsedOrder.total = totalcost;

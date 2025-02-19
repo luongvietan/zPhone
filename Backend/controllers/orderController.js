@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Order = require("../models/orderModel");
 const User = require("../models/userModel"); // Đảm bảo import User model
 const { sendOrderConfirmationEmail } = require("../utils/emailService");
+const Product = require("../models/productModel"); // Thêm import Product model
 
 exports.addOrder = async (req, res) => {
   try {
     const order = new Order(req.body);
     await order.save();
-
     // Log: Đơn hàng đã được tạo
     console.log("[ORDER] Order created successfully:", {
       transactionId: order.transactionId,
@@ -65,7 +65,6 @@ exports.getUserOrders = async (req, res) => {
       .json({ message: "Error fetching orders", error: error.message });
   }
 };
-
 exports.createOrder = async (req, res) => {
   try {
     const {
@@ -78,14 +77,6 @@ exports.createOrder = async (req, res) => {
       total,
       status,
     } = req.body;
-    // console.log("Received order data:", req.body);
-    // if (!items || !Array.isArray(items) || items.length === 0) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Order must contain at least one item." });
-    // }
-
-    // console.log("Received items in backend:", items);
 
     // Kiểm tra transactionId + user_id
     const existingOrder = await Order.findOne({ transactionId });
@@ -94,27 +85,41 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Transaction ID already exists" });
     }
 
+    // Tạo đơn hàng mới
     const newOrder = new Order({
       user_id,
       items,
       transactionId,
       amount,
       subtotal,
-      shipping, // Giá trị này có thể bị thay đổi trước khi lưu
+      shipping,
       total,
       status: status || "pending",
       orderDate: new Date(),
     });
-    // console.log("Order being saved:", newOrder);
-    // console.log(`shipping : `, shipping);
 
+    // Lưu đơn hàng vào database
     await newOrder.save();
+
+    // Trừ số lượng sản phẩm trong kho
+    for (const item of items) {
+      const product = await Product.findOne({ product_id: item.product_id });
+      if (product) {
+        if (product.stock_quantity < item.quantity) {
+          throw new Error(`Not enough stock for product ${item.product_name}`);
+        }
+        product.stock_quantity -= item.quantity; // Trừ số lượng
+        await product.save(); // Lưu lại thay đổi
+      }
+    }
+
     res.status(201).json(newOrder);
   } catch (error) {
     console.error("Order creation error:", error);
     res.status(500).json({ message: error.message || "Error creating order" });
   }
 };
+
 exports.checkOrderExists = async (req, res) => {
   try {
     const { transactionId } = req.params;
