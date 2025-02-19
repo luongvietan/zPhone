@@ -289,7 +289,26 @@ exports.getTopSellingProducts = async (req, res) => {
         },
       },
       { $sort: { total_quantity: -1 } },
-      { $limit: 10 }, // Lấy top 10 sản phẩm bán chạy nhất
+      { $limit: 10 },
+      {
+        $lookup: {
+          from: "products", // Tên collection của Product
+          localField: "_id",
+          foreignField: "product_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      {
+        $project: {
+          _id: 1,
+          product_name: 1,
+          storage: 1,
+          total_quantity: 1,
+          total_revenue: 1,
+          product_image: "$productDetails.product_image", // Lấy thông tin ảnh từ Product
+        },
+      },
     ]);
 
     res.json(orders);
@@ -300,6 +319,7 @@ exports.getTopSellingProducts = async (req, res) => {
     });
   }
 };
+
 exports.getWeeklyRevenue = async (req, res) => {
   try {
     const currentYear = new Date().getFullYear();

@@ -72,6 +72,7 @@ const Dashboard = () => {
             },
           }
         );
+        console.log(topSelling.data);
         setTopSellingProducts(topSelling.data || []);
         // console.log(`topSellingProducts : `, topSellingProducts);
 
@@ -143,20 +144,55 @@ const Dashboard = () => {
       </div>
 
       {/* Top Selling Products */}
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">
+      <div className="bg-white shadow-lg rounded-xl p-6 mb-6">
+        <h2 className="text-2xl font-bold mb-4 text-center text-gray-700">
           Top 10 Best Selling Products
         </h2>
-        <ul>
-          {Array.isArray(topSellingProducts) &&
-            topSellingProducts.map((product) => (
-              <li key={product._id} className="mb-2">
-                {product.product_name} - {product.storage} - Quantity:{" "}
-                {product.total_quantity} - Revenue:{" "}
-                {formatCurrency(product.total_revenue || 0)} VND
-              </li>
-            ))}
-        </ul>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead>
+              <tr className="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                <th className="py-3 px-4 border-b text-left">Image</th>
+                <th className="py-3 px-4 border-b text-left">Product Name</th>
+                <th className="py-3 px-4 border-b text-center">Quantity</th>
+                <th className="py-3 px-4 border-b text-right">Revenue</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600 text-sm">
+              {Array.isArray(topSellingProducts) &&
+                topSellingProducts.map((product, index) => (
+                  <tr
+                    key={product._id}
+                    className={`${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } hover:bg-gray-100 transition`}
+                  >
+                    <td className="py-3 px-4 border-b">
+                      <img
+                        src={`${import.meta.env.VITE_API_URL}/phone_images/${
+                          product.product_image[0]
+                        }.png`}
+                        alt={product.product_name}
+                        className="w-16 h-16 object-cover rounded-md"
+                      />
+                    </td>
+                    <td className="py-3 px-4 border-b">
+                      <span className="font-medium text-gray-800">
+                        {product.product_name}
+                      </span>{" "}
+                      - {product.storage}
+                    </td>
+                    <td className="py-3 px-4 border-b text-center font-semibold">
+                      {product.total_quantity}
+                    </td>
+                    <td className="py-3 px-4 border-b text-right font-semibold text-green-600">
+                      {formatCurrency(product.total_revenue || 0)} VND
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Monthly Revenue Chart */}

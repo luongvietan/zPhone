@@ -127,7 +127,7 @@ const ProductsList = () => {
                     product.product_image[0]
                   }.png`}
                   alt={product.product_name}
-                  className="w-full h-full object-cover"
+                  className="w-auto h-auto "
                   style={{ height: "200px" }}
                 />
               </div>
