@@ -13,7 +13,6 @@ const Payment = () => {
       setIsLoading(true);
       setError(null);
 
-      // Kiểm tra và lưu thông tin người dùng
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user) {
         throw new Error("User information not found. Please log in again.");
@@ -49,27 +48,29 @@ const Payment = () => {
   };
 
   return (
-    <div className="payment-container">
-      {error && (
-        <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>
-      )}
-      <div className="mb-4">
-        <h2>Total Amount: {amount.toLocaleString()} VND</h2>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md text-center">
+        <img
+          src="https://vinadesign.vn/uploads/thumbnails/800/2023/05/vnpay-logo-vinadesign-25-12-59-16.jpg"
+          alt="VNPay"
+          className="w-32 mx-auto mb-4"
+        />
+        <h2 className="text-xl font-semibold text-gray-700">
+          Total Amount: {amount.toLocaleString()} VND
+        </h2>
+        <p className="text-gray-600 mt-2">
+          Card Number:{" "}
+          <span className="font-semibold">9704198526191432198</span>
+        </p>
+        {error && <div className="text-red-500 mt-2">Error: {error}</div>}
+        <button
+          onClick={handlePayment}
+          disabled={isLoading}
+          className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 w-full"
+        >
+          {isLoading ? "Processing..." : "Purchase by VNPay QR"}
+        </button>
       </div>
-      <div className="mb-4">
-        <h2>Test bank : NCB</h2>
-        <h2>Card number : 9704198526191432198</h2>
-        <h2>Owner : NGUYEN VAN A</h2>
-        <h2>Date : 0715</h2>
-        <h2>OTP : 123456</h2>
-      </div>
-      <button
-        onClick={handlePayment}
-        disabled={isLoading}
-        className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
-      >
-        {isLoading ? "Đang xử lý..." : "Thanh toán qua VNPay QR"}
-      </button>
     </div>
   );
 };
