@@ -3,9 +3,10 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { getUserById, updateUser } from "../../services/userService";
 
 const UserForm = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Đây là _id của user
   const navigate = useNavigate();
   const [user, setUser] = useState({
+    id: "", // Trường id cần chỉnh sửa
     username: "",
     email: "",
     phone: "",
@@ -20,8 +21,8 @@ const UserForm = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const data = await getUserById(id);
-      setUser(data);
+      const data = await getUserById(id); // Lấy thông tin user từ API
+      setUser(data); // Cập nhật state với dữ liệu user
     };
     fetchUser();
 
@@ -94,7 +95,7 @@ const UserForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateUser(id, user);
+    await updateUser(id, user); // Gửi dữ liệu cập nhật lên server
     navigate("/users");
   };
 
@@ -104,6 +105,18 @@ const UserForm = () => {
         Edit User Information
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Trường ID */}
+        {/* <div>
+          <label className="block text-sm font-medium text-gray-700">ID</label>
+          <input
+            type="text"
+            name="id"
+            value={user.id}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div> */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Username

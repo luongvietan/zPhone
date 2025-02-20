@@ -3,16 +3,26 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OrderStats from "./OrderStats";
 import OrderExport from "./OrderExport";
-import { Info, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Info,
+  ArrowUp,
+  ArrowDown,
+  Clock,
+  Truck,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
-  const [groupedOrders, setGroupedOrders] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
-  const [sortCriteria, setSortCriteria] = useState("total"); // Tiêu chí sắp xếp
-  const [sortDirection, setSortDirection] = useState("desc"); // Hướng sắp xếp
+  const [sortCriteria, setSortCriteria] = useState("total");
+  const [sortDirection, setSortDirection] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(10); // Số lượng đơn hàng hiển thị trên mỗi trang
+  const [users, setUsers] = useState({}); // Lưu thông tin user để hiển thị id
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,16 +45,6 @@ const OrderList = () => {
           const filteredOrders = response.data.orders.filter(
             (order) => !isNaN(order.total) && order.items.length > 0
           );
-
-          const grouped = filteredOrders.reduce((acc, order) => {
-            if (!acc[order.transactionId]) {
-              acc[order.transactionId] = [];
-            }
-            acc[order.transactionId].push(order);
-            return acc;
-          }, {});
-
-          setGroupedOrders(grouped);
           setOrders(filteredOrders);
         } else {
           setOrders([]);
@@ -56,71 +56,57 @@ const OrderList = () => {
         setLoading(false);
       }
     };
+
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const usersMap = response.data.reduce((acc, user) => {
+          acc[user._id] = user.id; // Lưu id của user
+          return acc;
+        }, {});
+        setUsers(usersMap);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
     fetchOrders();
+    fetchUsers();
   }, [navigate]);
 
-  // Hàm định dạng số tiền với dấu phẩy ngăn cách
-  const formatCurrency = (amount) => {
-    return (amount * 1000000).toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
-  };
-
   // Hàm xử lý khi nhấp vào icon để hiển thị thông tin chi tiết
-  const toggleOrderDetails = (transactionId) => {
-    if (expandedOrderId === transactionId) {
+  const toggleOrderDetails = (orderId) => {
+    if (expandedOrderId === orderId) {
       setExpandedOrderId(null);
     } else {
-      setExpandedOrderId(transactionId);
+      setExpandedOrderId(orderId);
     }
   };
 
   // Hàm sắp xếp các đơn hàng
   const sortOrders = (criteria, direction) => {
-    console.log("Sorting by:", criteria, "Direction:", direction);
-    const groupArray = Object.entries(groupedOrders);
-
-    // Log giá trị total của từng nhóm trước khi sắp xếp
-    groupArray.forEach(([key, orders]) => {
-      const total = orders.reduce((sum, order) => sum + order.total, 0);
-      console.log(`Transaction ID: ${key}, Total: ${total}`);
-    });
-
-    groupArray.sort(([aKey], [bKey]) => {
-      const orderA = groupedOrders[aKey][0];
-      const orderB = groupedOrders[bKey][0];
-
+    const sortedOrders = [...orders].sort((a, b) => {
       if (criteria === "total") {
-        const totalA = groupedOrders[aKey].reduce(
-          (sum, order) => sum + order.total,
-          0
-        );
-        const totalB = groupedOrders[bKey].reduce(
-          (sum, order) => sum + order.total,
-          0
-        );
-        return direction === "asc" ? totalA - totalB : totalB - totalA;
-      } else if (criteria === "status") {
+        return direction === "asc" ? a.total - b.total : b.total - a.total;
+      }
+      if (criteria === "status") {
         return direction === "asc"
-          ? orderA.status.localeCompare(orderB.status)
-          : orderB.status.localeCompare(orderA.status);
-      } else if (criteria === "orderDate") {
-        const dateA = new Date(orderA.orderDate);
-        const dateB = new Date(orderB.orderDate);
-        return direction === "asc" ? dateA - dateB : dateB - dateA;
+          ? a.status.localeCompare(b.status)
+          : b.status.localeCompare(a.status);
+      }
+      if (criteria === "orderDate") {
+        return direction === "asc"
+          ? new Date(a.orderDate) - new Date(b.orderDate)
+          : new Date(b.orderDate) - new Date(a.orderDate);
       }
       return 0;
     });
-
-    // Log giá trị total của từng nhóm sau khi sắp xếp
-    groupArray.forEach(([key, orders]) => {
-      const total = orders.reduce((sum, order) => sum + order.total, 0);
-      console.log(`Transaction ID: ${key}, Total: ${total}`);
-    });
-
-    const sortedGroupedOrders = Object.fromEntries(groupArray);
-    setGroupedOrders(sortedGroupedOrders);
+    setOrders(sortedOrders);
   };
 
   // Hàm xử lý khi thay đổi tiêu chí sắp xếp
@@ -138,6 +124,35 @@ const OrderList = () => {
     sortOrders(sortCriteria, sortDirection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortCriteria, sortDirection]);
+
+  // Logic phân trang
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Hàm cập nhật trạng thái đơn hàng
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/orders/${orderId}/status`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Cập nhật lại danh sách đơn hàng
+      const updatedOrders = orders.map((order) =>
+        order._id === orderId ? { ...order, status: newStatus } : order
+      );
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -176,80 +191,86 @@ const OrderList = () => {
         </button>
       </div>
 
-      <table className="min-w-full bg-white mt-4">
-        <thead>
+      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden mt-4">
+        <thead className="bg-gray-200 text-gray-700">
           <tr>
-            <th className="py-2 px-4 border-b">Transaction ID</th>
-            <th className="py-2 px-4 border-b">User ID</th>
-            <th className="py-2 px-4 border-b">Total</th>
-            <th className="py-2 px-4 border-b">Status</th>
-            <th className="py-2 px-4 border-b">Order Date</th>
-            <th className="py-2 px-4 border-b">Details</th>
+            <th className="py-3 px-5 text-left">Transaction ID</th>
+            <th className="py-3 px-5 text-left">User ID</th>
+            <th className="py-3 px-5 text-right">Total</th>
+            <th className="py-3 px-5 text-center">Status</th>
+            <th className="py-3 px-5 text-center">Order Date</th>
+            <th className="py-3 px-5 text-center">Details</th>
           </tr>
         </thead>
         <tbody>
-          {Object.keys(groupedOrders).map((transactionId) => (
-            <React.Fragment key={transactionId}>
-              <tr>
-                <td className="py-2 px-4 border-b">{transactionId}</td>
-                <td className="py-2 px-4 border-b">
-                  {groupedOrders[transactionId][0].user_id}
+          {currentOrders.map((order) => (
+            <React.Fragment key={order._id}>
+              <tr className="border-b hover:bg-gray-100 transition">
+                <td className="py-3 px-5">{order.transactionId}</td>
+                <td className="py-3 px-5">
+                  {users[order.user_id] || order.user_id}
                 </td>
-                <td className="py-2 px-4 border-b">
-                  {formatCurrency(
-                    groupedOrders[transactionId].reduce(
-                      (sum, order) => sum + order.total,
-                      0
-                    )
-                  )}
+                <td className="py-3 px-5 text-right font-semibold">
+                  {(order.total * 1000000).toLocaleString()}
                 </td>
-                <td className="py-2 px-4 border-b">
-                  {groupedOrders[transactionId][0].status}
+                <td className="py-3 px-5 text-center">
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      updateOrderStatus(order._id, e.target.value)
+                    }
+                    className={`p-1 border rounded bg-white focus:ring-2 
+                ${order.status === "pending" ? "text-yellow-500" : ""} 
+                ${order.status === "shipping" ? "text-blue-500" : ""} 
+                ${order.status === "done" ? "text-green-500" : ""} 
+                ${order.status === "canceled" ? "text-red-500" : ""}`}
+                  >
+                    <option value="pending">
+                      <Clock size={16} className="inline mr-1" /> Pending
+                    </option>
+                    <option value="shipping">
+                      <Truck size={16} className="inline mr-1" /> Shipping
+                    </option>
+                    <option value="done">
+                      <CheckCircle size={16} className="inline mr-1" /> Done
+                    </option>
+                    <option value="canceled">
+                      <XCircle size={16} className="inline mr-1" /> Canceled
+                    </option>
+                  </select>
                 </td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(
-                    groupedOrders[transactionId][0].orderDate
-                  ).toLocaleDateString()}
+                <td className="py-3 px-5 text-center">
+                  {new Date(order.orderDate).toLocaleDateString()}
                 </td>
-                <td className="py-2 px-4 border-b">
+                <td className="py-3 px-5 text-center">
                   <button
-                    onClick={() => toggleOrderDetails(transactionId)}
+                    onClick={() => toggleOrderDetails(order._id)}
                     className="text-blue-500 hover:text-blue-700"
                   >
-                    <Info size={16} />
+                    <Info size={18} />
                   </button>
                 </td>
               </tr>
-              {expandedOrderId === transactionId && (
-                <tr>
-                  <td colSpan="6" className="py-2 px-4 border-b">
-                    <div className="pl-4">
-                      <h3 className="font-semibold">Order Details:</h3>
-                      <ul>
-                        {groupedOrders[transactionId].map((order, index) => (
-                          <li key={index} className="mt-2">
-                            <p>
-                              <strong>Order ID:</strong> {order._id}
-                            </p>
-                            <p>
-                              <strong>Items:</strong>
-                              <ul>
-                                {order.items.map((item, idx) => (
-                                  <li key={idx}>
-                                    {item.product_name} -{item.storage} -
-                                    Quantity: {item.quantity} - Price:{" "}
-                                    {formatCurrency(item.price)}
-                                  </li>
-                                ))}
-                              </ul>
-                            </p>
-                            <p>
-                              <strong>Total:</strong>{" "}
-                              {formatCurrency(order.total)}
-                            </p>
+              {expandedOrderId === order._id && (
+                <tr className="bg-gray-50">
+                  <td colSpan="6" className="py-4 px-5">
+                    <div className="pl-4 border-l-4 border-blue-500">
+                      <h3 className="font-semibold text-lg mb-2">
+                        Order Details:
+                      </h3>
+                      <ul className="list-disc pl-6">
+                        {order.items.map((item, idx) => (
+                          <li key={idx} className="mb-1">
+                            {item.product_name} - {item.storage} - Quantity:{" "}
+                            {item.quantity} - Price:{" "}
+                            {(item.price * 1000000).toLocaleString()}
                           </li>
                         ))}
                       </ul>
+                      <p className="mt-2 font-semibold">
+                        <strong>Total:</strong>{" "}
+                        {(order.total * 1000000).toLocaleString()}
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -258,6 +279,24 @@ const OrderList = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        {Array.from(
+          { length: Math.ceil(orders.length / ordersPerPage) },
+          (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={`mx-1 px-3 py-1 rounded ${
+                currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {i + 1}
+            </button>
+          )
+        )}
+      </div>
     </div>
   );
 };

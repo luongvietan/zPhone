@@ -22,8 +22,8 @@ const orderSchema = new mongoose.Schema({
   transactionId: {
     type: String,
     required: true,
-    unique: true, // Thêm unique
-    index: true, // Thêm index
+    unique: true,
+    index: true,
   },
   amount: Number,
   subtotal: Number,
@@ -31,6 +31,7 @@ const orderSchema = new mongoose.Schema({
   total: Number,
   status: {
     type: String,
+    enum: ["pending", "shipping", "done", "canceled"],
     default: "pending",
   },
   orderDate: {

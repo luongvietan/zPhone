@@ -16,5 +16,6 @@ router.get("/stats/yearly", orderController.getYearlyStats);
 router.get("/stats/top-selling", orderController.getTopSellingProducts);
 router.get("/stats/weekly-revenue", orderController.getWeeklyRevenue);
 router.get("/stats/order-status", orderController.getOrderStatusStats);
-
+router.delete("/delete-all", orderController.deleteAllOrders);
+router.put("/:orderId/status", orderController.updateOrderStatus);
 module.exports = router;
