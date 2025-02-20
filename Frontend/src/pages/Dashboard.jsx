@@ -6,8 +6,7 @@ const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+  const [expandedOrderId, setExpandedOrderId] = useState(null); // State để theo dõi đơn hàng đang được mở rộng
   const ordersPerPage = 5;
 
   useEffect(() => {
@@ -50,11 +49,6 @@ const Dashboard = () => {
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
-  const handleShowDetails = (order) => {
-    setSelectedOrder(order);
-    setShowPopup(true);
-  };
-
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
@@ -82,35 +76,75 @@ const Dashboard = () => {
         <div className="bg-white shadow-lg rounded-lg p-6">
           <ul className="divide-y divide-gray-300">
             {currentOrders.map((order) => (
-              <li
-                key={order._id}
-                className="py-4 flex justify-between items-center"
-              >
-                <div>
-                  <p className="text-lg font-medium text-gray-800">
-                    Transaction ID:{" "}
-                    <span className="text-blue-600">{order.transactionId}</span>
-                  </p>
-                  <p className="text-gray-600">
-                    Order Date:{" "}
-                    {order.orderDate
-                      ? new Date(order.orderDate).toLocaleString("vi-VN")
-                      : "No information"}
-                  </p>
-                  <p className="text-gray-600 font-semibold">
-                    Total Amount:{" "}
-                    <span className="text-green-600">
-                      {order.total !== undefined && order.total !== null
-                        ? (order.total * 1000000).toLocaleString("en-US")
-                        : "0"}{" "}
-                      VND
-                    </span>
-                  </p>
+              <li key={order._id} className="py-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-lg font-medium text-gray-800">
+                      Transaction ID:{" "}
+                      <span className="text-blue-600">
+                        {order.transactionId}
+                      </span>
+                    </p>
+                    <p className="text-gray-600">
+                      Order Date:{" "}
+                      {order.orderDate
+                        ? new Date(order.orderDate).toLocaleString("vi-VN")
+                        : "No information"}
+                    </p>
+                    <p className="text-gray-600 font-semibold">
+                      Total Amount:{" "}
+                      <span className="text-green-600">
+                        {order.total !== undefined && order.total !== null
+                          ? (order.total * 1000000).toLocaleString("en-US")
+                          : "0"}{" "}
+                        VND
+                      </span>
+                    </p>
+                  </div>
                 </div>
-                <BiShowAlt
-                  className="text-xl cursor-pointer text-blue-600"
-                  onClick={() => handleShowDetails(order)}
-                />
+
+                <div className="mt-4 pl-4 border-l-4 border-blue-200">
+                  <p>
+                    <strong>Shipping:</strong>{" "}
+                    {(order.shipping * 1000000).toLocaleString()} VND
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {order.status}
+                  </p>
+                  <h3 className="text-lg font-bold mt-4">Items:</h3>
+                  <table className="min-w-full mt-2">
+                    <thead>
+                      <tr>
+                        <th className="px-4 py-2 text-left">Image</th>
+                        <th className="px-4 py-2 text-left">Product Name</th>
+                        <th className="px-4 py-2 text-left">Storage</th>
+                        <th className="px-4 py-2 text-left">Quantity</th>
+                        <th className="px-4 py-2 text-left">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {order.items.map((item, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="px-4 py-2">
+                            <img
+                              src={`${
+                                import.meta.env.VITE_API_URL
+                              }/phone_images/${item.product_image}.png`}
+                              alt={`${item.product_name}`}
+                              className="w-16 h-16 object-cover"
+                            />
+                          </td>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">{item.storage}</td>
+                          <td className="px-4 py-2">{item.quantity}</td>
+                          <td className="px-4 py-2">
+                            {(item.price * 1000000).toLocaleString("en-US")} VND
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </li>
             ))}
           </ul>
@@ -152,46 +186,6 @@ const Dashboard = () => {
           Next
         </button>
       </div>
-
-      {showPopup && selectedOrder && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-            <h2 className="text-xl font-bold mb-4">Order Details</h2>
-            <p>
-              <strong>Transaction ID:</strong> {selectedOrder.transactionId}
-            </p>
-            <p>
-              <strong>Order Date:</strong>{" "}
-              {new Date(selectedOrder.orderDate).toLocaleString("vi-VN")}
-            </p>
-            <p>
-              <strong>Shipping:</strong> {selectedOrder.shipping} VND
-            </p>
-            <p>
-              <strong>Status:</strong> {selectedOrder.status}
-            </p>
-            <p>
-              <strong className="text-green-600">Total Amount:</strong>{" "}
-              {(selectedOrder.total * 1000000).toLocaleString("en-US")} VND
-            </p>
-            <h3 className="text-lg font-bold mt-4">Items:</h3>
-            <ul className="list-disc ml-5">
-              {selectedOrder.items.map((item, index) => (
-                <li key={index}>
-                  {item.product_name} ({item.storage}) - {item.quantity} x{" "}
-                  {(item.price * 1000000).toLocaleString("en-US")} VND
-                </li>
-              ))}
-            </ul>
-            <button
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
-              onClick={() => setShowPopup(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
