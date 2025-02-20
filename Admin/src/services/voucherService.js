@@ -19,7 +19,8 @@ export const deleteVoucher = async (id) => {
   const response = await axios.delete(`/api/vouchers/${id}`);
   return response.data;
 };
+
 export const getVoucherById = async (id) => {
-  const response = await axios.delete(`/api/vouchers/${id}`);
+  const response = await axios.get(`/api/vouchers/${id}`); // Sửa thành axios.get
   return response.data;
 };

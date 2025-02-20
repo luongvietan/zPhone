@@ -71,7 +71,7 @@ const CreateVoucher = () => {
             <input
               type="text"
               className="w-full p-2 border rounded"
-              value={formData.applicableTo.id}
+              value={formData.applicableTo.id || ""}
               onChange={(e) => {
                 const value = e.target.value.trim();
                 // Kiểm tra nếu giá trị là chuỗi hex 24 ký tự hoặc rỗng

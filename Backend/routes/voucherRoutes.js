@@ -1,4 +1,3 @@
-// routes/voucherRoutes.js
 const express = require("express");
 const router = express.Router();
 const voucherController = require("../controllers/voucherController");
@@ -17,5 +16,9 @@ router.put("/:id", voucherController.updateVoucher);
 
 // Xóa voucher
 router.delete("/:id", voucherController.deleteVoucher);
+// Áp dụng voucher
+router.post("/apply", voucherController.applyVoucher);
 
+// Cập nhật số lượt sử dụng voucher
+router.post("/update-usage", voucherController.updateVoucherUsage);
 module.exports = router;

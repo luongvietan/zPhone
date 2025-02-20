@@ -10,7 +10,7 @@ const EditVoucher = () => {
     code: "",
     discountType: "global",
     discountValue: 10,
-    applicableTo: { type: "", id: "" },
+    applicableTo: { type: "", id: "" }, // Đảm bảo applicableTo có giá trị mặc định
     expiryDate: "",
     usageLimit: 100,
   });
@@ -19,7 +19,11 @@ const EditVoucher = () => {
     const loadVoucher = async () => {
       try {
         const voucher = await getVoucherById(id);
-        setFormData(voucher);
+        // Đảm bảo applicableTo không bị undefined
+        setFormData({
+          ...voucher,
+          applicableTo: voucher.applicableTo || { type: "", id: "" },
+        });
       } catch (error) {
         toast.error("Failed to load voucher");
       }
@@ -77,7 +81,7 @@ const EditVoucher = () => {
             <input
               type="text"
               className="w-full p-2 border rounded"
-              value={formData.applicableTo.id}
+              value={formData.applicableTo.id || ""}
               onChange={(e) =>
                 setFormData({
                   ...formData,

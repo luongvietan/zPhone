@@ -1,4 +1,3 @@
-// controllers/voucherController.js
 const Voucher = require("../models/voucherModel");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
@@ -95,7 +94,7 @@ exports.updateVoucher = async (req, res) => {
       usageLimit,
     } = req.body;
 
-    const voucher = await Voucher.findById(req.params._id);
+    const voucher = await Voucher.findById(req.params.id);
     if (!voucher) {
       return res.status(404).json({ message: "Voucher not found" });
     }
@@ -127,5 +126,64 @@ exports.deleteVoucher = async (req, res) => {
   } catch (error) {
     console.error("Error deleting voucher:", error);
     res.status(500).json({ message: "Failed to delete voucher" });
+  }
+};
+// controllers/voucherController.js
+exports.applyVoucher = async (req, res) => {
+  try {
+    const { code } = req.body;
+
+    // Kiểm tra xem voucher code có được cung cấp không
+    if (!code) {
+      return res.status(400).json({ message: "Voucher code is required" });
+    }
+
+    // Kiểm tra voucher có tồn tại không
+    const voucher = await Voucher.findOne({ code });
+    if (!voucher) {
+      return res.status(404).json({ message: "Voucher not found" });
+    }
+
+    // Kiểm tra voucher đã hết hạn chưa
+    if (new Date(voucher.expiryDate) < new Date()) {
+      return res.status(400).json({ message: "Voucher has expired" });
+    }
+
+    // Kiểm tra số lượt sử dụng còn lại
+    if (voucher.usedCount >= voucher.usageLimit) {
+      return res.status(400).json({ message: "Voucher usage limit reached" });
+    }
+
+    // Trả về thông tin voucher
+    res.status(200).json({
+      discountValue: voucher.discountValue,
+      applicableTo: voucher.applicableTo,
+    });
+    console.log("Received voucher code:", code);
+  } catch (error) {
+    console.error("Error applying voucher:", error);
+    res.status(500).json({ message: "Failed to apply voucher" });
+  }
+};
+// controllers/voucherController.js
+exports.updateVoucherUsage = async (req, res) => {
+  try {
+    const { code } = req.body;
+
+    // Tìm voucher và cập nhật số lượt sử dụng
+    const voucher = await Voucher.findOneAndUpdate(
+      { code },
+      { $inc: { usedCount: 1 } }, // Tăng usedCount lên 1
+      { new: true }
+    );
+
+    if (!voucher) {
+      return res.status(404).json({ message: "Voucher not found" });
+    }
+
+    res.status(200).json({ message: "Voucher usage updated successfully" });
+  } catch (error) {
+    console.error("Error updating voucher usage:", error);
+    res.status(500).json({ message: "Failed to update voucher usage" });
   }
 };

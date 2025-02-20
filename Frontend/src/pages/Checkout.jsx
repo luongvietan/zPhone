@@ -3,47 +3,78 @@ import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
-
-const validVouchers = {
-  DISCOUNT10: 0.1,
-  DISCOUNT20: 0.2,
-};
+import { toast } from "react-toastify";
 
 const Checkout = () => {
   const { cartItems } = useContext(CartContext);
   const { user } = useAuth();
-  const userCity = user?.address?.split(",")[0]?.trim();
   const navigate = useNavigate();
-  const userName = user?.username || "";
-  const userPhone = user?.phone || "";
-  const userAddress = user?.address || "";
 
+  // State cho thông tin người dùng
+  const [userName, setUserName] = useState(user?.username || "");
+  const [userPhone, setUserPhone] = useState(user?.phone || "");
+  const [userAddress, setUserAddress] = useState(user?.address || "");
+
+  // State cho voucher
+  const [voucherCode, setVoucherCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+
+  // Tính toán phí vận chuyển dựa trên thành phố
+  const userCity = userAddress?.split(",")[0]?.trim();
   const shipping = userCity === "Thành phố Hồ Chí Minh" ? 0 : 0.08;
+
+  // Tính toán subtotal
   const subtotal = cartItems.reduce(
     (sum, item) => sum + Number(item.price) * Number(item.quantity),
     0
   );
 
-  const [voucherCode, setVoucherCode] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+  // Tính toán total
+  const total = subtotal + shipping - (subtotal + shipping) * (discount / 100);
 
-  const applyVoucher = () => {
-    if (validVouchers[voucherCode]) {
-      setDiscount(validVouchers[voucherCode]);
+  // Hàm áp dụng voucher
+  const applyVoucher = async () => {
+    try {
+      // Gọi API để kiểm tra và áp dụng voucher
+      const response = await axios.post("/api/vouchers/apply", {
+        code: voucherCode, // Đảm bảo voucherCode không rỗng
+      });
+
+      const { discountValue } = response.data;
+
+      // Cập nhật discount
+      setDiscount(discountValue);
       setIsDiscountApplied(true);
-    } else {
+
+      // Gọi API để cập nhật số lượt sử dụng voucher
+      await axios.post("/api/vouchers/update-usage", { code: voucherCode });
+      console.log("Sending voucher code:", voucherCode);
+      toast.success("Voucher applied successfully!");
+    } catch (error) {
+      console.error("Error applying voucher:", error);
+      // Xử lý thông báo lỗi cụ thể từ backend
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message); // Hiển thị thông báo lỗi từ backend
+      } else {
+        toast.error("Failed to apply voucher"); // Thông báo lỗi mặc định
+      }
+
+      // Đặt lại discount và trạng thái áp dụng voucher
       setDiscount(0);
       setIsDiscountApplied(false);
-      alert("Invalid Voucher!");
     }
   };
 
-  const total = subtotal * (1 - discount) + shipping;
-  localStorage.setItem("total", JSON.stringify(total));
+  // Hàm xử lý đặt hàng
   const handlePlaceOrder = useCallback(() => {
+    // Lưu thông tin người dùng vào localStorage hoặc gửi lên server
+    localStorage.setItem(
+      "userInfo",
+      JSON.stringify({ userName, userPhone, userAddress })
+    );
     navigate("/payment", { state: { amount: total * 1000000 } });
-  }, [total, navigate]);
+  }, [total, navigate, userName, userPhone, userAddress]);
 
   return (
     <div>
@@ -88,7 +119,7 @@ const Checkout = () => {
         <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
           <p className="text-xl font-medium">Personal Information</p>
           <p className="text-gray-400">
-            Complete your order by providing neccessary infomation.
+            Complete your order by providing necessary information.
           </p>
           <div className="">
             <label
@@ -105,11 +136,11 @@ const Checkout = () => {
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Your full name here"
                 value={userName}
-                readOnly
+                onChange={(e) => setUserName(e.target.value)}
               />
             </div>
             <label
-              htmlFor="email"
+              htmlFor="phone"
               className="mt-4 mb-2 block text-sm font-medium"
             >
               Your Phone number
@@ -117,16 +148,16 @@ const Checkout = () => {
             <div className="relative">
               <input
                 type="text"
-                id="email"
-                name="email"
+                id="phone"
+                name="phone"
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Phone number"
                 value={userPhone}
-                readOnly
+                onChange={(e) => setUserPhone(e.target.value)}
               />
             </div>
             <label
-              htmlFor="billing-address"
+              htmlFor="address"
               className="mt-4 mb-2 block text-sm font-medium"
             >
               Your Address
@@ -134,12 +165,12 @@ const Checkout = () => {
             <div className="relative">
               <input
                 type="text"
-                id="billing-address"
-                name="billing-address"
+                id="address"
+                name="address"
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Street Address"
                 value={userAddress}
-                readOnly
+                onChange={(e) => setUserAddress(e.target.value)}
               />
             </div>
           </div>
@@ -181,7 +212,7 @@ const Checkout = () => {
             <div className="mt-6 flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Discount</p>
               <p className="font-semibold text-red-500">
-                -{(subtotal * discount * 1000000).toLocaleString()} VND
+                -{(subtotal * discount * 10000).toLocaleString()} VND
               </p>
             </div>
           )}
