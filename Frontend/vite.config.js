@@ -7,5 +7,6 @@ export default defineConfig({
     rollupOptions: {
       external: [], // Đảm bảo không externalize module react-router-dom
     },
+    outDir: "dist",
   },
 });
