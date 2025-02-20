@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BiShowAlt } from "react-icons/bi";
+import { Package, Truck, CheckCircle, XCircle } from "lucide-react";
 
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [expandedOrderId, setExpandedOrderId] = useState(null); // State để theo dõi đơn hàng đang được mở rộng
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
   const ordersPerPage = 5;
 
   useEffect(() => {
@@ -48,6 +48,75 @@ const Dashboard = () => {
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "pending":
+        return <Package className="w-6 h-6 text-yellow-500" />;
+      case "shipping":
+        return <Truck className="w-6 h-6 text-blue-500" />;
+      case "done":
+        return <CheckCircle className="w-6 h-6 text-green-500" />;
+      case "canceled":
+        return <XCircle className="w-6 h-6 text-red-500" />;
+      default:
+        return <Package className="w-6 h-6 text-gray-500" />;
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case "pending":
+        return "Waiting for delivery";
+      case "shipping":
+        return "Shipping";
+      case "done":
+        return "Order have done";
+      case "canceled":
+        return "Canceled";
+      default:
+        return "Undefined";
+    }
+  };
+
+  const getStatusProgress = (status) => {
+    const steps = [
+      {
+        status: "pending",
+        icon: <Package className="w-6 h-6" />,
+        text: "Waiting for delivery",
+      },
+      {
+        status: "shipping",
+        icon: <Truck className="w-6 h-6" />,
+        text: "Shipping",
+      },
+      {
+        status: "done",
+        icon: <CheckCircle className="w-6 h-6" />,
+        text: "Order have done",
+      },
+    ];
+
+    return (
+      <div className="flex justify-between items-center w-full mt-4">
+        {steps.map((step, index) => (
+          <div key={index} className="flex flex-col items-center">
+            <div
+              className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                status === step.status
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              {step.icon}
+            </div>
+            <p className="mt-2 text-sm text-center">{step.text}</p>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
@@ -108,9 +177,13 @@ const Dashboard = () => {
                     <strong>Shipping:</strong>{" "}
                     {(order.shipping * 1000000).toLocaleString()} VND
                   </p>
-                  <p>
-                    <strong>Status:</strong> {order.status}
-                  </p>
+                  <div className="flex items-center space-x-2 mt-2">
+                    {getStatusIcon(order.status)}
+                    <p>
+                      <strong>Status:</strong> {getStatusText(order.status)}
+                    </p>
+                  </div>
+                  {getStatusProgress(order.status)}
                   <h3 className="text-lg font-bold mt-4">Items:</h3>
                   <table className="min-w-full mt-2">
                     <thead>
