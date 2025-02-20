@@ -1,10 +1,16 @@
-import { LayoutDashboard, Users, Package, ShoppingCart } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  ShoppingCart,
+  BadgePercent,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
     <div className="w-64 bg-gray-900 text-white h-auto p-5">
-      <h2 className="text-2xl font-bold mb-5">Admin Panel</h2>
+      <h2 className="text-2xl font-bold mb-5">zPhone Admin</h2>
       <ul>
         <li className="mb-4">
           <Link
@@ -36,6 +42,14 @@ const Sidebar = () => {
             className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded-lg transition-colors"
           >
             <ShoppingCart className="w-5 h-5" /> Orders
+          </Link>
+        </li>
+        <li className="mb-4">
+          <Link
+            to="/promotions"
+            className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded-lg transition-colors"
+          >
+            <BadgePercent className="w-5 h-5" /> Promotions
           </Link>
         </li>
       </ul>

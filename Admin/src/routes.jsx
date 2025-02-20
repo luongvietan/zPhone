@@ -11,6 +11,9 @@ import AdminLogin from "./pages/AdminLogin";
 import OrderList from "./pages/Orders/OrderList";
 import OrderStats from "./pages/Orders/OrderStats";
 import OrderExport from "./pages/Orders/OrderExport";
+import PromotionsList from "./pages/Promotions/PromotionsList"; // Thêm import
+import CreateVoucher from "./pages/Promotions/CreateVoucher"; // Thêm import
+import EditVoucher from "./pages/Promotions/EditVoucher"; // Thêm import
 
 const AppRoutes = () => {
   const isAuthenticated = () => {
@@ -94,6 +97,33 @@ const AppRoutes = () => {
           path="/orders/export"
           element={
             isAuthenticated() ? <OrderExport /> : <Navigate to="/admin/login" />
+          }
+        />
+        {/* Thêm các route cho Promotions */}
+        <Route
+          path="/promotions"
+          element={
+            isAuthenticated() ? (
+              <PromotionsList />
+            ) : (
+              <Navigate to="/admin/login" />
+            )
+          }
+        />
+        <Route
+          path="/promotions/create"
+          element={
+            isAuthenticated() ? (
+              <CreateVoucher />
+            ) : (
+              <Navigate to="/admin/login" />
+            )
+          }
+        />
+        <Route
+          path="/promotions/edit/:id"
+          element={
+            isAuthenticated() ? <EditVoucher /> : <Navigate to="/admin/login" />
           }
         />
         <Route path="*" element={<Navigate to="/admin/login" />} />

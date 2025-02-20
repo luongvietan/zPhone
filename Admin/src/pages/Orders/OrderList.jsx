@@ -211,7 +211,7 @@ const OrderList = () => {
                   {users[order.user_id] || order.user_id}
                 </td>
                 <td className="py-3 px-5 text-right font-semibold">
-                  {(order.total * 1000000).toLocaleString()}
+                  {(order.total * 1000000).toLocaleString()} VND
                 </td>
                 <td className="py-3 px-5 text-center">
                   <select
@@ -264,12 +264,14 @@ const OrderList = () => {
                             {item.product_name} - {item.storage} - Quantity:{" "}
                             {item.quantity} - Price:{" "}
                             {(item.price * 1000000).toLocaleString()}
+                            {" VND"}
                           </li>
                         ))}
                       </ul>
                       <p className="mt-2 font-semibold">
                         <strong>Total:</strong>{" "}
                         {(order.total * 1000000).toLocaleString()}
+                        {" VND"}
                       </p>
                     </div>
                   </td>

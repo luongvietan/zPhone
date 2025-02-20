@@ -52,6 +52,7 @@ const userRoutes = require("./routes/userRouter");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const voucherRoutes = require("./routes/voucherRoutes");
 app.use("/api/payment", paymentRoutes);
 app.use("/products", productRoutes);
 app.use("/api/users", userRoutes);
@@ -59,6 +60,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/vouchers", voucherRoutes);
 // app._router.stack.forEach((r) => {
 //   if (r.route) {
 //     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
