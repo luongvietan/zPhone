@@ -13,10 +13,7 @@ app.use(express.json());
 app.use(express.static("static"));
 
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI, {})
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 // Error handling middleware
@@ -35,13 +32,6 @@ const upload = multer({ storage });
 app.get("/", (req, res) => {
   res.send("Welcome to the zPhone API");
 });
-// // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, "build")));
-
-// // Handle React routing, return all requests to React app
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
@@ -61,15 +51,3 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/vouchers", voucherRoutes);
-// app._router.stack.forEach((r) => {
-//   if (r.route) {
-//     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
-//   }
-// });
-// // Debug danh sách route
-// console.log("Available routes:");
-// app._router.stack.forEach((r) => {
-//   if (r.route) {
-//     console.log(`${Object.keys(r.route.methods)} ${r.route.path}`);
-//   }
-// });
