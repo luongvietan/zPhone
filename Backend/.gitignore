@@ -63,3 +63,4 @@ typings/
 *.png
 *.jpg
 *.jpeg
+node_modules
