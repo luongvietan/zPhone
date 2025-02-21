@@ -1,7 +1,8 @@
 // productService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/products";
+const API_URL = `${import.meta.env.VITE_API_URL}/products`;
+console.log(API_URL);
 
 // Get all products
 export const getProducts = async () => {

@@ -8,13 +8,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const app = express();
-app.use(
-  cors({
-    origin: ["https://z-phone.vercel.app/", "https://zphone.onrender.com/"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(express.static("static"));
 
