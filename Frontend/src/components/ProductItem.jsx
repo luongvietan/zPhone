@@ -94,7 +94,7 @@ const ProductItem = ({
       >
         <img
           className="object-cover"
-          src={`${import.meta.env.VITE_API_URL}/phone_images/${
+          src={`${import.meta.env.VITE_API_URL}/Phone_images/${
             product_image[0]
           }.png`}
           alt={product_image[0]}
