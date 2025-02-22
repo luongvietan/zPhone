@@ -90,7 +90,7 @@ const Checkout = () => {
               >
                 <div className="flex items-center">
                   <img
-                    src={`${axios.defaults.baseURL}/phone_images/${item.product_image}.png`}
+                    src={`${axios.defaults.baseURL}/Phone_images/${item.product_image}.png`}
                     alt={item.product_name}
                     className="h-24 w-24 object-cover rounded-md"
                   />

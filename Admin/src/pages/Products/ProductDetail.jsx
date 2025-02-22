@@ -152,7 +152,7 @@ const ProductDetail = () => {
                     key={index}
                     src={`${
                       import.meta.env.VITE_API_URL
-                    }/phone_images/${image}.png`}
+                    }/Phone_images/${image}.png`}
                     alt={product.product_name}
                     className="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                   />

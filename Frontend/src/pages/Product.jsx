@@ -322,10 +322,10 @@ export const Product = () => {
                       className="h-full w-full max-w-full object-cover transition-transform duration-300"
                       src={`${
                         import.meta.env.VITE_API_URL
-                      }/phone_images/${image}.png`}
+                      }/Phone_images/${image}.png`}
                       alt={`${
                         import.meta.env.VITE_API_URL
-                      }/phone_images/${image}.png`}
+                      }/Phone_images/${image}.png`}
                     />
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export const Product = () => {
                           className="h-full w-full object-cover"
                           src={`${
                             import.meta.env.VITE_API_URL
-                          }/phone_images/${img}.png`}
+                          }/Phone_images/${img}.png`}
                           alt=""
                         />
                       </button>

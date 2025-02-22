@@ -202,7 +202,7 @@ const Dashboard = () => {
                             <img
                               src={`${
                                 import.meta.env.VITE_API_URL
-                              }/phone_images/${item.product_image}.png`}
+                              }/Phone_images/${item.product_image}.png`}
                               alt={`${item.product_name}`}
                               className="w-16 h-16 object-cover"
                             />

@@ -123,7 +123,7 @@ const ProductsList = () => {
             >
               <div className="relative h-48">
                 <img
-                  src={`${import.meta.env.VITE_API_URL}/phone_images/${
+                  src={`${import.meta.env.VITE_API_URL}/Phone_images/${
                     product.product_image[0]
                   }.png`}
                   alt={product.product_name}

@@ -49,7 +49,7 @@ const Wishlist = ({ isWishlistOpen, toggleWishlist }) => {
                 >
                   {/* Hình ảnh sản phẩm */}
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/phone_images/${
+                    src={`${import.meta.env.VITE_API_URL}/Phone_images/${
                       item.product_image
                     }.png`}
                     alt={item.product_name}

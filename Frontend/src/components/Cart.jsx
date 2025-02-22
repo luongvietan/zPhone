@@ -104,7 +104,7 @@ const Cart = () => {
                           <img
                             src={
                               item.product_image
-                                ? `${axios.defaults.baseURL}/phone_images/${item.product_image}.png`
+                                ? `${axios.defaults.baseURL}/Phone_images/${item.product_image}.png`
                                 : ""
                             }
                             alt={item.name}
