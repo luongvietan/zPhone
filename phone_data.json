@@ -1,0 +1,984 @@
+[
+  {
+    "product_id": 1,
+    "product_name": "Xiaomi Redmi Note 14",
+    "product_quantity": 50,
+    "product_description": "Redmi Note 14 5G sở hữu camera AI 108MP kết hợp với zoom trong cảm biến 3x.",
+    "product_image": [
+      "Xiaomi_Redmi_Note_14_1",
+      "Xiaomi_Redmi_Note_14_2",
+      "Xiaomi_Redmi_Note_14_3"
+    ],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.79,
+        "product_sku": "XRN14-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 10.79,
+        "product_sku": "XRN14-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 2,
+    "product_name": "Xiaomi 14T",
+    "product_quantity": 52,
+    "product_description": "Xiaomi 14T trang bị pin lớn 5.000mAh, kết hợp với công nghệ sạc nhanh 67W - Sạc đầy nhanh chóng.",
+    "product_image": ["Xiaomi_14T_1", "Xiaomi_14T_2", "Xiaomi_14T_3"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 10.79,
+        "product_sku": "X14T-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 15.79,
+        "product_sku": "X14T-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 3,
+    "product_name": "Xiaomi Redmi Note 13",
+    "product_quantity": 53,
+    "product_description": "Công nghệ âm thanh Dolby Atmos - Redmi Note 13 Pro đem lại trải nghiệm âm thanh sống động, chi tiết và mạnh mẽ.",
+    "product_image": ["Xiaomi_Redmi_Note_13_1", "Xiaomi_Redmi_Note_13_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 6.49,
+        "product_sku": "XRN13-256GB"
+      },
+      {
+        "storage": "518GB",
+        "product_price": 9.29,
+        "product_sku": "XRN13-518GB"
+      }
+    ]
+  },
+  {
+    "product_id": 4,
+    "product_name": "Xiaomi POCO M6",
+    "product_quantity": 54,
+    "product_description": "Với thiết kế trẻ trung, năng động, POCO M6 phù hợp với những người dùng yêu thích sự cá tính và nổi bật.",
+    "product_image": ["Xiaomi_POCO_M6_1"],
+    "brand_id": 3,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.49,
+        "product_sku": "XPM6-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 5,
+    "product_name": "Xiaomi Redmi 14C",
+    "product_quantity": 55,
+    "product_description": "Redmi 14C được trang bị bộ vi xử lý 8 nhân MediaTek Helio G81- Ultra, mang lại hiệu năng mượt mà và hiệu quả.",
+    "product_image": ["Xiaomi_Redmi_14C_1", "Xiaomi_Redmi_14C_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "XR14C-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 6,
+    "product_name": "Xiaomi POCO X6 Pro",
+    "product_quantity": 56,
+    "product_description": "Bộ 3 camera chất lượng, quay chụp sắc nét - Đem đến cho bạn những bức hình chân dung chất lượng cao.",
+    "product_image": [
+      "Xiaomi_Poco_X6_1",
+      "Xiaomi_Poco_X6_2",
+      "Xiaomi_Poco_X6_3"
+    ],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 8.49,
+        "product_sku": "XPX6-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 12.49,
+        "product_sku": "XPX6-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 7,
+    "product_name": "Xiaomi Redmi A3",
+    "product_quantity": 57,
+    "product_description": "Đắm chìm cùng Redmi A3 với những thước phim mượt mà với màn ảnh rộng 6.71 inch cùng tốc độ làm mới 90Hz.",
+    "product_image": ["Xiaomi_Redmi_A3_1", "Xiaomi_Redmi_A3_2"],
+    "brand_id": 3,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.59,
+        "product_sku": "XRA3-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 8,
+    "product_name": "Xiaomi Redmi 13C",
+    "product_quantity": 58,
+    "product_description": "Chipset Helio G85 cho hiệu năng ổn định - Hoạt động mượt mà cho các tác vụ cơ bản hàng ngày.",
+    "product_image": ["Xiaomi_Redmi_13C_1", "Xiaomi_Redmi_13C_2"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "XR13C-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 5.39,
+        "product_sku": "XR13C-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 9,
+    "product_name": "Xiaomi Redmi 10",
+    "product_quantity": 59,
+    "product_description": "Trải nghiệm chất lượng hiển thị sắc nét, mượt mà - Màn hình 6.5' FullHD+, tần số quét 90 Hz.",
+    "product_image": ["Xiaomi_Redmi_10_1"],
+    "brand_id": 3,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.19,
+        "product_sku": "XR10-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 5.49,
+        "product_sku": "XR10-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 10,
+    "product_name": "Xiaomi 12 Pro (5G)",
+    "product_quantity": 60,
+    "product_description": "Cân mọi tác vụ với CPU thế hệ mới - Vi xử lí Snapdragon 8 Gen 1 cùng RAM 12GB.",
+    "product_image": ["Xiaomi_12_1", "Xiaomi_12_2", "Xiaomi_12_3"],
+    "brand_id": 3,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 12.79,
+        "product_sku": "X12-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 17.79,
+        "product_sku": "X12-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 11,
+    "product_name": "OPPO Reno13",
+    "product_quantity": 61,
+    "product_description": "Màn hình OPPO Reno13 F AMOLED 6.67 inch với độ phân giải Full HD+ và tần số quét 120Hz mang đến cho bạn chất lượng hình ảnh sắc nét..",
+    "product_image": ["OPPO_Reno13_1", "OPPO_Reno13_2", "OPPO_Reno13_3"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 8.99,
+        "product_sku": "OR13-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 12,
+    "product_name": "OPPO Find X8",
+    "product_quantity": 62,
+    "product_description": "OPPO Find X8 sở hữu chip Dimensity 9400 3nm với lõi Cortex-X925 sẽ đảm bảo xử lý mọi tác vụ một cách nhanh chóng.",
+    "product_image": ["OPPO_Find_X8_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 20.99,
+        "product_sku": "OFX8-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 22.19,
+        "product_sku": "OFX8-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 13,
+    "product_name": "OPPO A3",
+    "product_quantity": 63,
+    "product_description": "Màn hình LCD, 6.67 inch cho phép bạn xem nội dung với độ chi tiết cao và màu sắc rực rỡ.",
+    "product_image": ["OPPO_A3_1", "OPPO_A3_2"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.59,
+        "product_sku": "OA3-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 6.09,
+        "product_sku": "OA3-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 14,
+    "product_name": "OPPO Reno12",
+    "product_quantity": 44,
+    "product_description": "Thiết kế OPPO Reno 12 5G mỏng nhẹ dễ dàng mang theo bên mình, đồng thời vẫn đảm bảo độ bền bỉ và chắc chắn.",
+    "product_image": ["OPPO_Reno12_1", "OPPO_Reno12_2"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 8.79,
+        "product_sku": "OR12-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 11.99,
+        "product_sku": "OR12-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 15,
+    "product_name": "OPPO A79",
+    "product_quantity": 55,
+    "product_description": "Tận hưởng tốc độ internet siêu nhanh và ổn định với kết nối 5G, cho bạn tải xuống, xem video và chơi game online mượt mà hơn.",
+    "product_image": ["OPPO_A79_1"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 6.29,
+        "product_sku": "OA79-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 16,
+    "product_name": "OPPO Find X5",
+    "product_quantity": 66,
+    "product_description": "Màn hình AMOLED 120 Hz mang đến cho bạn trải nghiệm mượt mà, màu sắc sống động.",
+    "product_image": ["OPPO_Find_X5_1", "OPPO_Find_X5_2"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 12.79,
+        "product_sku": "OFX5-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 14.99,
+        "product_sku": "OFX5-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 17,
+    "product_name": "OPPO Find N3",
+    "product_quantity": 67,
+    "product_description": "Bậc thầy thiết kế, siêu mỏng nhẹ - Mỏng chỉ 239g, nhẹ chỉ 5.8mm với nếp gấp tàng hình.",
+    "product_image": ["OPPO_Find_N3_1", "OPPO_Find_N3_2", "OPPO_Find_N3_3"],
+    "brand_id": 4,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 36.99,
+        "product_sku": "OFN3-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 18,
+    "product_name": "OPPO Reno10",
+    "product_quantity": 68,
+    "product_description": "Chuyên gia chân dung thế hệ thứ 10 - Camera chân dung 32MP siêu nét, chụp xa từ 2X-5X không lo biến dạng khung hình.",
+    "product_image": ["OPPO_Reno10_1", "OPPO_Reno10_2"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 7.79,
+        "product_sku": "OR10-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 8.49,
+        "product_sku": "OR10-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 19,
+    "product_name": "OPPO A38",
+    "product_quantity": 69,
+    "product_description": "CPU MediaTek Helio P35 8 nhân,  cho khả năng xử lý đa nhiệm mượt mà, chơi game nhẹ và các tác vụ cơ bản.",
+    "product_image": ["OPPO_A38_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.99,
+        "product_sku": "OA38-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 20,
+    "product_name": "OPPO A18",
+    "product_quantity": 59,
+    "product_description": "Bộ nhớ trong 64GB cho bạn không gian lưu trữ thoải mái cho ứng dụng, hình ảnh và video.",
+    "product_image": ["OPPO_A18_1"],
+    "brand_id": 4,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 2.99,
+        "product_sku": "OA18-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 21,
+    "product_name": "Vivo Y19S",
+    "product_quantity": 31,
+    "product_description": "Bộ nhớ trong 128GB - Lưu trữ thoải mái hình ảnh, video, ứng dụng và tài liệu mà không lo hết dung lượng.",
+    "product_image": ["Vivo_Y19S_1", "Vivo_Y19S_2"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.59,
+        "product_sku": "VY19S-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 22,
+    "product_name": "Vivo Y100",
+    "product_quantity": 42,
+    "product_description": "Màn hình vivo Y100 rộng 6.67 inch - Cho không gian hiển thị lớn và thoải mái cho các hoạt động trên điện thoại.",
+    "product_image": ["Vivo_Y100_1"],
+    "brand_id": 5,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 5.79,
+        "product_sku": "VY100-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 6.19,
+        "product_sku": "VY100-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 23,
+    "product_name": "Vivo Y36",
+    "product_quantity": 73,
+    "product_description": "Description of product 23.",
+    "product_image": ["Vivo_Y36_1", "Vivo_Y36_2", "Vivo_Y36_3"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.29,
+        "product_sku": "VY36-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 5.89,
+        "product_sku": "VY36-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 24,
+    "product_name": "Vivo V30E",
+    "product_quantity": 74,
+    "product_description": "Chip Snapdragon 6 Gen 1 cho khả năng xử lý đa nhiệm mượt mà và chơi game tốt.",
+    "product_image": ["Vivo_V30E_1", "Vivo_V30E_2"],
+    "brand_id": 5,
+    "category_id": 2,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 8.99,
+        "product_sku": "VV30E-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 25,
+    "product_name": "Vivo Y18S",
+    "product_quantity": 55,
+    "product_description": "Được trang bị vi xử lý Mediatek Helio G85 và RAM 6GB, Y18S đảm bảo khả năng xử lý mượt mà và hiệu suất vượt trội.",
+    "product_image": ["Vivo_Y18S_1", "Vivo_Y18S_2", "Vivo_Y18S_3"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 3.29,
+        "product_sku": "VY18S-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 5.49,
+        "product_sku": "VY18S-256GB"
+      }
+    ]
+  },
+
+  {
+    "product_id": 26,
+    "product_name": "Vivo Y19S",
+    "product_quantity": 55,
+    "product_description": "Điện thoại vivo Y19S mạnh mẽ với vi xử lý T612, con chip với 2 lõi 1,8GHz và 6 lõi 1,8GHz tối ưu hiệu năng sử dụng. Máy sở hữu một vẻ ngoài bắt mắt cùng ba màu sang trọng Đen bóng, Xanh băng hà và Bạc ngọc trai. Thời lượng sử dụng điện thoại vivo này cũng ấn tượng với dung lượng 5500 mAh cùng với sạc nhanh công suất 15W ấn tượng.",
+    "product_image": ["Vivo_Y19S"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 4.59,
+        "product_sku": "VY19S-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 27,
+    "product_name": "Vivo V30E",
+    "product_quantity": 55,
+    "product_description": "Điện thoại vivo V30E mạnh mẽ với chipset Snapdragon 6 Gen 1, kết hợp với 12GB RAM và 256GB bộ nhớ trong, đảm bảo hiệu suất ấn tượng cho mọi tác vụ. Màn hình AMOLED 6.68 inch của máy cung cấp trải nghiệm hình ảnh sắc nét đi kèm cụm camera kép ở mặt sau với camera chính lên đến 50MP. Vivo V30E còn sở hữu pin dung lượng 5.500 mAh, hỗ trợ sạc nhanh 44W, tối ưu hóa trải nghiệm sử dụng hàng ngày.",
+    "product_image": ["Vivo_V30E"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 8.99,
+        "product_sku": "V30E-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 28,
+    "product_name": "Vivo Y03 ",
+    "product_quantity": 55,
+    "product_description": "vivo Y03 chạy trên hệ điều hành Android 14 OS, được trang bị chipset MediaTek Helio G85 giúp tăng khả năng xử lý và nâng cao hiệu năng. Màn hình IPS LCD kích thước 6.56 inch, độ phân giải HD+ kết hợp với tần số quét 90Hz mang đến cho người dùng trải nghiệm mượt mà. Bên cạnh đó dung lượng pin lên đến 5000mAh giúp người dùng thoải mái sử dụng trong một thời gian dài chỉ sau một lần sạc.",
+    "product_image": ["Vivo_V03"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "64GB",
+        "product_price": 2.99,
+        "product_sku": "V30E-64GB"
+      }
+    ]
+  },
+  {
+    "product_id": 29,
+    "product_name": "Vivo T1X ",
+    "product_quantity": 55,
+    "product_description": "Tiếp tục là một sản phẩm smartphone đến từ thương hiệu Vivo mang tên Vivo T1X thuộc phân khúc tầm trung với nhiều công nghệ tiên tiến, thiết kế ấn tượng cùng hiệu năng mạnh mẽ, hứa hẹn đáp ứng tốt các nhu cầu sử dụng của người dùng.",
+    "product_image": ["Vivo_T1X"],
+    "brand_id": 5,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "64GB",
+        "product_price": 3.89,
+        "product_sku": "T1X-64GB"
+      },
+      {
+        "storage": "128GB",
+        "product_price": 4.99,
+        "product_sku": "T1X-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 30,
+    "product_name": "iPhone 16 Pro Max | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 16 Pro Max sở hữu màn hình 6.9 inch với công nghệ ProMotion, mang lại trải nghiệm hiển thị mượt mà và sắc nét, lý tưởng cho giải trí và làm việc. Với chip A18 Pro mạnh mẽ, mẫu iPhone đời mới này cung cấp hiệu suất vượt trội, giúp xử lý mượt mà các tác vụ nặng như chơi game hay edit video. Chiếc điện thoại iPhone 16 mới này còn sở hữu hệ thống camera Ultra Wide 48MP cho khả năng chụp ảnh cực kỳ chi tiết, mang đến chất lượng hình ảnh ấn tượng trong mọi tình huống.",
+    "product_image": "iPhone_16_PM",
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 32.79,
+        "product_sku": "IP16PM-256GB"
+      },
+      {
+        "storage": "512GB",
+        "product_price": 38.79,
+        "product_sku": "IP16PM-512GB"
+      }
+    ]
+  },
+
+  {
+    "product_id": 31,
+    "product_name": "iPhone 16 Pro | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 16 Pro chính là thế hệ điện thoại tiếp theo được Apple cho ra mắt vào tháng 9/2024. Với những thay đổi đầy vượt bậc như: camera của chiếc iPhone 16 bản Pro có độ phân giải 48MP, camera Ultra Wide 48MP, camera Telephoto 5x 12MP, dung lượng bộ nhớ trong 128GB và chipset A18 Pro mạnh mẽ. Tất cả những điều trên biến chiếc điện thoại iPhone 16 trở thành một siêu phẩm công nghệ mới.",
+    "product_image": "iPhone_16_P",
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 27.39,
+        "product_sku": "IP16P-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 30.39,
+        "product_sku": "IP16P-256GB"
+      }
+    ]
+  },
+
+  {
+    "product_id": 32,
+    "product_name": "iPhone 16 | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Điện thoại iPhone 16 sở hữu thiết kế khung nhôm, mặt lưng kính pha màu cùng với 5 màu sắc bắt mắt để lựa chọn. Máy với trọng lượng 170g cùng kích thước màn hình 6.1 inch Super Retina XDR, dải màu P3. Với cấu hình từ chip A18 Bionic mới, điện thoại iPhone mới này mang lại hiệu năng ổn định, đáp ứng nhiều nhu cầu dùng.",
+    "product_image": ["iPhone_16"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 21.19,
+        "product_sku": "IP16-128GB"
+      },
+      {
+        "storage": "256",
+        "product_price": 24.29,
+        "product_sku": "IP16-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 33,
+    "product_name": "iPhone 15 Pro Max | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 15 Pro Max hứa hẹn đem tới trải nghiệm hình ảnh với độ sắc nét và mượt mà cao nhờ sở hữu màn hình Super Retina XDR OLED 6.7 inch tần số quét 120Hz. Nhờ vận hành với chipset A17 Pro sản xuất trên tiến trình 3nm, thế hệ iPhone 15 bản Pro Max đảm bảo vận hành mạnh mẽ và tiết kiệm pin tối ưu. Đặc biệt, máy còn sở hữu cụm camera chính 48MP cùng khả năng zoom quang học 5x, giúp iPhone 15 Pro Max trở thành lựa chọn tuyệt vời cho người đam mê nhiếp ảnh và quay phim chuyên nghiệp.",
+    "product_image": ["iPhone_15_PM"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 29.29,
+        "product_sku": "IP15PM-256GB"
+      },
+      {
+        "storage": "512GB",
+        "product_price": 33.99,
+        "product_sku": "IP15PM-512GB"
+      }
+    ]
+  },
+  {
+    "product_id": 34,
+    "product_name": "iPhone 15 Pro | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Điện thoại iPhone 15 Pro được trang bị màn hình mới Dynamic Island với kích thước 6.1 inch cùng công nghệ ProMotion và tính năng Always On Display. Thiết bị cũng có nhiều thay đổi trong thiết kế với nút hành động cùng cổng sạc USB-C, khung viền titan sang trọng. Thế hệ điện thoại iPhone 15 mới này được trang bị 04 màu sắc mới như Titan tự nhiên, titan đen, titan trắng và titan xanh.",
+    "product_image": ["iPhone_15_P"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 24.89,
+        "product_sku": "IP15P-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 28.59,
+        "product_sku": "IP15P-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 35,
+    "product_name": "iPhone 15 Plus | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 15 Plus được đánh giá cao bởi màn hình Dynamic Island 6.7 inch với mặt kính lưng pha màu ấn tượng, chip A16 Bionic mạnh mẽ cùng cổng sạc USB-C cho khả năng sạc đầy nhanh chóng. Ngoài ra, phiên bản Plus thuộc series iPhone 15 còn sở hữu 5 phiên bản màu pastel thanh lịch phù hợp với nhiều đối tượng khách hàng: hồng, vàng, xanh lá, xanh dương, đen. Xem thêm các thông tin hữu ích khác về điện thoại iPhone 15 Plus sau đây!",
+    "product_image": ["iPhone_15_PL"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 22.59,
+        "product_sku": "IP15PL-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 25.89,
+        "product_sku": "IP15PL-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 36,
+    "product_name": "iPhone 15 | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 15 được trang bị màn hình Dynamic Island kích thước 6.1 inch với công nghệ hiển thị Super Retina XDR màn lại trải nghiệm hình ảnh vượt trội. Điện thoại với mặt lưng kính nhám chống bám mồ hôi cùng 5 phiên bản màu sắc lựa chọn: Hồng, Vàng, Xanh lá, Xanh dương và đen. Camera trên iPhone 15 series cũng được nâng cấp lên cảm biến 48MP cùng tính năng chụp zoom quang học tới 2x. Cùng với thiết kế cổng sạc thay đổi từ lightning sang USB-C vô cùng ấn tượng.",
+    "product_image": ["iPhone_15"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 18.89,
+        "product_sku": "IP15-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 21.99,
+        "product_sku": "IP15-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 37,
+    "product_name": "iPhone 14 Pro Max | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 14 Pro Max sở hữu thiết kế màn hình Dynamic Island ấn tượng cùng màn hình OLED 6,7 inch hỗ trợ always-on display và hiệu năng vượt trội với chip A16 Bionic. Bên cạnh đó máy còn sở hữu nhiều nâng cấp về camera với cụm camera sau 48MP, camera trước 12MP dùng bộ nhớ RAM 6GB đa nhiệm vượt trội. Cùng phân tích chi tiết thông số siêu phẩm này ngay sau đây.",
+    "product_image": ["iPhone_14_PM"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 25.59,
+        "product_sku": "IP14PM-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 27.99,
+        "product_sku": "IP14PM-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 38,
+    "product_name": "iPhone 14 Plus | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 14 Plus sở hữu màn hình Super Retina XDR OLED thiết kế tai thỏ, kích thước 6.7 inch, kết hợp công nghệ True Tone, HDR, Haptic Touch, Không chỉ vậy, sản phẩm còn trang bị chip A15 Bionic mạnh mẽ, RAM 6GB, bộ nhớ trong 128GB và chạy trên hệ điều hành iOS 16. Camera kép 12MP cải thiện khả năng chụp thiếu sáng, camera trước True Depth 12MP tự động lấy nét. Xem thêm chi tiết với thông tin sau đây!",
+    "product_image": ["iPhone_14_PL"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 19.69,
+        "product_sku": "IP14PL-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 22.39,
+        "product_sku": "IP14PL-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 39,
+    "product_name": "iPhone 14 Pro | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 14 Pro đem tới trải nghiệm thị giác siêu mượt mà khi sở hữu màn hình Dynamic Island sắc nét cùng công nghệ Super Retina XDR thế hệ mới. Hiệu năng của iPhone 14 Pro mạnh mẽ với vi xử lý Apple A16 Bionic, giúp ổn định mọi tác vụ. Cụm camera sau 48MP cùng nhiều công nghệ chụp ảnh hiện đại mang tới chất lượng quay chụp ấn tượng, chuẩn nhiếp ảnh chuyên nghiệp.",
+    "product_image": ["iPhone_14_P"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 22.99,
+        "product_sku": "IP14P-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 24.99,
+        "product_sku": "IP14P-256GB"
+      }
+    ]
+  },
+
+  {
+    "product_id": 40,
+    "product_name": "iPhone 14 | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "iPhone 14 sở hữu màn hình Retina XDR OLED kích thước 6.1 inch cùng độ sáng vượt trội lên đến 1200 nits. Máy cũng được trang bị camera kép 12 MP phía sau cùng cảm biến điểm ảnh lớn, đạt 1.9 micron giúp cải thiện khả năng chụp thiếu sáng. Mẫu iPhone 14 mới cũng mang trong mình con chip Apple A15 Bionic phiên bản 5 nhân mang lại hiệu suất vượt trội.",
+    "product_image": ["iPhone_14"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 16.59,
+        "product_sku": "IP14-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 41,
+    "product_name": "iPhone 13 Pro Max | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Hiệu năng vượt trội - Chip Apple A15 Bionic mạnh mẽ, hỗ trợ mạng 5G tốc độ cao.Không gian hiển thị sống động - Màn hình 6.7 Super Retina XDR độ sáng cao, sắc nét.Trải nghiệm điện ảnh đỉnh cao - Cụm 3 camera kép 12MP, hỗ trợ ổn định hình ảnh quang học.Tối ưu điện năng - Sạc nhanh 20 W, đầy 50% pin trong khoảng 30 phút.",
+    "product_image": ["iPhone_13_PM"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 22.99,
+        "product_sku": "IP13PM-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 23.99,
+        "product_sku": "IP13PM-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 42,
+    "product_name": "iPhone 13 Pro | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Hiệu năng vượt trội - Chip Apple A15 Bionic mạnh mẽ, hỗ trợ mạng 5G tốc độ cao.Không gian hiển thị sống động - Màn hình 6.7 Super Retina XDR độ sáng cao, sắc nét.Trải nghiệm điện ảnh đỉnh cao - Cụm 3 camera kép 12MP, hỗ trợ ổn định hình ảnh quang học.Tối ưu điện năng - Sạc nhanh 20 W, đầy 50% pin trong khoảng 30 phút.",
+    "product_image": ["iPhone_13_P"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 21.99,
+        "product_sku": "IP13P-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 24.49,
+        "product_sku": "IP13P-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 43,
+    "product_name": "Samsung Galaxy Z Fold5 12GB",
+    "product_quantity": 50,
+    "product_description": "Samsung Galaxy Z Fold 5 phiên bản 12GB tạo nên trải nghiệm xử lý tác vụ siêu mượt mà thông qua chipset Snapdragon 8 Gen 2 đỉnh cao cùng dung lượng RAM lên tới 12GB. Máy được trang bị công nghệ màn hình Dynamic AMOLED 2X 120Hz với kích thước có thể lên tới 7.6 inch khi mở, đem lại trải nghiệm hình ảnh sắc nét trong từng điểm ảnh. Bên cạnh đó, phân khúc smartphone gập này còn sở hữu cụm camera hiện đại với độ sắc nét đạt tới 50MP cùng viên pin 4400mAh.",
+    "product_image": ["SSG_Z_F5"],
+    "brand_id": 2,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 27.99,
+        "product_sku": "SSG_Z_F6-256GB"
+      },
+      {
+        "storage": "512GB",
+        "product_price": 29.99,
+        "product_sku": "SSG_Z_F6-521GB"
+      }
+    ]
+  },
+  {
+    "product_id": 44,
+    "product_name": "Samsung Galaxy A55 5G",
+    "product_quantity": 50,
+    "product_description": "Samsung Galaxy A55 thiết kế sang trọng, hiện đại với màn hình rộng 6.6 inch, tấm nền Super AMOLED cùng độ phân giải Full HD+ cho hình ảnh hiển thị mượt mà, sắc nét. Sở hữu con chip Exynos 1480, cùng tần số quét 120 Hz cho trải nghiệm sử dụng không bị giật, lag.",
+    "product_image": ["SSG_A55"],
+    "brand_id": 2,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 8.79,
+        "product_sku": "SSG_A55-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 45,
+    "product_name": "iPhone 12 Pro Max | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Mạnh mẽ, siêu nhanh với chip A14, RAM 6GB, mạng 5G tốc độ cao Rực rỡ, sắc nét, độ sáng cao - Màn hình OLED cao cấp, Super Retina XDR hỗ trợ HDR10, Dolby Vision Chụp ảnh siêu đỉnh - Night Mode , thuật toán Deep Fusion, Smart HDR 3, camera LiDar Bền bỉ vượt trội - Kháng nước, kháng bụi IP68, mặt lưng Ceramic Shield",
+    "product_image": ["iPhone_12_PM"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 23.49,
+        "product_sku": "IP12PM-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 27.59,
+        "product_sku": "IP12PM-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 46,
+    "product_name": "iPhone 12 Pro | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": "Mạnh mẽ, siêu nhanh với chip A14, RAM 6GB, mạng 5G tốc độ cao Rực rỡ, sắc nét, độ sáng cao - Màn hình OLED cao cấp, Super Retina XDR hỗ trợ HDR10, Dolby Vision Chụp ảnh siêu đỉnh - Night Mode , thuật toán Deep Fusion, Smart HDR 3, camera LiDar Bền bỉ vượt trội - Kháng nước, kháng bụi IP68, mặt lưng Ceramic Shield",
+    "product_image": ["iPhone_12_P"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 24.99,
+        "product_sku": "IP12P-128GB"
+      },
+      {
+        "storage": "256GB",
+        "product_price": 24.99,
+        "product_sku": "IP12P-256GB"
+      }
+    ]
+  },
+  {
+    "product_id": 47,
+    "product_name": "iPhone 12 | Chính hãng VN/A",
+    "product_quantity": 50,
+    "product_description": " Mạnh mẽ, siêu nhanh với chip A14, RAM 6GB, mạng 5G tốc độ cao Rực rỡ, sắc nét, độ sáng cao - Màn hình OLED cao cấp, Super Retina XDR hỗ trợ HDR10, Dolby Vision Chụp ảnh siêu đỉnh - Night Mode , thuật toán Deep Fusion, Smart HDR 3, camera LiDar Bền bỉ vượt trội - Kháng nước, kháng bụi IP68, mặt lưng Ceramic Shield",
+    "product_image": ["iPhone_12"],
+    "brand_id": 1,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 11.99,
+        "product_sku": "IP12-128GB"
+      },
+      {
+        "storage": "64GB",
+        "product_price": 10.49,
+        "product_sku": "IP12-64GB"
+      }
+    ]
+  },
+  {
+    "product_id": 48,
+    "product_name": "Samsung Galaxy S24 Ultra",
+    "product_quantity": 50,
+    "product_description": "Samsung S24 Ultra là siêu phẩm smartphone đỉnh cao mở đầu năm 2024 đến từ nhà Samsung với chip Snapdragon 8 Gen 3 For Galaxy mạnh mẽ, công nghệ tương lai Galaxy AI cùng khung viền Titan đẳng cấp hứa hẹn sẽ mang tới nhiều sự thay đổi lớn về mặt thiết kế và cấu hình. SS Galaxy S24 bản Ultra sở hữu màn hình 6.8 inch Dynamic AMOLED 2X tần số quét 120Hz. Máy cũng sở hữu camera chính 200MP, camera zoom quang học 50MP, camera tele 10MP và camera góc siêu rộng 12MP.",
+    "product_image": ["SSG_S24_U"],
+    "brand_id": 2,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 25.49,
+        "product_sku": "SSG_S24_U-256GB"
+      },
+      {
+        "storage": "512GB",
+        "product_price": 28.59,
+        "product_sku": "SSG_S24_U-512GB"
+      }
+    ]
+  },
+  {
+    "product_id": 49,
+    "product_name": "Samsung Galaxy A35 5G",
+    "product_quantity": 50,
+    "product_description": "Samsung Galaxy A35 sở hữu những tính năng mang tính đột phá, vượt trội hơn hẳn những mẫu điện thoại thông thường. Với thiết kế ngoại hình ấn tượng cùng sự mạnh mẽ của hiệu năng tới từ con chip Exynos 1380 đi kèm với bộ vi xử lý đồ hoạ ấn tượng, sản phẩm Samsung Galaxy A mới này được các chuyên giá đánh giá là rất có tiềm năng so với những chiếc máy cùng phân khúc.",
+    "product_image": ["SSG_A35"],
+    "brand_id": 2,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "128GB",
+        "product_price": 7.79,
+        "product_sku": "SSG_A35-128GB"
+      }
+    ]
+  },
+  {
+    "product_id": 50,
+    "product_name": "Samsung Galaxy Z Flip6 12GB",
+    "product_quantity": 50,
+    "product_description": "Samsung Z Flip 6 là chiếc điện thoại gập vỏ sò chạy chip Snapdragon 8 Gen 3 for Galaxy mạnh mẽ bậc nhất hiện nay. Máy có cụm camera kép độ phân giải 50MP sắc nét. Đi kèm là bộ nhớ RAM 12GB và thời lượng pin được nâng cấp thêm 4 tiếng sử dụng. Màn hình ngoài Z Flip6 tăng kích thước lên 3.4 inch cho khả năng đa nhiệm vượt trội. Sản phẩm chính thức được ra mắt ngày 10/7/2024 tại sự kiện Galaxy Unpacked diễn ra ở thủ đô Paris nước Pháp.",
+    "product_image": ["SSG_Z_F6"],
+    "brand_id": 2,
+    "category_id": 1,
+    "variants": [
+      {
+        "storage": "256GB",
+        "product_price": 20.99,
+        "product_sku": "SSG_Z_F6-256GB"
+      },
+      {
+        "storage": "512GB",
+        "product_price": 24.99,
+        "product_sku": "SSG_Z_F6-521GB"
+      }
+    ]
+  }
+]
