@@ -323,7 +323,9 @@ export const Product = () => {
                       src={`${
                         import.meta.env.VITE_API_URL
                       }/phone_images/${image}.png`}
-                      alt={productData?.product_name}
+                      alt={`${
+                        import.meta.env.VITE_API_URL
+                      }/phone_images/${image}.png`}
                     />
                   </div>
                 </div>
