@@ -9,7 +9,7 @@ const UsersList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/users")
+      .get("https://zphone.onrender.com/api/users")
       .then((response) => setUsers(response.data))
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
@@ -17,7 +17,7 @@ const UsersList = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       axios
-        .delete(`http://localhost:5000/api/users/${id}`)
+        .delete(`https://zphone.onrender.com/api/users/${id}`)
         .then(() => setUsers(users.filter((user) => user.id !== id)))
         .catch((error) => console.error("Error deleting user:", error));
     }

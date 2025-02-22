@@ -243,7 +243,7 @@ const ProductForm = ({ product = {} }) => {
                 />
                 {previewImage && (
                   <img
-                    src={`http://localhost:5000/uploads/${formData.product_image[0]}`} // Xây dựng lại đường dẫn
+                    src={`https://zphone.onrender.com/uploads/${formData.product_image[0]}`} // Xây dựng lại đường dẫn
                     alt="Product Preview"
                     className="mt-2 w-32 h-32 object-cover rounded-lg"
                   />
